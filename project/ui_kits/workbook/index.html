@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sovereign Stillness — Workbook UI Kit</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 100%; height: 100%; background: #1A0F08; overflow: hidden; }
+  #root { width: 100%; height: 100%; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useEffect, useCallback } = React;
+
+const serif = "'Cormorant Garamond', Georgia, serif";
+const sans  = "'Fraunces', Georgia, serif";
+const C = { cream:'#F5F0E8', tan:'#C8B89A', charcoal:'#1A0F08', mid:'#4A3020', light:'#8A7060', panel:'#2D1E12' };
+
+/* ── Cover ── */
+function CoverPage() {
+  return (
+    <div style={{ width:'100%', height:'100%', background:C.cream, display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', position:'relative', overflow:'hidden', padding:'56px' }}>
+      <div style={{ position:'absolute', top:'40px', right:'48px', fontFamily:sans, fontSize:'9px', letterSpacing:'0.22em', textTransform:'uppercase', color:C.light }}>Victoria Avery</div>
+      <div style={{ textAlign:'center', position:'relative', zIndex:2 }}>
+        <div style={{ fontFamily:sans, fontSize:'8px', letterSpacing:'0.3em', textTransform:'uppercase', color:C.tan, marginBottom:'20px' }}>30-Day Workbook</div>
+        <h1 style={{ fontFamily:serif, fontSize:'clamp(30px,5vw,52px)', fontWeight:400, letterSpacing:'0.06em', textTransform:'uppercase', color:C.tan, lineHeight:1.05, margin:0 }}>Sovereign<br/>Stillness</h1>
+        <div style={{ width:'40px', height:'0.5px', background:C.tan, margin:'24px auto' }} />
+        <p style={{ fontFamily:serif, fontSize:'clamp(12px,1.4vw,15px)', fontWeight:300, fontStyle:'italic', color:C.mid, lineHeight:1.6, maxWidth:'320px' }}>
+          For the woman who has decided to come home to herself.
+        </p>
+      </div>
+      <div style={{ position:'absolute', bottom:'-8px', left:'50%', transform:'translateX(-50%)', fontFamily:serif, fontSize:'clamp(56px,11vw,110px)', fontWeight:700, letterSpacing:'0.08em', textTransform:'uppercase', color:'rgba(200,184,154,0.09)', whiteSpace:'nowrap', userSelect:'none', lineHeight:1 }}>WORKBOOK</div>
+    </div>
+  );
+}
+
+/* ── Table of Contents ── */
+function TableOfContents() {
+  const sections = [
+    { num:'01', title:'The Still Point', page:4 },
+    { num:'02', title:'Naming the Noise', page:12 },
+    { num:'03', title:'Reclaiming Attention', page:20 },
+    { num:'04', title:'The Sovereignty Practice', page:30 },
+    { num:'05', title:'Living from the Inside', page:42 },
+  ];
+  return (
+    <div style={{ width:'100%', height:'100%', background:C.cream, display:'flex', flexDirection:'column' }}>
+      <div style={{ background:C.charcoal, padding:'36px 52px 32px', flexShrink:0 }}>
+        <div style={{ fontFamily:sans, fontSize:'9px', letterSpacing:'0.28em', textTransform:'uppercase', color:C.light, marginBottom:'6px' }}>Table of</div>
+        <div style={{ fontFamily:serif, fontSize:'clamp(28px,5vw,52px)', fontWeight:400, color:C.tan, letterSpacing:'0.04em', lineHeight:1 }}>Contents</div>
+      </div>
+      <div style={{ padding:'40px 52px', display:'flex', flexDirection:'column', gap:'20px' }}>
+        {sections.map((s,i) => (
+          <div key={i} style={{ display:'flex', justifyContent:'space-between', alignItems:'baseline', borderBottom:`0.5px solid ${C.cream}`, paddingBottom:'16px', borderBottomColor:'#EDE0CC' }}>
+            <div>
+              <div style={{ fontFamily:sans, fontSize:'8px', letterSpacing:'0.2em', textTransform:'uppercase', color:C.light, marginBottom:'3px' }}>{s.num}</div>
+              <div style={{ fontFamily:serif, fontSize:'clamp(15px,2vw,20px)', fontWeight:400, color:C.charcoal }}>{s.title}</div>
+            </div>
+            <span style={{ fontFamily:serif, fontSize:'18px', color:C.tan }}>{s.page}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── Chapter Opener ── */
+function ChapterOpener({ number='01', title='The Still Point', subtitle='Where sovereignty begins — not as an achievement, but as a remembering.' }) {
+  return (
+    <div style={{ width:'100%', height:'100%', background:C.charcoal, display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', textAlign:'center', padding:'60px 52px' }}>
+      <div style={{ width:'52px', height:'52px', borderRadius:'50%', background:C.tan, display:'flex', alignItems:'center', justifyContent:'center', fontFamily:serif, fontSize:'22px', fontWeight:400, color:'#fff', marginBottom:'28px' }}>{number}</div>
+      <div style={{ fontFamily:sans, fontSize:'8px', letterSpacing:'0.28em', textTransform:'uppercase', color:C.light, marginBottom:'14px' }}>Chapter</div>
+      <h2 style={{ fontFamily:serif, fontSize:'clamp(26px,4vw,46px)', fontWeight:300, fontStyle:'italic', color:C.tan, lineHeight:1.15, margin:0 }}>{title}</h2>
+      <div style={{ width:'36px', height:'0.5px', background:C.tan, margin:'24px auto' }} />
+      <p style={{ fontFamily:sans, fontSize:'clamp(10px,1.2vw,13px)', fontWeight:300, color:C.light, lineHeight:1.7, maxWidth:'360px', letterSpacing:'0.05em', textTransform:'uppercase' }}>{subtitle}</p>
+    </div>
+  );
+}
+
+/* ── Body Page ── */
+const DEFAULT_BODY = ["The woman who governs herself does not begin her day reacting. She begins by listening — not to the noise outside, but to the signal within. This is the practice.","Before you check your phone, before the inbox, before the asks: five minutes with these questions. Not to perform reflection. To actually reflect.","What is already true in you today? What do you already know, but are moving away from? What would it mean to act from that knowing — fully, without apology?"];
+const DEFAULT_PROMPT = "What is the one thing I keep circling back to that I have not yet acted on?";
+function BodyPage({ eyebrow='Day 01', heading='Morning Inquiry', subheading='Begin before the world asks anything of you.', body=DEFAULT_BODY, prompt=DEFAULT_PROMPT }) {
+  return (
+    <div style={{ width:'100%', height:'100%', background:C.cream, padding:'52px 52px 40px', display:'flex', flexDirection:'column', overflowY:'auto' }}>
+      <div style={{ fontFamily:sans, fontSize:'8px', letterSpacing:'0.22em', textTransform:'uppercase', color:C.tan, marginBottom:'10px' }}>{eyebrow}</div>
+      <h2 style={{ fontFamily:serif, fontSize:'clamp(22px,3vw,34px)', fontWeight:400, color:C.charcoal, lineHeight:1.15, margin:'0 0 8px' }}>{heading}</h2>
+      <p style={{ fontFamily:serif, fontSize:'clamp(11px,1.2vw,14px)', fontStyle:'italic', color:C.mid, margin:0, lineHeight:1.6 }}>{subheading}</p>
+      <div style={{ width:'36px', height:'0.5px', background:C.tan, margin:'20px 0' }} />
+      <div style={{ flex:1 }}>
+        {body.map((p,i) => <p key={i} style={{ fontFamily:sans, fontSize:'clamp(10px,1.1vw,13px)', lineHeight:1.85, color:C.charcoal, marginBottom:'14px', fontWeight:300 }}>{p}</p>)}
+      </div>
+      {prompt && (
+        <div style={{ borderTop:`0.5px solid ${C.tan}`, paddingTop:'18px', marginTop:'16px' }}>
+          <div style={{ fontFamily:sans, fontSize:'7px', letterSpacing:'0.22em', textTransform:'uppercase', color:C.tan, marginBottom:'6px' }}>Reflection Prompt</div>
+          <div style={{ fontFamily:serif, fontSize:'clamp(13px,1.6vw,16px)', fontStyle:'italic', color:C.charcoal, lineHeight:1.5 }}>"{prompt}"</div>
+        </div>
+      )}
+    </div>
+  );
+}
+
+/* ── Quote Page ── */
+function QuotePage({ quote='You are right where you are meant to be.', attribution='Sovereign Stillness' }) {
+  return (
+    <div style={{ width:'100%', height:'100%', background:C.cream, display:'flex', flexDirection:'column', justifyContent:'center', alignItems:'center', textAlign:'center', padding:'72px 64px' }}>
+      <div style={{ fontFamily:serif, fontSize:'clamp(20px,3.2vw,36px)', fontWeight:300, lineHeight:1.45, color:C.tan }}>"{quote}"</div>
+      <div style={{ width:'36px', height:'0.5px', background:C.tan, margin:'24px auto' }} />
+      <div style={{ fontFamily:sans, fontSize:'8px', fontWeight:400, letterSpacing:'0.25em', textTransform:'uppercase', color:C.mid }}>{attribution}</div>
+    </div>
+  );
+}
+
+/* ── Two Column ── */
+function TwoColumnPage() {
+  return (
+    <div style={{ width:'100%', height:'100%', display:'flex' }}>
+      <div style={{ width:'50%', background:C.cream, padding:'52px 40px', display:'flex', flexDirection:'column', justifyContent:'flex-end' }}>
+        <div style={{ fontFamily:sans, fontSize:'7px', letterSpacing:'0.2em', textTransform:'uppercase', color:C.light, marginBottom:'12px' }}>Written by Victoria Avery</div>
+        <h2 style={{ fontFamily:serif, fontSize:'clamp(20px,2.5vw,30px)', fontWeight:400, color:C.charcoal, lineHeight:1.2 }}>The Discipline of<br/>Self-Sovereignty</h2>
+      </div>
+      <div style={{ width:'50%', background:C.panel, padding:'52px 40px', display:'flex', flexDirection:'column', justifyContent:'center', overflowY:'auto' }}>
+        {["Sovereignty is not something you acquire. It is something you stop betraying. Every time you override your own knowing — to keep the peace, to avoid discomfort — you widen the distance between the woman you are and the woman you live as.","The work here is not to become someone new. It is to stop performing someone smaller. This is the discipline. Not dramatic. Not loud. Just the daily choice to stay aligned with what you already know to be true.","That alignment is the stillness. You can be fully in motion — building, deciding, acting — and still be sovereign. Sovereignty is the quality of the ground you move from."].map((p,i) => (
+          <p key={i} style={{ fontFamily:sans, fontSize:'clamp(9px,1vw,12px)', lineHeight:1.85, color:C.cream, marginBottom:'14px', fontWeight:300, textAlign:'justify' }}>{p}</p>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── CTA Page ── */
+function CTAPage() {
+  const [hov, setHov] = useState(false);
+  return (
+    <div style={{ width:'100%', height:'100%', background:C.cream, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center', padding:'60px 64px' }}>
+      <div style={{ fontFamily:sans, fontSize:'8px', letterSpacing:'0.25em', textTransform:'uppercase', color:C.light, marginBottom:'14px' }}>Get Ready To</div>
+      <h2 style={{ fontFamily:serif, fontSize:'clamp(24px,3.5vw,40px)', fontWeight:400, color:C.tan, lineHeight:1.2, margin:0 }}>Unlock the Full Course</h2>
+      <div style={{ width:'36px', height:'0.5px', background:C.tan, margin:'24px auto' }} />
+      <p style={{ fontFamily:serif, fontSize:'clamp(11px,1.3vw,14px)', fontStyle:'italic', color:C.mid, lineHeight:1.75, maxWidth:'380px', margin:'0 0 36px' }}>
+        You've completed the workbook. What follows is the live practice — a guided immersion into everything this workbook has prepared you for.
+      </p>
+      <button onMouseEnter={()=>setHov(true)} onMouseLeave={()=>setHov(false)} style={{ fontFamily:sans, fontSize:'9px', letterSpacing:'0.22em', textTransform:'uppercase', background:hov?'#A89070':C.tan, color:'#fff', border:'none', padding:'13px 44px', cursor:'pointer', transition:'background 0.2s' }}>
+        Register Now
+      </button>
+    </div>
+  );
+}
+
+/* ── Thank You ── */
+function ThankYouPage() {
+  return (
+    <div style={{ width:'100%', height:'100%', background:C.cream, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'flex-end', textAlign:'center', padding:'0 0 64px' }}>
+      <div style={{ width:'100%', height:'45%', background:'linear-gradient(180deg, #E8EFF5 0%, #C5D4C2 60%, #8A9E6A 100%)', flexShrink:0, marginBottom:'40px', position:'relative', overflow:'hidden' }}>
+        {/* Simple landscape silhouette */}
+        <div style={{ position:'absolute', bottom:0, left:0, right:0, height:'40%', background:'#6B8A45', borderRadius:'50% 50% 0 0 / 30% 30% 0 0' }} />
+        <div style={{ position:'absolute', bottom:0, left:'-10%', right:'-10%', height:'30%', background:'#5A7A38' }} />
+      </div>
+      <div style={{ fontFamily:serif, fontSize:'clamp(28px,4vw,44px)', fontWeight:300, fontStyle:'italic', color:C.tan, marginBottom:'24px' }}>Thank You</div>
+      <div style={{ fontFamily:sans, fontSize:'8px', letterSpacing:'0.22em', textTransform:'uppercase', color:C.light, marginBottom:'12px' }}>Let's Keep in Touch</div>
+      <div style={{ fontFamily:sans, fontSize:'9px', letterSpacing:'0.14em', textTransform:'uppercase', color:C.mid, lineHeight:1.8 }}>
+        @sovereignstillness<br/>hello@sovereignstillness.com
+      </div>
+    </div>
+  );
+}
+
+/* ── Pages map ── */
+const PAGES = [
+  { id:'cover',   label:'Cover',      comp: <CoverPage /> },
+  { id:'toc',     label:'Contents',   comp: <TableOfContents /> },
+  { id:'ch1',     label:'Chapter 1',  comp: <ChapterOpener number="01" title="The Still Point" subtitle="Where sovereignty begins — not as an achievement, but as a remembering." /> },
+  { id:'body1',   label:'Day 01',     comp: <BodyPage /> },
+  { id:'quote1',  label:'Quote',      comp: <QuotePage quote="You are right where you are meant to be." attribution="Sovereign Stillness" /> },
+  { id:'twocol',  label:'Two Column', comp: <TwoColumnPage /> },
+  { id:'ch2',     label:'Chapter 2',  comp: <ChapterOpener number="02" title="Naming the Noise" subtitle="You cannot govern what you have not named. Begin here." /> },
+  { id:'body2',   label:'Day 08',     comp: <BodyPage eyebrow="Day 08" heading="What Pulls You Away" subheading="Not every distraction announces itself." body={["The noise is rarely dramatic. It arrives as helpfulness — the quick reply, the favour, the small yes that costs you more than you calculated.","Begin to notice the quality of the pull. Is it coming from your own intentions, or from someone else's? This is not a moral question. It is a diagnostic one.","Spend one day simply noticing — without changing anything. What asks for your attention that you did not invite?"]} prompt="What am I saying yes to that I haven't consciously chosen?" /> },
+  { id:'quote2',  label:'Reflection', comp: <QuotePage quote="Stop shrinking to fit into places you've outgrown." attribution="Sovereign Stillness" /> },
+  { id:'cta',     label:'Unlock',     comp: <CTAPage /> },
+  { id:'bye',     label:'Thank You',  comp: <ThankYouPage /> },
+];
+
+/* ── Viewer ── */
+function WorkbookViewer() {
+  const [idx, setIdx] = useState(0);
+  const [fade, setFade] = useState(true);
+
+  // no localStorage — always start fresh so card preview shows cover
+
+  const go = useCallback((delta) => {
+    const next = idx + delta;
+    if (next < 0 || next >= PAGES.length) return;
+    setFade(false);
+    setTimeout(() => { setIdx(next); setFade(true); }, 220);
+  }, [idx]);
+
+  useEffect(() => {
+    const k = (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') go(1);
+      if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   go(-1);
+    };
+    window.addEventListener('keydown', k);
+    return () => window.removeEventListener('keydown', k);
+  }, [go]);
+
+  return (
+    <div style={{ width:'100vw', height:'100vh', background:'#1A0F08', display:'flex', flexDirection:'column', alignItems:'center' }}>
+      {/* Stage */}
+      <div style={{ flex:1, width:'100%', display:'flex', alignItems:'center', justifyContent:'center', position:'relative', padding:'20px 72px', minHeight:0 }}>
+        {/* Page */}
+        <div style={{
+          aspectRatio:'8.5/11', height:'100%',
+          maxHeight:'calc(100vh - 68px)',
+          maxWidth:'calc((100vh - 68px) * 8.5 / 11)',
+          boxShadow:'0 8px 48px rgba(0,0,0,0.55)',
+          overflow:'hidden', flexShrink:0,
+          opacity: fade ? 1 : 0,
+          transform: fade ? 'translateY(0)' : 'translateY(10px)',
+          transition:'opacity 0.28s ease, transform 0.28s ease',
+        }}>
+          {PAGES[idx].comp}
+        </div>
+
+        {/* Nav arrows */}
+        {idx > 0 && (
+          <button onClick={() => go(-1)} style={{ position:'absolute', left:'12px', top:'50%', transform:'translateY(-50%)', background:'rgba(245,240,232,0.08)', border:'none', borderRadius:'50%', width:'42px', height:'42px', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ fontFamily:serif, fontSize:'26px', color:C.tan, lineHeight:1 }}>‹</span>
+          </button>
+        )}
+        {idx < PAGES.length - 1 && (
+          <button onClick={() => go(1)} style={{ position:'absolute', right:'12px', top:'50%', transform:'translateY(-50%)', background:'rgba(245,240,232,0.08)', border:'none', borderRadius:'50%', width:'42px', height:'42px', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>
+            <span style={{ fontFamily:serif, fontSize:'26px', color:C.tan, lineHeight:1 }}>›</span>
+          </button>
+        )}
+      </div>
+
+      {/* Bottom bar */}
+      <div style={{ height:'48px', width:'100%', background:'#120A04', borderTop:'0.5px solid #2D1E12', display:'flex', alignItems:'center', justifyContent:'space-between', padding:'0 20px', flexShrink:0 }}>
+        <span style={{ fontFamily:serif, fontSize:'12px', color:C.tan, letterSpacing:'0.06em' }}>Sovereign Stillness</span>
+        <div style={{ display:'flex', gap:'5px', alignItems:'center' }}>
+          {PAGES.map((p,i) => (
+            <button key={p.id} onClick={() => { setFade(false); setTimeout(() => { setIdx(i); setFade(true); }, 220); }}
+              style={{ width:'6px', height:'6px', borderRadius:'50%', border:'none', cursor:'pointer', padding:0, background: i === idx ? C.tan : 'rgba(200,184,154,0.3)', transform: i === idx ? 'scale(1.35)' : 'scale(1)', transition:'all 0.2s' }} />
+          ))}
+        </div>
+        <div style={{ display:'flex', gap:'10px', alignItems:'center' }}>
+          <span style={{ fontFamily:sans, fontSize:'9px', color:C.light, letterSpacing:'0.1em' }}>{idx + 1} / {PAGES.length}</span>
+          <span style={{ fontFamily:sans, fontSize:'9px', letterSpacing:'0.16em', textTransform:'uppercase', color:C.tan }}>{PAGES[idx].label}</span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<WorkbookViewer />);
+</script>
+</body>
+</html>

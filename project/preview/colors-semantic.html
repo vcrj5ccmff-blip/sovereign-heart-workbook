@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#F5F0E8; font-family:'Fraunces',sans-serif; padding:20px; }
+  .grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; }
+  .item { }
+  .chip { height:36px; margin-bottom:6px; }
+  .role { font-size:8.5px; letter-spacing:0.14em; text-transform:uppercase; color:#4A3020; }
+  .val  { font-size:9px; font-family:monospace; color:#4A3020; margin-top:1px; }
+</style>
+</head><body>
+<div class="grid">
+  <div class="item"><div class="chip" style="background:#F5F0E8;border:1px solid #DDD1BC;"></div><div class="role">bg-page</div><div class="val">--color-cream</div></div>
+  <div class="item"><div class="chip" style="background:#3B1F0E;"></div><div class="role">bg-dark</div><div class="val">--color-espresso</div></div>
+  <div class="item"><div class="chip" style="background:#2D1E12;"></div><div class="role">bg-panel</div><div class="val">--color-panel</div></div>
+  <div class="item"><div class="chip" style="background:#C8B89A;"></div><div class="role">bg-accent-light</div><div class="val">--color-antique-gold</div></div>
+  <div class="item"><div class="chip" style="background:#A07848;"></div><div class="role">bg-accent</div><div class="val">--color-aged-brass</div></div>
+  <div class="item"><div class="chip" style="background:#3B1F0E;"></div><div class="role">fg-primary</div><div class="val">--color-espresso</div></div>
+  <div class="item"><div class="chip" style="background:#4A3020;"></div><div class="role">fg-secondary</div><div class="val">--color-mid</div></div>
+  <div class="item"><div class="chip" style="background:#A07848;"></div><div class="role">fg-accent</div><div class="val">--color-aged-brass</div></div>
+  <div class="item"><div class="chip" style="background:#F5F0E8;border:1px solid #A07848;"></div><div class="role">fg-on-dark</div><div class="val">--color-cream</div></div>
+</div>
+</body></html>

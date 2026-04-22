@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#2D1E12; padding:20px; display:flex; gap:10px; flex-wrap:wrap; align-items:flex-start; }
+
+  /* ── page shell ── */
+  .page {
+    width:130px; flex-shrink:0; aspect-ratio:8.5/11;
+    position:relative; overflow:hidden;
+    display:flex; flex-direction:column;
+    background:#F5F0E8;
+  }
+  .pg-lbl {
+    position:absolute; bottom:4px; left:6px; z-index:20;
+    font-family:'Fraunces',sans-serif; font-size:5px;
+    letter-spacing:0.14em; text-transform:uppercase; color:#A07848;
+  }
+  .dark .pg-lbl { color:#C8B89A; }
+
+  /* ── photo placeholder ── */
+  .ph {
+    background:
+      repeating-linear-gradient(135deg,
+        rgba(160,120,72,0.18) 0,rgba(160,120,72,0.18) 1px,
+        transparent 1px, transparent 7px),
+      #3B1F0E22;
+    display:flex; align-items:center; justify-content:center;
+    flex-shrink:0;
+  }
+  .dark .ph {
+    background:
+      repeating-linear-gradient(135deg,
+        rgba(200,184,154,0.15) 0,rgba(200,184,154,0.15) 1px,
+        transparent 1px, transparent 7px),
+      #1a0e0822;
+  }
+  .ph-lbl { font-family:monospace; font-size:4.5px; color:#A07848; text-align:center; line-height:1.5; opacity:0.9; padding:3px; }
+  .dark .ph-lbl { color:#C8B89A; }
+
+  /* ── arch shape ── */
+  .arch-shape {
+    border-radius: 999px 999px 0 0;
+    overflow:hidden;
+    flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* ── type helpers ── */
+  .eyebrow { font-family:'Fraunces',sans-serif; font-size:4.5px; letter-spacing:0.22em; text-transform:uppercase; color:#A07848; }
+  .eyebrow-lt { color:#C8B89A; }
+  .rule-xs { border:none; border-top:0.5px solid #A07848; width:18px; margin:4px 0; }
+  .rule-xs-lt { border-top-color:#C8B89A; }
+  .h1  { font-family:'Cormorant Garamond',serif; font-weight:300; color:#3B1F0E; }
+  .h1-lt { color:#F5F0E8; }
+  .h1-gold { color:#C8B89A; }
+  .body-txt { font-family:'Fraunces',sans-serif; font-size:5px; line-height:1.75; color:#4A3020; }
+  .body-txt-lt { color:#C8B89A; }
+  .body-txt-cream { color:#F5F0E8; }
+  .italic { font-style:italic; }
+  .two-col { column-count:2; column-gap:8px; }
+
+  /* ════════════════════════════════
+     1. COVER — dark, photo top, title bottom
+  ════════════════════════════════ */
+  .pg-cover { background:#3B1F0E; }
+  .pg-cover .ph { flex:1; }
+  .pg-cover .cover-foot { padding:10px 12px 14px; }
+  .pg-cover .cover-auth { font-family:'Fraunces',sans-serif; font-size:4.5px; letter-spacing:0.24em; text-transform:uppercase; color:#A07848; margin-bottom:3px; }
+  .pg-cover .cover-title { font-family:'Cormorant Garamond',serif; font-size:17px; font-weight:300; color:#F5F0E8; line-height:1.0; letter-spacing:0.02em; }
+  .pg-cover .cover-sub { font-family:'Fraunces',sans-serif; font-size:4px; letter-spacing:0.2em; text-transform:uppercase; color:#C8B89A; margin-top:5px; }
+
+  /* ════════════════════════════════
+     2. WELCOME / INTRO — light, 1 col
+  ════════════════════════════════ */
+  .pg-welcome { padding:14px 14px 18px; }
+
+  /* ════════════════════════════════
+     3. ARCH OPENER — dark, solid arch + title
+  ════════════════════════════════ */
+  .pg-arch { background:#3B1F0E; align-items:center; padding:14px 12px; gap:0; }
+  .pg-arch .arch-shape { width:70px; height:85px; background:#2D1E12; margin:0 auto 10px; }
+  .pg-arch .arch-inner { text-align:center; }
+
+  /* ════════════════════════════════
+     4. ARCH WITH PHOTO — dark bg, arch contains photo
+  ════════════════════════════════ */
+  .pg-arch-photo { background:#2D1E12; align-items:center; justify-content:center; padding:14px 12px; gap:8px; }
+  .pg-arch-photo .arch-shape { width:76px; height:96px; }
+  .pg-arch-photo .arch-foot { text-align:center; }
+
+  /* ════════════════════════════════
+     5. TOC — light
+  ════════════════════════════════ */
+  .pg-toc { padding:14px 14px 18px; }
+  .toc-row { display:flex; justify-content:space-between; align-items:baseline; padding:4px 0; border-bottom:0.5px solid #DDD1BC; }
+  .toc-name { font-family:'Fraunces',sans-serif; font-size:5.5px; letter-spacing:0.12em; text-transform:uppercase; color:#3B1F0E; }
+  .toc-pg   { font-family:'Cormorant Garamond',serif; font-size:9px; color:#A07848; }
+
+  /* ════════════════════════════════
+     6. CHAPTER OPENER — dark, num + title + photo right
+  ════════════════════════════════ */
+  .pg-chapter { background:#3B1F0E; flex-direction:row; }
+  .pg-chapter .ch-left { flex:1; padding:14px 10px; display:flex; flex-direction:column; justify-content:flex-end; gap:3px; }
+  .pg-chapter .ch-num { font-family:'Cormorant Garamond',serif; font-size:36px; color:#C8B89A; opacity:0.35; line-height:1; }
+  .pg-chapter .ch-label { font-family:'Fraunces',sans-serif; font-size:4.5px; letter-spacing:0.2em; text-transform:uppercase; color:#A07848; }
+  .pg-chapter .ch-title { font-family:'Cormorant Garamond',serif; font-size:12px; font-style:italic; color:#F5F0E8; line-height:1.3; }
+  .pg-chapter .ph { width:45%; }
+
+  /* ════════════════════════════════
+     7. 1-COL TEXT — light
+  ════════════════════════════════ */
+  .pg-1col { padding:14px 14px 18px; }
+
+  /* ════════════════════════════════
+     8. 2-COL TEXT — light
+  ════════════════════════════════ */
+  .pg-2col { padding:14px 14px 18px; }
+
+  /* ════════════════════════════════
+     9. PULL QUOTE — dark
+  ════════════════════════════════ */
+  .pg-quote { background:#3B1F0E; align-items:center; justify-content:center; padding:20px 16px; text-align:center; }
+  .pg-quote .q-mark { font-family:'Cormorant Garamond',serif; font-size:36px; color:#C8B89A; line-height:0.7; margin-bottom:6px; opacity:0.6; }
+  .pg-quote .q-text { font-family:'Cormorant Garamond',serif; font-size:11px; font-style:italic; font-weight:300; color:#F5F0E8; line-height:1.5; }
+  .pg-quote .q-attr { font-family:'Fraunces',sans-serif; font-size:4.5px; letter-spacing:0.22em; text-transform:uppercase; color:#A07848; margin-top:8px; }
+
+  /* ════════════════════════════════
+     10. PHOTO LEFT + TEXT RIGHT — light
+  ════════════════════════════════ */
+  .pg-photo-left { flex-direction:row; }
+  .pg-photo-left .ph { width:48%; }
+  .pg-photo-left .txt-side { flex:1; padding:12px 10px; display:flex; flex-direction:column; justify-content:flex-end; }
+
+  /* ════════════════════════════════
+     11. PHOTO TOP + 2-COL TEXT — light
+  ════════════════════════════════ */
+  .pg-photo-top { }
+  .pg-photo-top .ph { height:38%; }
+  .pg-photo-top .body-area { padding:8px 10px; flex:1; }
+
+  /* ════════════════════════════════
+     12. DARK, PHOTO RIGHT + HEADING LEFT — dark
+  ════════════════════════════════ */
+  .pg-dark-split { background:#2D1E12; flex-direction:row; }
+  .pg-dark-split .left-txt { flex:1; padding:14px 10px; display:flex; flex-direction:column; justify-content:center; gap:4px; }
+  .pg-dark-split .ph { width:46%; }
+
+  /* ════════════════════════════════
+     13. CURRICULUM / MODULE LIST — light
+  ════════════════════════════════ */
+  .pg-curriculum { padding:14px 14px 18px; }
+  .mod-row { display:flex; gap:6px; padding:4px 0; border-bottom:0.5px solid #DDD1BC; align-items:flex-start; }
+  .mod-num { font-family:'Cormorant Garamond',serif; font-size:12px; color:#C8B89A; line-height:1; width:14px; flex-shrink:0; }
+  .mod-title { font-family:'Fraunces',sans-serif; font-size:5px; letter-spacing:0.1em; text-transform:uppercase; color:#3B1F0E; line-height:1.5; }
+  .mod-sub { font-family:'Fraunces',sans-serif; font-size:4.5px; line-height:1.5; color:#4A3020; margin-top:1px; }
+
+  /* ════════════════════════════════
+     14. CTA PAGE — dark
+  ════════════════════════════════ */
+  .pg-cta { background:#3B1F0E; align-items:center; justify-content:center; padding:16px 14px; text-align:center; gap:6px; }
+  .pg-cta .cta-eyebrow { font-family:'Fraunces',sans-serif; font-size:4.5px; letter-spacing:0.22em; text-transform:uppercase; color:#A07848; }
+  .pg-cta .cta-title { font-family:'Cormorant Garamond',serif; font-size:14px; font-weight:300; color:#F5F0E8; line-height:1.2; }
+  .pg-cta .cta-body { font-family:'Fraunces',sans-serif; font-size:5px; line-height:1.6; color:#C8B89A; }
+  .pg-cta .cta-btn { background:#C8B89A; color:#F5F0E8; font-family:'Fraunces',sans-serif; font-size:5px; letter-spacing:0.18em; text-transform:uppercase; padding:5px 14px; display:inline-block; margin-top:4px; }
+
+  /* ════════════════════════════════
+     15. PHOTO COLLAGE — light, stacked photos + pullquote side
+  ════════════════════════════════ */
+  .pg-collage { flex-direction:row; }
+  .pg-collage .col-photos { width:50%; display:flex; flex-direction:column; gap:3px; padding:8px 0 8px 8px; }
+  .pg-collage .col-ph { flex:1; }
+  .pg-collage .col-right { flex:1; padding:12px 10px 12px 8px; display:flex; flex-direction:column; justify-content:center; gap:4px; }
+
+  /* ════════════════════════════════
+     16. FULL-TEXT QUOTE INLINE — light, large italic quote + attribution
+  ════════════════════════════════ */
+  .pg-inline-quote { padding:14px 14px 18px; }
+  .inline-q { font-family:'Cormorant Garamond',serif; font-size:10px; font-style:italic; color:#3B1F0E; line-height:1.5; margin:8px 0; border-left:1.5px solid #A07848; padding-left:8px; }
+
+  /* ════════════════════════════════
+     17. CTA + DEVICE MOCKUP — light
+  ════════════════════════════════ */
+  .pg-cta-device { padding:14px 14px 14px; display:flex; flex-direction:column; gap:4px; }
+  .device-frame { background:#2D1E12; border-radius:3px; padding:4px; margin:6px 0; position:relative; }
+  .device-screen { background: repeating-linear-gradient(135deg,rgba(160,120,72,0.18) 0,rgba(160,120,72,0.18) 1px,transparent 1px,transparent 7px),#3B1F0E22; height:42px; border-radius:1px; display:flex; align-items:center; justify-content:center; }
+  .device-stand { width:20px; height:3px; background:#2D1E12; margin:0 auto; border-radius:0 0 2px 2px; }
+  .device-base { width:32px; height:1.5px; background:#3B1F0E; margin:0 auto; }
+
+  /* ════════════════════════════════
+     18. CHAPTER ONE — photo top, cream arch overlay, badge, gold text
+  ════════════════════════════════ */
+  .pg-ch1 { position:relative; }
+  .pg-ch1 .bg-photo { position:absolute; top:0; left:0; right:0; height:60%; }
+  .pg-ch1 .cream-arch {
+    position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+    width:110%; padding-bottom:0;
+    height:72%; background:#F5F0E8;
+    border-radius:999px 999px 0 0;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+    padding:0 14px 14px;
+  }
+  .pg-ch1 .badge-circle {
+    position:absolute; top:-12px; left:50%; transform:translateX(-50%);
+    width:22px; height:22px; border-radius:50%;
+    background:#F5F0E8; border:0.5px solid #C8B89A;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Cormorant Garamond',serif; font-size:10px; color:#3B1F0E;
+  }
+  .pg-ch1 .ch1-body { font-family:'Fraunces',sans-serif; font-size:4.5px; letter-spacing:0.08em; text-transform:uppercase; color:#4A3020; text-align:center; line-height:1.6; margin-bottom:6px; }
+  .pg-ch1 .ch1-title { font-family:'Cormorant Garamond',serif; font-size:18px; font-weight:400; letter-spacing:0.08em; text-transform:uppercase; color:#A07848; line-height:1.1; text-align:center; }
+
+  /* ════════════════════════════════
+     19. CHAPTER TWO — full-bleed photo, dark panel overlay, badge
+  ════════════════════════════════ */
+  .pg-ch2 { position:relative; }
+  .pg-ch2 .bg-photo { position:absolute; inset:0; }
+  .pg-ch2 .badge-circle {
+    position:absolute; top:10px; left:50%; transform:translateX(-50%);
+    width:22px; height:22px; border-radius:50%;
+    background:#F5F0E8; border:0.5px solid #C8B89A;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Cormorant Garamond',serif; font-size:10px; color:#3B1F0E; z-index:5;
+  }
+  .pg-ch2 .dark-panel {
+    position:absolute; top:22%; left:8%; right:8%; bottom:12%;
+    background:rgba(45,30,18,0.82);
+    display:flex; flex-direction:column; justify-content:center; align-items:center;
+    padding:12px 10px; text-align:center; gap:5px;
+  }
+  .pg-ch2 .ch2-title { font-family:'Cormorant Garamond',serif; font-size:13px; font-style:italic; color:#C8B89A; line-height:1.2; }
+  .pg-ch2 .ch2-body { font-family:'Fraunces',sans-serif; font-size:4.5px; letter-spacing:0.1em; text-transform:uppercase; color:#F5F0E8; line-height:1.6; opacity:0.8; }
+
+  /* ════════════════════════════════
+     20. WELCOME ARCH — cream bg, tall dark arch, text inside + below
+  ════════════════════════════════ */
+  .pg-welcome-arch { padding:10px 10px 12px; align-items:center; }
+  .welcome-arch-shape {
+    width:90px; height:108px;
+    background:#2D1E12;
+    border-radius:999px 999px 0 0;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-end;
+    padding-bottom:12px; flex-shrink:0;
+  }
+  .welcome-arch-shape .w-title { font-family:'Cormorant Garamond',serif; font-size:15px; letter-spacing:0.08em; color:#F5F0E8; text-transform:uppercase; }
+  .welcome-below { padding:8px 4px 0; text-align:center; }
+  .welcome-below .w-body { font-family:'Fraunces',sans-serif; font-size:4.5px; line-height:1.7; color:#4A3020; }
+  .welcome-below .w-sig { font-family:'Cormorant Garamond',serif; font-size:7px; letter-spacing:0.1em; color:#3B1F0E; margin-top:6px; }
+
+  /* ════════════════════════════════
+     21. DENSE 1-COL TEXT — large heading, dense body
+  ════════════════════════════════ */
+  .pg-dense1 { padding:16px 14px 14px; }
+  .pg-dense1 .big-head { font-family:'Cormorant Garamond',serif; font-size:14px; font-weight:300; color:#3B1F0E; line-height:1.2; margin-bottom:8px; }
+  .pg-dense1 .dense-body { font-family:'Fraunces',sans-serif; font-size:4.5px; line-height:1.8; color:#4A3020; }
+
+  /* ════════════════════════════════
+     22. DENSE 2-COL TEXT — full page, signature bottom right
+  ════════════════════════════════ */
+  .pg-dense2 { padding:12px 12px 14px; display:flex; flex-direction:column; }
+  .pg-dense2 .dense-body-2col { font-family:'Fraunces',sans-serif; font-size:4.5px; line-height:1.8; color:#4A3020; column-count:2; column-gap:8px; flex:1; }
+  .pg-dense2 .sig-line { font-family:'Cormorant Garamond',serif; font-size:7px; color:#3B1F0E; letter-spacing:0.08em; text-align:right; margin-top:8px; }
+  .pg-dense2 .sig-sub { font-family:'Fraunces',sans-serif; font-size:4px; letter-spacing:0.16em; text-transform:uppercase; color:#A07848; text-align:right; margin-top:1px; }
+
+  /* ════════════════════════════════
+     23. 2-COL + PULL QUOTE BOTTOM RIGHT
+  ════════════════════════════════ */
+  .pg-2col-pq { padding:12px 12px 12px; display:flex; flex-direction:column; gap:4px; }
+  .pg-2col-pq .top-body { font-family:'Fraunces',sans-serif; font-size:4.5px; line-height:1.8; color:#4A3020; column-count:2; column-gap:8px; flex:1; }
+  .pg-2col-pq .pq-corner { border-top:0.5px solid #A07848; padding-top:5px; margin-top:4px; text-align:right; }
+  .pg-2col-pq .pq-text { font-family:'Cormorant Garamond',serif; font-size:9px; font-style:italic; color:#3B1F0E; line-height:1.4; }
+
+  /* ════════════════════════════════
+     24. SUB-HEADING + BODY
+  ════════════════════════════════ */
+  .pg-subhead { padding:14px 14px 14px; }
+  .pg-subhead .subhead-eye { font-family:'Fraunces',sans-serif; font-size:4.5px; letter-spacing:0.22em; text-transform:uppercase; color:#A07848; margin-bottom:3px; }
+  .pg-subhead .subhead-h { font-family:'Cormorant Garamond',serif; font-size:16px; font-weight:300; color:#3B1F0E; line-height:1.1; margin-bottom:3px; }
+  .pg-subhead .subhead-intro { font-family:'Cormorant Garamond',serif; font-size:7px; font-style:italic; color:#4A3020; margin-bottom:6px; line-height:1.5; }
+  .pg-subhead .subhead-rule { border:none; border-top:0.5px solid #A07848; margin-bottom:6px; }
+  .pg-subhead .subhead-body { font-family:'Fraunces',sans-serif; font-size:4.5px; line-height:1.8; color:#4A3020; }
+</style>
+</head><body>
+
+  <!-- 1. COVER -->
+  <div class="page pg-cover dark">
+    <div class="ph" style="flex:1"><div class="ph-lbl">portrait<br>photo</div></div>
+    <div class="cover-foot">
+      <div class="cover-auth">Victoria Avery</div>
+      <div class="cover-title">Sovereign<br>Stillness</div>
+      <div class="cover-sub">A 30-Day Workbook</div>
+    </div>
+    <div class="pg-lbl">Cover</div>
+  </div>
+
+  <!-- 2. WELCOME 1-COL -->
+  <div class="page pg-welcome">
+    <div class="eyebrow" style="margin-bottom:4px;">Welcome</div>
+    <div class="h1" style="font-size:14px; line-height:1.1; margin-bottom:6px;">You Are Right<br>Where You<br>Are Meant To Be.</div>
+    <div class="rule-xs"></div>
+    <div class="body-txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation.<br><br>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint.</div>
+    <div class="pg-lbl">Welcome — 1 Col</div>
+  </div>
+
+  <!-- 3. ARCH OPENER — solid arch -->
+  <div class="page pg-arch dark">
+    <div class="arch-shape" style="width:72px;height:88px;background:#2D1E12;margin:0 auto 10px;">
+      <div style="font-family:'Cormorant Garamond',serif;font-size:9px;color:#C8B89A;letter-spacing:0.12em;text-transform:uppercase;text-align:center;padding-top:54px;">© 2025</div>
+    </div>
+    <div class="arch-inner" style="text-align:center;">
+      <div class="eyebrow eyebrow-lt" style="margin-bottom:4px;">Sovereign Stillness</div>
+      <div class="h1 h1-lt" style="font-size:11px;font-style:italic;line-height:1.3;">Victoria<br>Avery</div>
+    </div>
+    <div class="pg-lbl">Arch — Solid</div>
+  </div>
+
+  <!-- 4. ARCH WITH PHOTO -->
+  <div class="page pg-arch-photo dark">
+    <div class="arch-shape" style="width:78px;height:98px;">
+      <div class="ph" style="width:100%;height:100%;"><div class="ph-lbl">photo</div></div>
+    </div>
+    <div class="arch-foot">
+      <div class="eyebrow eyebrow-lt" style="margin-bottom:3px;">Chapter One</div>
+      <div class="h1 h1-gold" style="font-size:14px;letter-spacing:0.04em;">THE STILL<br>POINT</div>
+    </div>
+    <div class="pg-lbl" style="color:#C8B89A;">Arch — Photo Inside</div>
+  </div>
+
+  <!-- 5. TABLE OF CONTENTS -->
+  <div class="page pg-toc">
+    <div class="eyebrow" style="margin-bottom:2px;">The Course</div>
+    <div class="h1" style="font-size:14px;margin-bottom:8px;">Curriculum</div>
+    <div class="toc-row"><span class="toc-name">Section 01</span><span class="toc-pg">4</span></div>
+    <div class="toc-row"><span class="toc-name">Section 02</span><span class="toc-pg">8</span></div>
+    <div class="toc-row"><span class="toc-name">Section 03</span><span class="toc-pg">14</span></div>
+    <div class="toc-row"><span class="toc-name">Section 04</span><span class="toc-pg">22</span></div>
+    <div class="toc-row"><span class="toc-name">Section 05</span><span class="toc-pg">30</span></div>
+    <div class="toc-row"><span class="toc-name">Section 06</span><span class="toc-pg">38</span></div>
+    <div class="pg-lbl">TOC</div>
+  </div>
+
+  <!-- 6. CHAPTER OPENER dark, num + photo -->
+  <div class="page pg-chapter dark">
+    <div class="ch-left">
+      <div class="ch-num">03</div>
+      <div class="ch-label">Chapter Heading</div>
+      <div class="ch-title">The Still<br>Point</div>
+    </div>
+    <div class="ph" style="width:45%;"><div class="ph-lbl">photo</div></div>
+    <div class="pg-lbl" style="color:#C8B89A;">Chapter Opener</div>
+  </div>
+
+  <!-- 7. 1-COL BODY TEXT — light -->
+  <div class="page pg-1col">
+    <div class="eyebrow" style="margin-bottom:3px;">Day 01</div>
+    <div class="h1" style="font-size:13px;margin-bottom:3px;line-height:1.2;">Morning<br>Inquiry</div>
+    <div class="rule-xs"></div>
+    <div class="body-txt" style="margin-top:2px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua ut enim.<br><br>Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident.</div>
+    <div class="pg-lbl">Body — 1 Col</div>
+  </div>
+
+  <!-- 8. 2-COL TEXT — light -->
+  <div class="page pg-2col">
+    <div class="eyebrow" style="margin-bottom:3px;">Your Heading Here</div>
+    <div class="h1" style="font-size:13px;margin-bottom:5px;line-height:1.2;">Your Heading<br>Title Here</div>
+    <div class="rule-xs"></div>
+    <div class="body-txt two-col" style="margin-top:4px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident. Sunt in culpa qui officia deserunt.</div>
+    <div class="pg-lbl">Body — 2 Col</div>
+  </div>
+
+  <!-- 9. PULL QUOTE — dark -->
+  <div class="page pg-quote dark">
+    <div class="q-mark">"</div>
+    <div class="q-text">This is probably the greatest thing to happen in my life — to be able to share this with you.</div>
+    <div class="q-attr">— Sovereign Stillness</div>
+    <div class="pg-lbl">Pull Quote</div>
+  </div>
+
+  <!-- 10. PHOTO LEFT + TEXT RIGHT -->
+  <div class="page pg-photo-left">
+    <div class="ph"><div class="ph-lbl">portrait<br>photo</div></div>
+    <div class="txt-side">
+      <div class="eyebrow" style="margin-bottom:3px;">Your Heading Here</div>
+      <div class="h1" style="font-size:12px;line-height:1.2;margin-bottom:4px;">Your Heading<br>Title Here</div>
+      <div class="rule-xs"></div>
+      <div class="body-txt" style="margin-top:3px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</div>
+    </div>
+    <div class="pg-lbl">Photo Left</div>
+  </div>
+
+  <!-- 11. PHOTO TOP + 2-COL BODY -->
+  <div class="page pg-photo-top">
+    <div class="ph" style="height:36%;"><div class="ph-lbl">editorial photo</div></div>
+    <div class="body-area">
+      <div class="eyebrow" style="margin-bottom:2px;">Your Heading Here</div>
+      <div class="h1" style="font-size:11px;margin-bottom:4px;line-height:1.2;">Heading Here</div>
+      <div class="body-txt two-col">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore dolore magna aliqua enim minim veniam.</div>
+    </div>
+    <div class="pg-lbl">Photo Top + 2 Col</div>
+  </div>
+
+  <!-- 12. DARK SPLIT — text left, photo right -->
+  <div class="page pg-dark-split dark">
+    <div class="left-txt">
+      <div class="eyebrow eyebrow-lt" style="margin-bottom:3px;">Your Heading Here</div>
+      <div class="h1 h1-lt" style="font-size:13px;line-height:1.2;margin-bottom:4px;">Chapter<br>Heading</div>
+      <div class="rule-xs rule-xs-lt"></div>
+      <div class="body-txt body-txt-cream" style="margin-top:3px;font-size:4.5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor.</div>
+    </div>
+    <div class="ph"><div class="ph-lbl">photo</div></div>
+    <div class="pg-lbl">Dark Split</div>
+  </div>
+
+  <!-- 13. CURRICULUM -->
+  <div class="page pg-curriculum">
+    <div class="eyebrow" style="margin-bottom:2px;">The Course</div>
+    <div class="h1" style="font-size:13px;margin-bottom:7px;">Module Framework</div>
+    <div class="mod-row"><div class="mod-num">1</div><div><div class="mod-title">Research</div><div class="mod-sub">Frameworks + Workbooks</div></div></div>
+    <div class="mod-row"><div class="mod-num">2</div><div><div class="mod-title">Target Audience</div><div class="mod-sub">Deep-dive exercises</div></div></div>
+    <div class="mod-row"><div class="mod-num">3</div><div><div class="mod-title">Build Your Brand</div><div class="mod-sub">Visual identity</div></div></div>
+    <div class="mod-row"><div class="mod-num">4</div><div><div class="mod-title">Mindset</div><div class="mod-sub">Daily practices</div></div></div>
+    <div class="mod-row"><div class="mod-num">5</div><div><div class="mod-title">Marketing</div><div class="mod-sub">Content + formats</div></div></div>
+    <div class="pg-lbl">Curriculum</div>
+  </div>
+
+  <!-- 14. CTA DARK -->
+  <div class="page pg-cta dark">
+    <div class="cta-eyebrow">Get Access</div>
+    <div class="cta-title">Unlock The<br>Full Course</div>
+    <div class="cta-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore.</div>
+    <div class="cta-btn">Unlock Course</div>
+    <div class="pg-lbl">CTA</div>
+  </div>
+
+  <!-- 15. PHOTO COLLAGE — photos stacked + text -->
+  <div class="page pg-collage">
+    <div class="col-photos">
+      <div class="ph col-ph"><div class="ph-lbl">photo</div></div>
+      <div class="ph col-ph"><div class="ph-lbl">photo</div></div>
+      <div class="ph col-ph"><div class="ph-lbl">photo</div></div>
+    </div>
+    <div class="col-right">
+      <div class="eyebrow" style="margin-bottom:3px;">Shared By Me</div>
+      <div class="h1" style="font-size:12px;line-height:1.2;margin-bottom:4px;">Fave<br>Resources</div>
+      <div class="rule-xs"></div>
+      <div class="body-txt" style="margin-top:3px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod.</div>
+    </div>
+    <div class="pg-lbl">Collage</div>
+  </div>
+
+  <!-- 16. INLINE PULL QUOTE — light, quote within body -->
+  <div class="page pg-inline-quote">
+    <div class="eyebrow" style="margin-bottom:3px;">Day 07</div>
+    <div class="h1" style="font-size:11px;margin-bottom:5px;line-height:1.2;">Returning Home</div>
+    <div class="body-txt">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt.</div>
+    <div class="inline-q">"You are right where you are meant to be. This is where you can pause, a turn on the subject."</div>
+    <div class="body-txt">Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint.</div>
+    <div class="pg-lbl">Inline Quote</div>
+  </div>
+
+
+  <!-- 17. CTA + DEVICE MOCKUP -->
+  <div class="page pg-cta-device">
+    <div class="eyebrow" style="margin-bottom:2px;">Get Ready To</div>
+    <div class="h1" style="font-size:13px;line-height:1.15;margin-bottom:3px;">Unlock The<br>Full Course</div>
+    <div class="body-txt" style="font-size:4.5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt.</div>
+    <div class="device-frame">
+      <div class="device-screen"><div class="ph-lbl" style="color:#C8B89A;font-size:4px;">device / laptop<br>mockup</div></div>
+    </div>
+    <div class="device-stand"></div>
+    <div class="device-base"></div>
+    <div class="body-txt" style="font-size:4.5px;margin-top:5px;">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor. Duis aute irure dolor in reprehenderit voluptate.</div>
+    <div style="margin-top:auto;padding-top:6px;">
+      <div style="background:#C8B89A;color:#F5F0E8;font-family:'Fraunces',sans-serif;font-size:4.5px;letter-spacing:0.18em;text-transform:uppercase;padding:5px 0;text-align:center;">Register Now</div>
+    </div>
+    <div class="pg-lbl">CTA + Device</div>
+  </div>
+
+  <!-- 18. CHAPTER ONE — cream arch over photo -->
+  <div class="page pg-ch1">
+    <div class="ph bg-photo"><div class="ph-lbl">palm / nature<br>photo</div></div>
+    <div class="cream-arch">
+      <div class="badge-circle">1</div>
+      <div class="ch1-body" style="margin-top:14px;">Lorem ipsum dolor sit amet,<br>consectetur adipiscing elit.</div>
+      <div class="ch1-title">Chapter<br>One</div>
+    </div>
+    <div class="pg-lbl" style="color:#A07848;">Ch. Opener Light</div>
+  </div>
+
+  <!-- 19. CHAPTER TWO — full photo bg, dark panel -->
+  <div class="page pg-ch2">
+    <div class="ph bg-photo"><div class="ph-lbl" style="color:#C8B89A;">full-bleed<br>photo bg</div></div>
+    <div class="badge-circle">2</div>
+    <div class="dark-panel">
+      <div class="ch2-title">Chapter Two</div>
+      <div class="ch2-body">Lorem ipsum dolor sit amet,<br>consectetur adipiscing elit.</div>
+    </div>
+    <div class="pg-lbl" style="color:#C8B89A;">Ch. Opener Dark</div>
+  </div>
+
+  <!-- 20. WELCOME ARCH — solid dark arch, text inside -->
+  <div class="page pg-welcome-arch">
+    <div class="welcome-arch-shape">
+      <div class="w-title">Welcome</div>
+    </div>
+    <div class="welcome-below">
+      <div class="w-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit sed do eiusmod tempor incididunt ut labore dolore magna. Duis aute irure dolor reprehenderit voluptate velit esse cillum eu fugiat nulla pariatur excepteur sint.</div>
+      <div class="w-sig">Victoria Avery</div>
+    </div>
+    <div class="pg-lbl">Welcome Arch</div>
+  </div>
+
+  <!-- 21. DENSE 1-COL TEXT -->
+  <div class="page pg-dense1">
+    <div class="big-head">You are right where you are meant to be.</div>
+    <div class="dense-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur excepteur sint occaecat cupidatat non proident sunt culpa.<br><br>Ullam corporis suscipit laboriosam nisi ut aliquid. Quis autem vel eum iure reprehenderit qui in ea voluptate. Nam libero tempore cum soluta nobis eligendi optio cumque nihil impedit quo minus id quod maxime placeat facere possimus omnis.</div>
+    <div class="pg-lbl">Dense 1-Col</div>
+  </div>
+
+  <!-- 22. DENSE 2-COL + SIGNATURE -->
+  <div class="page pg-dense2">
+    <div class="dense-body-2col">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation ullamco laboris. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident sunt culpa officia.<br><br>Nam libero tempore cum soluta nobis eligendi optio cumque nihil impedit quo minus id quod maxime. Placeat facere possimus omnis voluptas assumenda est omnis dolor repellendus temporibus autem quibusdam.<br><br>At vero eos et accusamus et iusto odio dignissimos ducimus blanditiis praesentium voluptatum deleniti atque corrupti quos dolores quas molestias excepturi sint.</div>
+    <div class="sig-line">Victoria Avery</div>
+    <div class="sig-sub">Written By</div>
+    <div class="pg-lbl">Dense 2-Col</div>
+  </div>
+
+  <!-- 23. 2-COL + PULL QUOTE BOTTOM RIGHT -->
+  <div class="page pg-2col-pq">
+    <div class="top-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud. Duis aute irure dolor reprehenderit voluptate velit esse cillum dolore eu fugiat nulla. Excepteur sint occaecat cupidatat non proident sunt culpa officia deserunt.<br><br>Ullam corporis suscipit laboriosam nisi ut aliquid ex ea commodi consequatur voluptatem quia voluptas aspernatur aut odit aut fugit sed quia.</div>
+    <div class="pq-corner">
+      <div class="pq-text">"You are right<br>where you are<br>meant to be."</div>
+    </div>
+    <div class="pg-lbl">2-Col + Pull Quote</div>
+  </div>
+
+  <!-- 24. SUB-HEADING + BODY -->
+  <div class="page pg-subhead">
+    <div class="subhead-eye">Sub-Heading Here</div>
+    <div class="subhead-h">Your Heading Here</div>
+    <div class="subhead-intro">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore magna.</div>
+    <div class="subhead-rule"></div>
+    <div class="subhead-body">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam quis nostrud exercitation. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore fugiat.<br><br>Ullam corporis suscipit laboriosam nisi ut aliquid ex ea commodi consequatur. Nam libero tempore cum soluta nobis eligendi optio cumque nihil impedit maxime facere possimus.</div>
+    <div class="pg-lbl">Sub-Heading + Body</div>
+  </div>
+
+</body></html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { background:#F5F0E8; padding:20px 24px; }
+  .row { display:flex; gap:16px; align-items:center; flex-wrap:wrap; }
+  .btn { display:inline-block; font-family:'Fraunces',sans-serif; font-size:9px; font-weight:400;
+    letter-spacing:0.2em; text-transform:uppercase; padding:10px 28px; cursor:pointer; border:none; }
+  .btn-primary  { background:#C8B89A; color:#F5F0E8; }
+  .btn-dark     { background:#3B1F0E; color:#F5F0E8; }
+  .btn-outline  { background:transparent; color:#3B1F0E; border:0.5px solid #3B1F0E; }
+  .btn-ghost    { background:transparent; color:#4A3020; border:0.5px solid #4A3020; }
+  .rule { border:none; border-top:0.5px solid #A07848; margin:14px 0; }
+  .tip { display:inline-flex; align-items:center; gap:8px; }
+  .tip-pill { border:1px solid #3B1F0E; border-radius:999px; padding:3px 14px;
+    font-family:'Cormorant Garamond',serif; font-size:12px; color:#3B1F0E; }
+  .badge { width:36px; height:36px; border-radius:50%; background:#A07848;
+    display:inline-flex; align-items:center; justify-content:center;
+    font-family:'Cormorant Garamond',serif; font-size:18px; color:#F5F0E8; }
+  .label { font-family:'Fraunces',sans-serif; font-size:8px; letter-spacing:0.18em; text-transform:uppercase; color:#4A3020; margin-bottom:6px; }
+  .sublabel { font-family:'Fraunces',sans-serif; font-size:7px; letter-spacing:0.12em; text-transform:uppercase; color:#A07848; margin-left:4px; vertical-align:middle; }
+</style>
+</head><body>
+  <div class="label">Buttons</div>
+  <div class="row">
+    <button class="btn btn-primary">Register Now<span class="sublabel">— Antique Gold fill</span></button>
+    <button class="btn btn-dark">Unlock Course<span class="sublabel">— Espresso fill</span></button>
+    <button class="btn btn-outline">Learn More</button>
+    <button class="btn btn-ghost">Explore</button>
+  </div>
+  <hr class="rule">
+  <div class="label">Callout Components</div>
+  <div class="row">
+    <span class="tip"><span class="tip-pill">TIP</span></span>
+    <span class="badge">3</span>
+    <span class="badge" style="background:#3B1F0E;">1</span>
+  </div>
+</body></html>

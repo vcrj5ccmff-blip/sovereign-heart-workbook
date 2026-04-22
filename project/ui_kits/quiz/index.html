@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Feminine Energy Quiz — Sovereign Stillness</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="quiz-data.js"></script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; }
+  body {
+    background: #F5F0E8;
+    min-height: 100vh;
+    font-family: 'Fraunces', Georgia, serif;
+    color: #1A0F08;
+    overflow-x: hidden;
+  }
+  ::selection { background: #C8B89A40; }
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: #C8B89A; border-radius: 2px; }
+
+  /* Transitions */
+  .fade-enter { opacity: 0; transform: translateY(16px); }
+  .fade-active { opacity: 1; transform: translateY(0); transition: opacity 0.5s ease, transform 0.5s ease; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+const { useState, useEffect, useRef } = React;
+
+/* ─── Tokens ─────────────────────────────────────── */
+const C = {
+  cream: '#F5F0E8',
+  tan:   '#C8B89A',
+  tanDk: '#A89070',
+  charcoal: '#1A0F08',
+  mid:   '#4A3020',
+  light: '#8A7060',
+  panel: '#2D1E12',
+};
+
+const serif  = "'Cormorant Garamond', Georgia, serif";
+const sans   = "'Fraunces', Georgia, serif";
+
+/* ─── Fade wrapper ───────────────────────────────── */
+function Fade({ children, key: k }) {
+  const [visible, setVisible] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setVisible(true), 30); return () => clearTimeout(t); }, []);
+  return (
+    <div style={{
+      opacity: visible ? 1 : 0,
+      transform: visible ? 'translateY(0)' : 'translateY(18px)',
+      transition: 'opacity 0.55s ease, transform 0.55s ease',
+    }}>
+      {children}
+    </div>
+  );
+}
+
+/* ─── Layout shell ───────────────────────────────── */
+function Shell({ children, dark = false }) {
+  return (
+    <div style={{
+      minHeight: '100vh',
+      background: dark ? C.charcoal : C.cream,
+      display: 'flex', flexDirection: 'column',
+      alignItems: 'center',
+      padding: '0 24px',
+    }}>
+      {/* Wordmark */}
+      <div style={{
+        width: '100%', maxWidth: '640px',
+        padding: '36px 0 0',
+        display: 'flex', justifyContent: 'center',
+      }}>
+        <span style={{
+          fontFamily: sans, fontSize: '10px',
+          letterSpacing: '0.28em', textTransform: 'uppercase',
+          color: dark ? C.light : C.light,
+        }}>@sovereignstillness</span>
+      </div>
+      <div style={{ width: '100%', maxWidth: '640px', flex: 1 }}>
+        {children}
+      </div>
+      {/* Footer */}
+      <div style={{
+        width: '100%', maxWidth: '640px',
+        padding: '32px 0 40px',
+        display: 'flex', justifyContent: 'center',
+        borderTop: `0.5px solid ${dark ? '#333' : C.tan}20`,
+        marginTop: '40px',
+      }}>
+        <span style={{ fontFamily: sans, fontSize: '10px', letterSpacing: '0.12em', color: C.light }}>
+          Sovereign Stillness · Daily transmissions for the woman doing the inner work
+        </span>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Progress bar ───────────────────────────────── */
+function Progress({ current, total }) {
+  return (
+    <div style={{ marginBottom: '40px' }}>
+      <div style={{
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        marginBottom: '10px',
+      }}>
+        <span style={{ fontFamily: sans, fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: C.light }}>
+          Question {current} of {total}
+        </span>
+        <span style={{ fontFamily: sans, fontSize: '10px', letterSpacing: '0.18em', textTransform: 'uppercase', color: C.tan }}>
+          {Math.round((current / total) * 100)}%
+        </span>
+      </div>
+      <div style={{ height: '1px', background: `${C.tan}30`, position: 'relative' }}>
+        <div style={{
+          position: 'absolute', top: 0, left: 0,
+          height: '100%', background: C.tan,
+          width: `${(current / total) * 100}%`,
+          transition: 'width 0.4s ease',
+        }} />
+      </div>
+    </div>
+  );
+}
+
+/* ─── Option button ──────────────────────────────── */
+function Option({ letter, text, selected, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  const active = selected || hovered;
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        display: 'flex', alignItems: 'flex-start', gap: '16px',
+        width: '100%', textAlign: 'left',
+        background: selected ? C.charcoal : hovered ? `${C.tan}12` : 'transparent',
+        border: `0.5px solid ${selected ? C.charcoal : hovered ? C.tan : `${C.tan}50`}`,
+        padding: '18px 20px', marginBottom: '10px',
+        cursor: 'pointer',
+        transition: 'all 0.2s ease',
+      }}
+    >
+      <span style={{
+        fontFamily: serif, fontSize: '18px', fontWeight: 300,
+        color: selected ? C.tan : C.tan,
+        lineHeight: 1, flexShrink: 0, marginTop: '1px',
+      }}>{letter}</span>
+      <span style={{
+        fontFamily: sans, fontSize: '14px', fontWeight: 300,
+        lineHeight: 1.65, color: selected ? C.cream : C.mid,
+      }}>{text}</span>
+    </button>
+  );
+}
+
+/* ─── Intro screen ───────────────────────────────── */
+function IntroScreen({ onStart }) {
+  const d = QUIZ_DATA.intro;
+  return (
+    <Shell>
+      <Fade>
+        <div style={{ padding: '48px 0 0', textAlign: 'center' }}>
+          <div style={{
+            fontFamily: sans, fontSize: '10px',
+            letterSpacing: '0.24em', textTransform: 'uppercase',
+            color: C.tan, marginBottom: '24px',
+          }}>The Quiz</div>
+
+          <h1 style={{
+            fontFamily: serif, fontSize: 'clamp(36px, 6vw, 54px)',
+            fontWeight: 300, letterSpacing: '0.02em',
+            color: C.charcoal, lineHeight: 1.1,
+            marginBottom: '12px',
+          }}>The Feminine<br/>Energy Quiz</h1>
+
+          <div style={{
+            fontFamily: serif, fontSize: 'clamp(16px, 2vw, 20px)',
+            fontStyle: 'italic', color: C.light,
+            marginBottom: '48px', letterSpacing: '0.01em',
+          }}>{d.subtitle}</div>
+
+          <div style={{
+            width: '40px', height: '0.5px',
+            background: C.tan, margin: '0 auto 48px',
+          }} />
+
+          {d.body.split('\n\n').map((para, i) => (
+            <p key={i} style={{
+              fontFamily: sans, fontSize: '15px', fontWeight: 300,
+              lineHeight: 1.8, color: C.mid,
+              marginBottom: '20px', textAlign: 'left',
+            }}>{para}</p>
+          ))}
+
+          <div style={{ marginTop: '52px', marginBottom: '16px' }}>
+            <Btn onClick={onStart}>{d.cta}</Btn>
+          </div>
+        </div>
+      </Fade>
+    </Shell>
+  );
+}
+
+/* ─── Question screen ────────────────────────────── */
+function QuestionScreen({ qIndex, answers, onAnswer }) {
+  const q = QUIZ_DATA.questions[qIndex];
+  const total = QUIZ_DATA.questions.length;
+  const selected = answers[qIndex];
+
+  return (
+    <Shell>
+      <Fade key={qIndex}>
+        <div style={{ padding: '40px 0 0' }}>
+          <Progress current={qIndex + 1} total={total} />
+
+          <p style={{
+            fontFamily: serif,
+            fontSize: 'clamp(20px, 3vw, 28px)',
+            fontWeight: 300, lineHeight: 1.4,
+            color: C.charcoal,
+            marginBottom: '36px',
+            letterSpacing: '0.01em',
+          }}>{q.text}</p>
+
+          <div>
+            {q.options.map(opt => (
+              <Option
+                key={opt.letter}
+                letter={opt.letter}
+                text={opt.text}
+                selected={selected === opt.letter}
+                onClick={() => onAnswer(qIndex, opt.letter)}
+              />
+            ))}
+          </div>
+        </div>
+      </Fade>
+    </Shell>
+  );
+}
+
+/* ─── Tally screen ───────────────────────────────── */
+function TallyScreen({ onReveal }) {
+  const [shown, setShown] = useState(false);
+  useEffect(() => { const t = setTimeout(() => setShown(true), 400); return () => clearTimeout(t); }, []);
+  useEffect(() => { if (shown) { const t = setTimeout(onReveal, 2000); return () => clearTimeout(t); } }, [shown]);
+
+  return (
+    <Shell>
+      <div style={{
+        display: 'flex', flexDirection: 'column',
+        alignItems: 'center', justifyContent: 'center',
+        minHeight: '70vh', textAlign: 'center',
+      }}>
+        <div style={{
+          fontFamily: sans, fontSize: '10px',
+          letterSpacing: '0.24em', textTransform: 'uppercase',
+          color: C.tan, marginBottom: '24px',
+          opacity: shown ? 1 : 0,
+          transition: 'opacity 0.6s ease',
+        }}>Reading your result</div>
+        <div style={{
+          fontFamily: serif, fontSize: 'clamp(22px, 4vw, 32px)',
+          fontWeight: 300, fontStyle: 'italic',
+          color: C.charcoal, lineHeight: 1.3,
+          opacity: shown ? 1 : 0,
+          transform: shown ? 'none' : 'translateY(10px)',
+          transition: 'all 0.7s ease 0.2s',
+        }}>
+          "That woman deserves to be seen accurately.<br/>She is the one this is written for."
+        </div>
+      </div>
+    </Shell>
+  );
+}
+
+/* ─── Result screen ──────────────────────────────── */
+function ResultScreen({ result, onRetake }) {
+  const r = QUIZ_DATA.results[result];
+  return (
+    <Shell dark>
+      <Fade>
+        <div style={{ padding: '48px 0 0' }}>
+          {/* Label */}
+          <div style={{
+            fontFamily: sans, fontSize: '10px',
+            letterSpacing: '0.24em', textTransform: 'uppercase',
+            color: C.light, marginBottom: '20px', textAlign: 'center',
+          }}>Your Result</div>
+
+          {/* Result name */}
+          <h2 style={{
+            fontFamily: serif,
+            fontSize: 'clamp(38px, 7vw, 64px)',
+            fontWeight: 300, letterSpacing: '0.03em',
+            color: C.tan, lineHeight: 1.05,
+            marginBottom: '28px', textAlign: 'center',
+            whiteSpace: 'pre-line',
+          }}>{r.label}</h2>
+
+          {/* Tagline */}
+          <p style={{
+            fontFamily: serif, fontSize: 'clamp(16px, 2vw, 20px)',
+            fontStyle: 'italic', fontWeight: 300,
+            color: C.cream, lineHeight: 1.5,
+            textAlign: 'center', marginBottom: '48px',
+          }}>{r.tagline}</p>
+
+          <div style={{ width: '40px', height: '0.5px', background: C.tan, margin: '0 auto 48px' }} />
+
+          {/* Body */}
+          {r.body.split('\n\n').map((para, i) => (
+            <p key={i} style={{
+              fontFamily: sans, fontSize: '15px', fontWeight: 300,
+              lineHeight: 1.85, color: '#C4BBAE',
+              marginBottom: '22px',
+            }}>{para}</p>
+          ))}
+
+          {/* Practice block */}
+          <div style={{
+            background: '#242424',
+            border: `0.5px solid #333`,
+            padding: '36px 32px', marginTop: '48px',
+          }}>
+            <div style={{
+              fontFamily: sans, fontSize: '10px',
+              letterSpacing: '0.22em', textTransform: 'uppercase',
+              color: C.tan, marginBottom: '16px',
+            }}>Practice</div>
+            <h3 style={{
+              fontFamily: serif, fontSize: 'clamp(20px, 2.5vw, 26px)',
+              fontWeight: 400, color: C.cream,
+              marginBottom: '24px', lineHeight: 1.25,
+            }}>{r.practice.title.replace("Today's Practice: ", '')}</h3>
+            {r.practice.body.split('\n\n').map((para, i) => (
+              <p key={i} style={{
+                fontFamily: sans, fontSize: '14px', fontWeight: 300,
+                lineHeight: 1.85, color: '#9A9089',
+                marginBottom: '16px',
+                fontStyle: para.startsWith('"') ? 'italic' : 'normal',
+              }}>{para}</p>
+            ))}
+          </div>
+
+          {/* Handle / bio */}
+          <div style={{
+            marginTop: '56px', padding: '36px 0',
+            borderTop: '0.5px solid #2D1E12',
+            textAlign: 'center',
+          }}>
+            <p style={{
+              fontFamily: serif, fontSize: 'clamp(16px, 2vw, 20px)',
+              fontStyle: 'italic', color: C.light,
+              marginBottom: '16px', lineHeight: 1.6,
+            }}>
+              "Everything I write is the thing I needed someone to say to me.<br/>I hope it finds you at exactly the right moment."
+            </p>
+            <div style={{
+              fontFamily: sans, fontSize: '11px',
+              letterSpacing: '0.18em', textTransform: 'uppercase',
+              color: C.tan, marginBottom: '4px',
+            }}>@sovereignstillness</div>
+            <div style={{
+              fontFamily: sans, fontSize: '11px',
+              color: C.light, letterSpacing: '0.06em',
+            }}>Instagram · Daily transmissions for the woman doing the inner work</div>
+          </div>
+
+          {/* Retake */}
+          <div style={{ textAlign: 'center', paddingBottom: '16px' }}>
+            <button onClick={onRetake} style={{
+              fontFamily: sans, fontSize: '10px',
+              letterSpacing: '0.2em', textTransform: 'uppercase',
+              background: 'transparent', border: `0.5px solid #333`,
+              color: C.light, padding: '12px 32px',
+              cursor: 'pointer', transition: 'all 0.2s ease',
+            }}>Retake Quiz</button>
+          </div>
+        </div>
+      </Fade>
+    </Shell>
+  );
+}
+
+/* ─── CTA Button ─────────────────────────────────── */
+function Btn({ children, onClick }) {
+  const [hovered, setHovered] = useState(false);
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{
+        fontFamily: sans, fontSize: '11px',
+        letterSpacing: '0.22em', textTransform: 'uppercase',
+        background: hovered ? C.tanDk : C.tan,
+        color: '#fff', border: 'none',
+        padding: '16px 52px',
+        cursor: 'pointer', transition: 'background 0.2s ease',
+      }}
+    >{children}</button>
+  );
+}
+
+/* ─── Tally logic ────────────────────────────────── */
+function tally(answers) {
+  const counts = { A: 0, B: 0, C: 0, D: 0 };
+  Object.values(answers).forEach(v => { if (v) counts[v]++; });
+  const max = Math.max(...Object.values(counts));
+  const winners = Object.keys(counts).filter(k => counts[k] === max);
+  // Tie-break: priority order B > A > C > D
+  const priority = ['B', 'A', 'C', 'D'];
+  return priority.find(k => winners.includes(k));
+}
+
+/* ─── App ────────────────────────────────────────── */
+function App() {
+  const saved = JSON.parse(localStorage.getItem('ss-quiz-state') || 'null');
+  const [screen, setScreen]   = useState(saved?.screen || 'intro');
+  const [qIndex, setQIndex]   = useState(saved?.qIndex || 0);
+  const [answers, setAnswers] = useState(saved?.answers || {});
+  const [result, setResult]   = useState(saved?.result || null);
+
+  const persist = (s) => localStorage.setItem('ss-quiz-state', JSON.stringify(s));
+
+  const handleStart = () => {
+    const s = { screen: 'question', qIndex: 0, answers: {}, result: null };
+    setScreen('question'); setQIndex(0); setAnswers({}); setResult(null);
+    persist(s);
+  };
+
+  const handleAnswer = (idx, letter) => {
+    const newAnswers = { ...answers, [idx]: letter };
+    setAnswers(newAnswers);
+    const isLast = idx === QUIZ_DATA.questions.length - 1;
+    const missingAny = QUIZ_DATA.questions.some((_, i) => !newAnswers[i]);
+
+    if (isLast && !missingAny) {
+      // Brief pause then tally
+      const s = { screen: 'tally', qIndex: idx + 1, answers: newAnswers, result: null };
+      setTimeout(() => { setScreen('tally'); persist(s); }, 350);
+    } else if (idx === qIndex && idx < QUIZ_DATA.questions.length - 1) {
+      // Auto-advance on first answer
+      setTimeout(() => {
+        const nextIdx = idx + 1;
+        setQIndex(nextIdx);
+        const s = { screen: 'question', qIndex: nextIdx, answers: newAnswers, result: null };
+        persist(s);
+      }, 320);
+    }
+  };
+
+  const handleReveal = () => {
+    const r = tally(answers);
+    setResult(r);
+    setScreen('result');
+    persist({ screen: 'result', qIndex, answers, result: r });
+  };
+
+  const handleRetake = () => {
+    localStorage.removeItem('ss-quiz-state');
+    setScreen('intro'); setQIndex(0); setAnswers({}); setResult(null);
+  };
+
+  if (screen === 'intro')    return <IntroScreen onStart={handleStart} />;
+  if (screen === 'question') return <QuestionScreen qIndex={qIndex} answers={answers} onAnswer={handleAnswer} />;
+  if (screen === 'tally')    return <TallyScreen onReveal={handleReveal} />;
+  if (screen === 'result')   return <ResultScreen result={result} onRetake={handleRetake} />;
+  return null;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>

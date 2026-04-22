@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Sovereign Stillness — New Workbook Pages</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet"/>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1a1a1a; font-family: sans-serif; }
+</style>
+</head>
+<body>
+<script type="text/babel" src="../design-canvas.jsx"></script>
+<script type="text/babel">
+
+// ─── DESIGN TOKENS ───────────────────────────────────────────
+const C = {
+  cream:     '#F5F0E8',
+  creamDark: '#EDE0CC',
+  tan:       '#C8B89A',
+  tanDark:   '#A89070',
+  charcoal:  '#1A0F08',
+  mid:       '#4A3020',
+  light:     '#8A7060',
+  dark:      '#2D1E12',
+  white:     '#FFFFFF',
+};
+const F = {
+  serif: "'Cormorant Garamond', Georgia, serif",
+  body:  "'Fraunces', Georgia, serif",
+};
+
+// Page wrapper — 8.5×11 at 96dpi
+const Page = ({ bg = C.cream, children, style = {} }) => (
+  <div style={{
+    width: 816, height: 1056,
+    background: bg,
+    position: 'relative',
+    overflow: 'hidden',
+    fontFamily: F.body,
+    ...style
+  }}>
+    {children}
+  </div>
+);
+
+const M = 56; // page margin
+
+// Label — small all-caps spaced
+const Label = ({ children, color = C.light, style = {} }) => (
+  <div style={{ fontFamily: F.body, fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color, ...style }}>
+    {children}
+  </div>
+);
+
+// Writing lines for journal pages
+const Lines = ({ count = 18, color = C.creamDark, style = {} }) => (
+  <div style={{ display: 'flex', flexDirection: 'column', gap: 0, ...style }}>
+    {Array.from({ length: count }).map((_, i) => (
+      <div key={i} style={{ borderBottom: `0.75px solid ${color}`, height: 40 }} />
+    ))}
+  </div>
+);
+
+// Thin tan rule
+const Rule = ({ style = {} }) => (
+  <div style={{ borderTop: `0.5px solid ${C.tan}`, ...style }} />
+);
+
+
+// ─── 1. COPYRIGHT ────────────────────────────────────────────
+const CopyrightPage = () => (
+  <Page>
+    <div style={{ padding: `${M}px`, height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+      <div />
+      <div style={{ maxWidth: 540 }}>
+        <Label style={{ marginBottom: 32 }}>Sovereign Stillness</Label>
+        <div style={{ fontFamily: F.body, fontSize: 13, lineHeight: 2, color: C.mid }}>
+          <p>Copyright © 2025 Sovereign Stillness. All rights reserved.</p>
+          <br/>
+          <p>No part of this workbook may be reproduced, distributed, or transmitted in any form or by any means, including photocopying, recording, or other electronic or mechanical methods, without the prior written permission of the author, except in the case of brief quotations embodied in personal use and certain other noncommercial uses permitted by copyright law.</p>
+          <br/>
+          <p>This workbook is for personal development purposes only. The content within is not intended as a substitute for professional mental health advice, diagnosis, or treatment. Always seek the guidance of a qualified health provider with any questions you may have.</p>
+          <br/>
+          <p>For permissions or inquiries:<br/>
+          <span style={{ color: C.tan }}>@sovereignstillness</span></p>
+        </div>
+      </div>
+      <div>
+        <Rule style={{ marginBottom: 20 }} />
+        <Label style={{ color: C.light }}>First Edition · 2025</Label>
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 2. LETTER FROM THE AUTHOR ───────────────────────────────
+const LetterPage = () => (
+  <Page>
+    <div style={{ display: 'flex', height: '100%' }}>
+      {/* Left dark strip */}
+      <div style={{ width: 8, background: C.tan, flexShrink: 0 }} />
+      <div style={{ padding: `${M}px 52px`, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+        <Label style={{ marginBottom: 12 }}>A Note From</Label>
+        <div style={{ fontFamily: F.serif, fontSize: 38, fontWeight: 400, lineHeight: 1.1, color: C.charcoal, marginBottom: 40 }}>
+          Dear Reader
+        </div>
+        <Rule style={{ marginBottom: 40 }} />
+        <div style={{ fontFamily: F.body, fontSize: 14.5, lineHeight: 1.9, color: C.mid, fontStyle: 'italic', maxWidth: 640 }}>
+          <p style={{ marginBottom: 20 }}>You already know something is off. Not wrong, exactly. Not broken. Just — off.</p>
+          <p style={{ marginBottom: 20 }}>Like you've been operating from a version of yourself that works, that gets things done, that holds everything together — and somewhere underneath all of that, something quieter has been waiting to be heard.</p>
+          <p style={{ marginBottom: 20 }}>This workbook is not a program. There is no correct way to move through it. There is no timeline, no grade, no destination you are supposed to reach by the last page.</p>
+          <p style={{ marginBottom: 20 }}>It is simply a space — honest, unhurried — for you to see yourself more clearly. To understand where you actually are. And to begin the gentle work of coming home.</p>
+          <p>You are exactly where you are supposed to be.</p>
+        </div>
+        <div style={{ marginTop: 48 }}>
+          <div style={{ fontFamily: F.serif, fontSize: 22, fontStyle: 'italic', color: C.tan }}>With love,</div>
+          <div style={{ fontFamily: F.serif, fontSize: 28, fontWeight: 400, color: C.charcoal, marginTop: 6 }}>Sovereign Stillness</div>
+          <Label style={{ marginTop: 6, color: C.light }}>@sovereignstillness</Label>
+        </div>
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 3. ABOUT THE AUTHOR ─────────────────────────────────────
+const AboutPage = () => (
+  <Page>
+    {/* Top dark band */}
+    <div style={{ background: C.dark, padding: `40px ${M}px 36px` }}>
+      <Label color={C.tan} style={{ marginBottom: 10 }}>About</Label>
+      <div style={{ fontFamily: F.serif, fontSize: 46, fontWeight: 400, color: C.cream, lineHeight: 1 }}>
+        The Author
+      </div>
+    </div>
+    <div style={{ padding: `48px ${M}px`, display: 'flex', gap: 44 }}>
+      {/* Photo placeholder */}
+      <div style={{ flexShrink: 0 }}>
+        <div style={{ width: 180, height: 220, background: C.creamDark, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ textAlign: 'center' }}>
+            <div style={{ width: 60, height: 60, borderRadius: '50%', background: C.tan, margin: '0 auto 8px' }} />
+            <Label style={{ color: C.light }}>Author Photo</Label>
+          </div>
+        </div>
+        <div style={{ marginTop: 16 }}>
+          <div style={{ fontFamily: F.serif, fontSize: 18, color: C.charcoal }}>Your Name</div>
+          <Label style={{ marginTop: 4, color: C.tan }}>@sovereignstillness</Label>
+        </div>
+      </div>
+      {/* Bio */}
+      <div style={{ flex: 1 }}>
+        <div style={{ fontFamily: F.body, fontSize: 14, lineHeight: 1.85, color: C.mid }}>
+          <p style={{ marginBottom: 18 }}>I didn't set out to write about feminine energy. I set out to understand why I was so exhausted.</p>
+          <p style={{ marginBottom: 18 }}>I had built a life that looked, from the outside, like it was working. A business. Independence. The ability to handle everything that needed handling. And underneath all of it — a tiredness I couldn't explain to anyone because it didn't make sense.</p>
+          <p style={{ marginBottom: 18 }}>What I eventually understood — slowly, then all at once — was that I had been living almost entirely in my masculine energy. Not because something was wrong with me. Because I had learned to. Because the world responded better to my strength than my softness.</p>
+          <p>This is what I write about. Not as someone who has it all figured out — but as someone who is living this, doing the inner work, and who believes that the most powerful thing a woman can do is come home to herself.</p>
+        </div>
+        <Rule style={{ margin: '32px 0' }} />
+        <Label color={C.light}>Instagram · Daily transmissions for the woman doing the inner work.</Label>
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 4. HOW TO USE THIS WORKBOOK ─────────────────────────────
+const HowToPage = () => (
+  <Page>
+    <div style={{ padding: `${M}px` }}>
+      <Label style={{ marginBottom: 14 }}>Before You Begin</Label>
+      <div style={{ fontFamily: F.serif, fontSize: 44, fontWeight: 400, lineHeight: 1.1, color: C.charcoal, marginBottom: 10 }}>
+        How to Use<br/>This Workbook
+      </div>
+      <Rule style={{ margin: '32px 0' }} />
+      <div style={{ fontFamily: F.body, fontSize: 14, lineHeight: 1.8, color: C.mid, marginBottom: 40, maxWidth: 620 }}>
+        This is not a workbook you complete. It is a workbook you return to.
+        Move through it at whatever pace feels honest — not the pace you think you should be moving at.
+      </div>
+
+      {[
+        ['01', 'Answer honestly', 'Not the aspirational version. Not the woman you\'re working toward. The woman you actually are today, in this season, in your real life.'],
+        ['02', 'Write without editing', 'The journal pages are yours alone. Write the first thing that arrives. The messy answer, the half-formed thought — that is the most useful one.'],
+        ['03', 'Take the quiz first', 'Before diving into the chapters, complete the Feminine Energy Quiz. Your result will give you a lens for everything that follows.'],
+        ['04', 'Revisit and revise', 'Come back. Your answers will change. That change is the evidence that the work is working.'],
+        ['05', 'One practice at a time', 'Each exercise has one practice at the end. Do just that one thing. Not the whole list. Just one.'],
+      ].map(([num, title, desc]) => (
+        <div key={num} style={{ display: 'flex', gap: 24, marginBottom: 32 }}>
+          <div style={{ fontFamily: F.serif, fontSize: 28, color: C.tan, minWidth: 36, lineHeight: 1 }}>{num}</div>
+          <div>
+            <div style={{ fontFamily: F.serif, fontSize: 18, color: C.charcoal, marginBottom: 6 }}>{title}</div>
+            <div style={{ fontFamily: F.body, fontSize: 13.5, lineHeight: 1.75, color: C.mid }}>{desc}</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  </Page>
+);
+
+
+// ─── 5a. JOURNAL — 1 QUESTION + FULL PAGE ────────────────────
+const JournalFullPage = () => (
+  <Page>
+    <div style={{ padding: `${M}px` }}>
+      <Label style={{ marginBottom: 40 }}>Reflection</Label>
+
+      {/* Question block */}
+      <div style={{ background: C.dark, padding: '36px 40px', marginBottom: 52 }}>
+        <Label color={C.tan} style={{ marginBottom: 14 }}>Question</Label>
+        <div style={{ fontFamily: F.serif, fontSize: 26, fontWeight: 400, fontStyle: 'italic', color: C.cream, lineHeight: 1.45 }}>
+          What am I holding right now that was never actually mine to carry?
+        </div>
+      </div>
+
+      {/* Response area */}
+      <Lines count={17} />
+
+      <Rule style={{ marginTop: 0 }} />
+      <div style={{ marginTop: 20, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Label color={C.light}>Your Response</Label>
+        <Label color={C.creamDark}>Date _______________</Label>
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 5b. JOURNAL — 3 QUESTIONS ───────────────────────────────
+const Journal3Page = () => (
+  <Page>
+    <div style={{ padding: `${M}px` }}>
+      <Label style={{ marginBottom: 14 }}>Journal Prompts</Label>
+      <div style={{ fontFamily: F.serif, fontSize: 36, fontWeight: 400, color: C.charcoal, marginBottom: 36, lineHeight: 1.1 }}>
+        Going Deeper
+      </div>
+
+      {[
+        'Where in my life am I forcing rather than allowing?',
+        'What would I do differently if I truly trusted the outcome?',
+        'When did I last feel fully at ease in my own body?',
+      ].map((q, i) => (
+        <div key={i} style={{ marginBottom: 44 }}>
+          <div style={{ display: 'flex', gap: 16, marginBottom: 16, alignItems: 'flex-start' }}>
+            <div style={{ fontFamily: F.serif, fontSize: 22, color: C.tan, lineHeight: 1, paddingTop: 2, minWidth: 20 }}>{i + 1}</div>
+            <div style={{ fontFamily: F.serif, fontSize: 16, fontStyle: 'italic', color: C.charcoal, lineHeight: 1.5 }}>{q}</div>
+          </div>
+          <Lines count={5} color={C.creamDark} />
+        </div>
+      ))}
+
+      <Rule style={{ marginTop: 8 }} />
+      <div style={{ marginTop: 18, display: 'flex', justifyContent: 'space-between' }}>
+        <Label color={C.light}>Reflection Prompts</Label>
+        <Label color={C.creamDark}>Date _______________</Label>
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 5c. JOURNAL — AFFIRMATION / REFLECTION ──────────────────
+const JournalAffirmPage = () => (
+  <Page bg={C.cream}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {/* Top tan accent */}
+      <div style={{ background: C.tan, height: 6 }} />
+      <div style={{ padding: `52px ${M}px 40px`, flex: 1, display: 'flex', flexDirection: 'column' }}>
+
+        <Label style={{ marginBottom: 48 }}>Today's Intention</Label>
+
+        {/* Central affirmation */}
+        <div style={{ textAlign: 'center', marginBottom: 52 }}>
+          <div style={{ fontFamily: F.serif, fontSize: 11, letterSpacing: '0.3em', textTransform: 'uppercase', color: C.tan, marginBottom: 20 }}>
+            Say This Out Loud
+          </div>
+          <div style={{ fontFamily: F.serif, fontSize: 30, fontStyle: 'italic', color: C.charcoal, lineHeight: 1.45, maxWidth: 560, margin: '0 auto' }}>
+            "I release my grip on what I cannot control. I am held. I am safe. I am enough, exactly as I am."
+          </div>
+          <Rule style={{ margin: '28px auto', width: 80 }} />
+        </div>
+
+        {/* What came up */}
+        <Label style={{ marginBottom: 16 }}>What came up for you?</Label>
+        <Lines count={10} />
+
+        {/* Bottom prompt */}
+        <div style={{ marginTop: 32, padding: '20px 24px', border: `0.5px solid ${C.tan}` }}>
+          <Label color={C.tan} style={{ marginBottom: 8 }}>One Small Act of Return</Label>
+          <div style={{ fontFamily: F.body, fontSize: 13.5, color: C.mid, lineHeight: 1.7 }}>
+            Write one thing — just one — you will do today to come back to yourself.
+          </div>
+          <div style={{ marginTop: 16 }}>
+            <Lines count={2} color={C.creamDark} />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 6. QUIZ INTRO ───────────────────────────────────────────
+const QuizIntroPage = () => (
+  <Page bg={C.charcoal}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: `${M}px 72px` }}>
+      <Label color={C.tan} style={{ marginBottom: 20 }}>The Feminine Energy</Label>
+      <div style={{ fontFamily: F.serif, fontSize: 72, fontWeight: 300, color: C.cream, lineHeight: 1, marginBottom: 8, letterSpacing: '0.02em' }}>
+        QUIZ
+      </div>
+      <div style={{ width: 80, height: 1, background: C.tan, marginBottom: 40 }} />
+      <div style={{ fontFamily: F.body, fontSize: 15, lineHeight: 1.9, color: '#B8A898', maxWidth: 560, marginBottom: 52 }}>
+        <p style={{ marginBottom: 16 }}>You already know something is off. Not wrong, exactly. Not broken. Just — off.</p>
+        <p style={{ marginBottom: 16 }}>This quiz is not a test. There is no correct answer. There is no better result.</p>
+        <p>It is simply ten questions designed to show you something you might not have been able to name yet — which energy you are actually living from, and what that is costing you.</p>
+      </div>
+      <div style={{ fontFamily: F.serif, fontSize: 14, fontStyle: 'italic', color: C.tan, lineHeight: 1.6, marginBottom: 48 }}>
+        Answer with the first thing that feels true.<br/>
+        Not the aspirational answer. The woman you actually are today.
+      </div>
+      <div style={{ display: 'flex', gap: 48 }}>
+        {[['10', 'Questions'], ['3', 'Results'], ['0', 'Wrong Answers']].map(([n, l]) => (
+          <div key={l}>
+            <div style={{ fontFamily: F.serif, fontSize: 36, color: C.tan }}>{n}</div>
+            <Label color={'#7A6A5A'} style={{ marginTop: 4 }}>{l}</Label>
+          </div>
+        ))}
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 7. QUIZ QUESTION (sample Q1) ────────────────────────────
+const QuizQuestionPage = () => (
+  <Page>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {/* Header */}
+      <div style={{ background: C.dark, padding: '28px 56px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <Label color={C.tan}>The Feminine Energy Quiz</Label>
+        <div style={{ fontFamily: F.serif, fontSize: 13, color: '#7A6A5A', letterSpacing: '0.1em' }}>1 of 10</div>
+      </div>
+
+      <div style={{ padding: '52px 56px', flex: 1 }}>
+        {/* Question */}
+        <div style={{ marginBottom: 48 }}>
+          <Label style={{ marginBottom: 20 }}>Question One</Label>
+          <div style={{ fontFamily: F.serif, fontSize: 22, fontWeight: 400, fontStyle: 'italic', color: C.charcoal, lineHeight: 1.55, maxWidth: 640 }}>
+            It's been a few hours and he hasn't replied. Your body does something before your mind even catches up. What does it do?
+          </div>
+        </div>
+
+        <Rule style={{ marginBottom: 40 }} />
+
+        {/* Answer options */}
+        {[
+          ['A', 'Tightens. You go back to the last message and read it again looking for what you might have said wrong.'],
+          ['B', 'Notices, feels the small dip, and then mostly settles — you\'ve learned to let things land without immediately making them mean something.'],
+          ['C', 'Reaches. You type something, delete it, type it again. The silence is too loud to sit in.'],
+          ['D', 'Carries it quietly. A low hum of unease you don\'t fully act on but can\'t quite put down.'],
+        ].map(([letter, text]) => (
+          <div key={letter} style={{ display: 'flex', gap: 24, marginBottom: 28, padding: '20px 24px', border: `0.5px solid ${C.creamDark}` }}>
+            <div style={{
+              width: 36, height: 36, border: `0.5px solid ${C.tan}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              fontFamily: F.serif, fontSize: 16, color: C.tan
+            }}>{letter}</div>
+            <div style={{ fontFamily: F.body, fontSize: 14, lineHeight: 1.75, color: C.mid, paddingTop: 8 }}>{text}</div>
+          </div>
+        ))}
+
+        <div style={{ marginTop: 8, display: 'flex', justifyContent: 'flex-end' }}>
+          <Label color={C.light}>Circle your answer · Continue to the next page</Label>
+        </div>
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 8. RESULT: THE WARRIOR ──────────────────────────────────
+const WarriorPage = () => (
+  <Page bg={C.cream}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      {/* Dark top */}
+      <div style={{ background: C.charcoal, padding: '36px 56px 32px' }}>
+        <Label color={C.tan} style={{ marginBottom: 10 }}>Your Result · Mostly A's</Label>
+        <div style={{ fontFamily: F.serif, fontSize: 52, fontWeight: 300, color: C.cream, lineHeight: 1, letterSpacing: '0.03em' }}>
+          THE WARRIOR
+        </div>
+      </div>
+
+      <div style={{ padding: '44px 56px', flex: 1, overflow: 'hidden' }}>
+        <div style={{ fontFamily: F.serif, fontSize: 19, fontStyle: 'italic', color: C.mid, lineHeight: 1.55, marginBottom: 28, maxWidth: 640 }}>
+          You have been holding everything together for so long you've forgotten what it feels like not to.
+        </div>
+        <Rule style={{ marginBottom: 28 }} />
+        <div style={{ fontFamily: F.body, fontSize: 13.5, lineHeight: 1.85, color: C.mid, columns: 2, columnGap: 40, marginBottom: 32 }}>
+          <p style={{ marginBottom: 14 }}>Not because you're broken. Because you're capable. Remarkably, exhaustingly capable. You learned early that the world responded better to your strength than your softness. That things got done when you did them.</p>
+          <p style={{ marginBottom: 14 }}>You are tired in a way that sleep doesn't fix. Not tired of your life. Tired of the weight of it. Tired of being the one who holds everything together while quietly wondering what it would feel like if someone held it for you.</p>
+          <p>That tiredness is not weakness. It is your feminine energy knocking on a door you haven't opened in a long time. She has been in there the whole time. Patient. Waiting. And now you're ready for something different.</p>
+        </div>
+        <div style={{ background: C.dark, padding: '24px 28px' }}>
+          <Label color={C.tan} style={{ marginBottom: 10 }}>Today's Practice · The Release</Label>
+          <div style={{ fontFamily: F.body, fontSize: 13, lineHeight: 1.75, color: '#B8A898' }}>
+            Find somewhere quiet. Ask yourself: <span style={{ fontStyle: 'italic' }}>what am I holding right now that was never mine to carry?</span> Write it down. Then say out loud: <span style={{ color: C.tan, fontStyle: 'italic' }}>"I release my grip on this. The universe has this. And the universe has me."</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 9. RESULT: THE ARCHITECT ────────────────────────────────
+const ArchitectPage = () => (
+  <Page bg={C.cream}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ background: C.dark, padding: '36px 56px 32px' }}>
+        <Label color={C.tan} style={{ marginBottom: 10 }}>Your Result · Mostly C's</Label>
+        <div style={{ fontFamily: F.serif, fontSize: 52, fontWeight: 300, color: C.cream, lineHeight: 1, letterSpacing: '0.03em' }}>
+          THE ARCHITECT
+        </div>
+      </div>
+
+      <div style={{ padding: '44px 56px', flex: 1 }}>
+        <div style={{ fontFamily: F.serif, fontSize: 19, fontStyle: 'italic', color: C.mid, lineHeight: 1.55, marginBottom: 28, maxWidth: 640 }}>
+          You know exactly what it feels like when life flows. That's what makes it so hard when it doesn't.
+        </div>
+        <Rule style={{ marginBottom: 28 }} />
+        <div style={{ fontFamily: F.body, fontSize: 13.5, lineHeight: 1.85, color: C.mid, columns: 2, columnGap: 40, marginBottom: 32 }}>
+          <p style={{ marginBottom: 14 }}>You have felt it. The ease. The way things arrive when you stop forcing them. The right person, the right opportunity — showing up without you having to chase it. And then something happened. And almost without realizing it, you shifted.</p>
+          <p style={{ marginBottom: 14 }}>The harder you push the further things seem to get. The more you try to hold on the more it slips. And quietly, in the back of your mind — maybe this isn't meant for me.</p>
+          <p>What nobody told you is that the fighting is not the solution. The fighting is the thing pushing it away. What is meant for you cannot be forced into arriving. It can only be allowed to.</p>
+        </div>
+        <div style={{ background: C.dark, padding: '24px 28px' }}>
+          <Label color={C.tan} style={{ marginBottom: 10 }}>Today's Practice · The Stay</Label>
+          <div style={{ fontFamily: F.body, fontSize: 13, lineHeight: 1.75, color: '#B8A898' }}>
+            When something feels uncertain today — put both feet flat on the floor, one hand on your chest, and say: <span style={{ color: C.tan, fontStyle: 'italic' }}>"I am safe in the not knowing. I don't have to fix this to be okay."</span> Stay there for sixty seconds.
+          </div>
+        </div>
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 10. RESULT: THE REMEMBERING ─────────────────────────────
+const RememberingPage = () => (
+  <Page bg={C.cream}>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ background: C.mid, padding: '36px 56px 32px' }}>
+        <Label color={C.tan} style={{ marginBottom: 10 }}>Your Result · Mostly B's</Label>
+        <div style={{ fontFamily: F.serif, fontSize: 52, fontWeight: 300, color: C.cream, lineHeight: 1, letterSpacing: '0.03em' }}>
+          THE REMEMBERING
+        </div>
+      </div>
+
+      <div style={{ padding: '44px 56px', flex: 1 }}>
+        <div style={{ fontFamily: F.serif, fontSize: 19, fontStyle: 'italic', color: C.mid, lineHeight: 1.55, marginBottom: 28, maxWidth: 640 }}>
+          Something is shifting in you. You may not have the words for it yet. But you feel it.
+        </div>
+        <Rule style={{ marginBottom: 28 }} />
+        <div style={{ fontFamily: F.body, fontSize: 13.5, lineHeight: 1.85, color: C.mid, columns: 2, columnGap: 40, marginBottom: 32 }}>
+          <p style={{ marginBottom: 14 }}>You have done the work. Not perfectly. Not without setbacks. But genuinely. You've learned to receive. To rest. To let things land without immediately making them mean something.</p>
+          <p style={{ marginBottom: 14 }}>But here is the question that arrives in the honest moments: <span style={{ fontStyle: 'italic' }}>am I actually flowing — or have I just learned to talk about flow?</span></p>
+          <p>The body always tells the truth. It cannot perform the way the mind can. When you are actually okay — your body is soft, open, resting. When you are performing okay — something is still held. The mind will always find a story. The body cannot lie the same way.</p>
+        </div>
+        <div style={{ background: C.dark, padding: '24px 28px' }}>
+          <Label color={C.tan} style={{ marginBottom: 10 }}>Today's Practice · The Finding</Label>
+          <div style={{ fontFamily: F.body, fontSize: 13, lineHeight: 1.75, color: '#B8A898' }}>
+            Bring to mind something you want. Scan your body's response — not your thoughts about it. Ask: <span style={{ fontStyle: 'italic' }}>is there an openness and a pull toward? Or is there tightness and a need for a specific outcome?</span> The open feeling is flow. The tight feeling is grip.
+          </div>
+        </div>
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 11. EXERCISE / PRACTICE ─────────────────────────────────
+const ExercisePage = () => (
+  <Page>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: `${M}px ${M}px 0` }}>
+        <Label style={{ marginBottom: 14 }}>Practice</Label>
+        <div style={{ fontFamily: F.serif, fontSize: 40, fontWeight: 400, color: C.charcoal, lineHeight: 1.1, marginBottom: 10 }}>
+          The Release
+        </div>
+        <div style={{ fontFamily: F.serif, fontSize: 16, fontStyle: 'italic', color: C.tan, marginBottom: 32 }}>
+          A practice in loosening your grip
+        </div>
+        <Rule style={{ marginBottom: 36 }} />
+      </div>
+
+      <div style={{ padding: `0 ${M}px`, flex: 1 }}>
+        {[
+          ['Find stillness', 'Sit somewhere quiet. Take three slow breaths — not the automatic kind. The kind where you actually feel your chest expand and your shoulders drop.'],
+          ['Ask the question', 'What am I holding right now that was never actually mine to carry? Not everything on your list. Just one thing. The one that exhausts you most.'],
+          ['Write it down', 'One sentence. As specifically as you can. Name it clearly.'],
+          ['Speak it aloud', '"I release my grip on this. It was never mine to control. The universe has this. And the universe has me."'],
+          ['Notice', 'What happens in your body in the ten seconds after. Don\'t judge it. Don\'t analyze it. Just notice.'],
+        ].map(([title, desc], i) => (
+          <div key={i} style={{ display: 'flex', gap: 20, marginBottom: 28 }}>
+            <div style={{
+              width: 32, height: 32, border: `0.5px solid ${C.tan}`,
+              display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
+              fontFamily: F.serif, fontSize: 14, color: C.tan
+            }}>{i + 1}</div>
+            <div>
+              <div style={{ fontFamily: F.serif, fontSize: 16, color: C.charcoal, marginBottom: 6 }}>{title}</div>
+              <div style={{ fontFamily: F.body, fontSize: 13.5, lineHeight: 1.75, color: C.mid }}>{desc}</div>
+            </div>
+          </div>
+        ))}
+
+        <div style={{ marginTop: 12 }}>
+          <Label style={{ marginBottom: 14 }}>What did you notice?</Label>
+          <Lines count={6} />
+        </div>
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── 12. RESOURCES / NEXT STEPS ──────────────────────────────
+const ResourcesPage = () => (
+  <Page>
+    <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+      <div style={{ background: C.tan, padding: '40px 56px 36px' }}>
+        <Label color={C.white} style={{ marginBottom: 12 }}>Continue the Work</Label>
+        <div style={{ fontFamily: F.serif, fontSize: 46, fontWeight: 400, color: C.white, lineHeight: 1 }}>
+          What Comes Next
+        </div>
+      </div>
+
+      <div style={{ padding: '48px 56px', flex: 1 }}>
+        <div style={{ fontFamily: F.body, fontSize: 14.5, lineHeight: 1.8, color: C.mid, marginBottom: 44, maxWidth: 620 }}>
+          This workbook is a beginning, not an end. Here is where to go from here.
+        </div>
+
+        {[
+          ['Daily Transmissions', '@sovereignstillness on Instagram', 'Words for the woman doing the inner work. Every day.'],
+          ['The Full Course', 'sovereignstillness.com', 'Deepen the work with guided audio, extended practices, and community.'],
+          ['1:1 Coaching', 'By application only', 'For the woman ready to move through this with direct support.'],
+          ['The Community', 'Link in bio', 'A private space for women in the remembering.'],
+        ].map(([title, link, desc]) => (
+          <div key={title} style={{ marginBottom: 32, paddingBottom: 32, borderBottom: `0.5px solid ${C.creamDark}` }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 8 }}>
+              <div style={{ fontFamily: F.serif, fontSize: 20, color: C.charcoal }}>{title}</div>
+              <div style={{ fontFamily: F.body, fontSize: 12, color: C.tan, letterSpacing: '0.05em' }}>{link}</div>
+            </div>
+            <div style={{ fontFamily: F.body, fontSize: 13.5, color: C.mid, lineHeight: 1.7 }}>{desc}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </Page>
+);
+
+
+// ─── DESIGN CANVAS ───────────────────────────────────────────
+const App = () => (
+  <DesignCanvas title="Sovereign Stillness — New Workbook Pages">
+
+    <DCSection id="front" title="Front Matter">
+      <DCArtboard id="copyright" label="Copyright / Disclaimer" width={816} height={1056}>
+        <CopyrightPage />
+      </DCArtboard>
+      <DCArtboard id="letter" label="Letter from the Author" width={816} height={1056}>
+        <LetterPage />
+      </DCArtboard>
+      <DCArtboard id="about" label="About the Author" width={816} height={1056}>
+        <AboutPage />
+      </DCArtboard>
+      <DCArtboard id="howto" label="How to Use This Workbook" width={816} height={1056}>
+        <HowToPage />
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="journal" title="Journal Pages">
+      <DCArtboard id="j-full" label="Journal A — Single Question" width={816} height={1056}>
+        <JournalFullPage />
+      </DCArtboard>
+      <DCArtboard id="j-three" label="Journal B — Three Prompts" width={816} height={1056}>
+        <Journal3Page />
+      </DCArtboard>
+      <DCArtboard id="j-affirm" label="Journal C — Affirmation + Intention" width={816} height={1056}>
+        <JournalAffirmPage />
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="quiz" title="Quiz Pages">
+      <DCArtboard id="quiz-intro" label="Quiz Intro" width={816} height={1056}>
+        <QuizIntroPage />
+      </DCArtboard>
+      <DCArtboard id="quiz-q" label="Quiz Question (Sample)" width={816} height={1056}>
+        <QuizQuestionPage />
+      </DCArtboard>
+      <DCArtboard id="warrior" label="Result — The Warrior" width={816} height={1056}>
+        <WarriorPage />
+      </DCArtboard>
+      <DCArtboard id="architect" label="Result — The Architect" width={816} height={1056}>
+        <ArchitectPage />
+      </DCArtboard>
+      <DCArtboard id="remembering" label="Result — The Remembering" width={816} height={1056}>
+        <RememberingPage />
+      </DCArtboard>
+    </DCSection>
+
+    <DCSection id="content" title="Content Pages">
+      <DCArtboard id="exercise" label="Exercise / Practice Page" width={816} height={1056}>
+        <ExercisePage />
+      </DCArtboard>
+      <DCArtboard id="resources" label="Resources / Next Steps" width={816} height={1056}>
+        <ResourcesPage />
+      </DCArtboard>
+    </DCSection>
+
+  </DesignCanvas>
+);
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+<div id="root"></div>
+</body>
+</html>

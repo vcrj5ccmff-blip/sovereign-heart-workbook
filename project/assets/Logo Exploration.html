@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Sovereign Stillness — Logo Refinement</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<style>*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }</style>
+</head>
+<body>
+<div id="root" style="width:100vw;height:100vh;"></div>
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel">
+
+const serif = "'Cormorant Garamond', Georgia, serif";
+const body  = "'Fraunces', Georgia, serif";
+const C = { cream:'#F5F0E8', tan:'#C8B89A', tanDk:'#A89070', espresso:'#1A0F08', panel:'#2D1E12', mid:'#4A3020', light:'#8A7060' };
+
+function Board({ bg, children }) {
+  return <div style={{ width:'100%', height:'100%', background:bg, display:'flex', alignItems:'center', justifyContent:'center' }}>{children}</div>;
+}
+
+/* ══ 02 VARIANTS — Stacked rule ══════════════════════════════ */
+
+// 02-A: Original on cream
+function Logo02Light() {
+  return (
+    <Board bg={C.cream}>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ fontFamily:serif, fontSize:'22px', fontWeight:600, letterSpacing:'0.2em', textTransform:'uppercase', color:C.espresso, lineHeight:1 }}>Sovereign</div>
+        <div style={{ width:'100%', height:'0.5px', background:C.tan, margin:'9px 0' }} />
+        <div style={{ fontFamily:serif, fontSize:'22px', fontWeight:300, letterSpacing:'0.35em', textTransform:'uppercase', color:C.tan, lineHeight:1 }}>Stillness</div>
+      </div>
+    </Board>
+  );
+}
+
+// 02-B: Dark background
+function Logo02Dark() {
+  return (
+    <Board bg={C.espresso}>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ fontFamily:serif, fontSize:'22px', fontWeight:600, letterSpacing:'0.2em', textTransform:'uppercase', color:C.cream, lineHeight:1 }}>Sovereign</div>
+        <div style={{ width:'100%', height:'0.5px', background:C.tan, margin:'9px 0' }} />
+        <div style={{ fontFamily:serif, fontSize:'22px', fontWeight:300, letterSpacing:'0.35em', textTransform:'uppercase', color:C.tan, lineHeight:1 }}>Stillness</div>
+      </div>
+    </Board>
+  );
+}
+
+// 02-C: Dark panel bg, cream top + tan bottom, wider
+function Logo02DarkWide() {
+  return (
+    <Board bg={C.panel}>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ fontFamily:serif, fontSize:'18px', fontWeight:600, letterSpacing:'0.28em', textTransform:'uppercase', color:C.cream, lineHeight:1 }}>Sovereign</div>
+        <div style={{ display:'flex', alignItems:'center', gap:'8px', margin:'10px 0' }}>
+          <div style={{ flex:1, height:'0.5px', background:C.tan }} />
+          <div style={{ width:'4px', height:'4px', background:C.tan, transform:'rotate(45deg)', flexShrink:0 }} />
+          <div style={{ flex:1, height:'0.5px', background:C.tan }} />
+        </div>
+        <div style={{ fontFamily:serif, fontSize:'18px', fontWeight:300, letterSpacing:'0.42em', textTransform:'uppercase', color:C.tan, lineHeight:1, paddingLeft:'0.42em' }}>Stillness</div>
+      </div>
+    </Board>
+  );
+}
+
+// 02-D: Stacked, condensed, tan rule with tagline
+function Logo02Tagline() {
+  return (
+    <Board bg={C.cream}>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ fontFamily:serif, fontSize:'20px', fontWeight:600, letterSpacing:'0.22em', textTransform:'uppercase', color:C.espresso, lineHeight:1 }}>Sovereign</div>
+        <div style={{ width:'100%', height:'0.5px', background:C.tan, margin:'8px 0' }} />
+        <div style={{ fontFamily:serif, fontSize:'20px', fontWeight:300, letterSpacing:'0.36em', textTransform:'uppercase', color:C.tan, lineHeight:1 }}>Stillness</div>
+        <div style={{ fontFamily:body, fontSize:'7px', fontWeight:300, letterSpacing:'0.22em', textTransform:'uppercase', color:C.light, marginTop:'12px', fontStyle:'italic' }}>transmission not instruction</div>
+      </div>
+    </Board>
+  );
+}
+
+/* ══ 04 VARIANTS — SS Monogram ═══════════════════════════════ */
+
+// 04-A: Original — large SS
+function Logo04A() {
+  return (
+    <Board bg={C.espresso}>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ fontFamily:serif, fontSize:'58px', fontWeight:600, color:C.tan, lineHeight:1, letterSpacing:'-0.08em' }}>SS</div>
+        <div style={{ width:'32px', height:'0.5px', background:C.tan, margin:'12px auto 10px' }} />
+        <div style={{ fontFamily:body, fontSize:'7px', fontWeight:300, letterSpacing:'0.34em', textTransform:'uppercase', color:C.light }}>Sovereign Stillness</div>
+      </div>
+    </Board>
+  );
+}
+
+// 04-B: Stacked SS — more spaced, outlined/hollow
+function Logo04B() {
+  return (
+    <Board bg={C.espresso}>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ fontFamily:serif, fontSize:'52px', fontWeight:300, color:'transparent', lineHeight:0.95, letterSpacing:'-0.06em', WebkitTextStroke:`1px ${C.tan}` }}>SS</div>
+        <div style={{ fontFamily:body, fontSize:'7px', fontWeight:300, letterSpacing:'0.32em', textTransform:'uppercase', color:C.light, marginTop:'14px' }}>Sovereign Stillness</div>
+      </div>
+    </Board>
+  );
+}
+
+// 04-C: Circle seal with SS
+function Logo04C() {
+  return (
+    <Board bg={C.espresso}>
+      <div style={{ width:'110px', height:'110px', borderRadius:'50%', border:`0.5px solid ${C.tan}`, display:'flex', flexDirection:'column', alignItems:'center', justifyContent:'center', textAlign:'center' }}>
+        <div style={{ fontFamily:serif, fontSize:'40px', fontWeight:600, color:C.tan, lineHeight:1, letterSpacing:'-0.08em' }}>SS</div>
+        <div style={{ width:'24px', height:'0.5px', background:C.tan, margin:'6px auto' }} />
+        <div style={{ fontFamily:body, fontSize:'5.5px', letterSpacing:'0.2em', textTransform:'uppercase', color:C.light }}>est.</div>
+      </div>
+    </Board>
+  );
+}
+
+// 04-D: SS on cream — inverted
+function Logo04D() {
+  return (
+    <Board bg={C.cream}>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ fontFamily:serif, fontSize:'58px', fontWeight:600, color:C.tan, lineHeight:1, letterSpacing:'-0.08em' }}>SS</div>
+        <div style={{ width:'32px', height:'0.5px', background:C.tan, margin:'12px auto 10px' }} />
+        <div style={{ fontFamily:body, fontSize:'7px', fontWeight:300, letterSpacing:'0.34em', textTransform:'uppercase', color:C.light }}>Sovereign Stillness</div>
+      </div>
+    </Board>
+  );
+}
+
+/* ══ 07 VARIANTS — Split weight horizontal ═══════════════════ */
+
+// 07-A: Original
+function Logo07A() {
+  return (
+    <Board bg={C.espresso}>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ display:'flex', alignItems:'center', justifyContent:'center', gap:'12px' }}>
+          <span style={{ fontFamily:serif, fontSize:'20px', fontWeight:700, letterSpacing:'0.14em', textTransform:'uppercase', color:C.cream }}>Sovereign</span>
+          <span style={{ width:'1px', height:'18px', background:C.tan, display:'inline-block', flexShrink:0 }} />
+          <span style={{ fontFamily:serif, fontSize:'20px', fontWeight:300, letterSpacing:'0.3em', textTransform:'uppercase', color:C.tan }}>Stillness</span>
+        </div>
+        <div style={{ width:'100%', height:'0.5px', background:'rgba(200,184,154,0.25)', margin:'10px 0 8px' }} />
+        <div style={{ fontFamily:body, fontSize:'6.5px', fontWeight:300, letterSpacing:'0.32em', textTransform:'uppercase', color:C.light, fontStyle:'italic' }}>transmission not instruction</div>
+      </div>
+    </Board>
+  );
+}
+
+// 07-B: Stacked instead of horizontal, bold/thin contrast
+function Logo07B() {
+  return (
+    <Board bg={C.espresso}>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ fontFamily:serif, fontSize:'24px', fontWeight:700, letterSpacing:'0.16em', textTransform:'uppercase', color:C.cream, lineHeight:1 }}>Sovereign</div>
+        <div style={{ fontFamily:serif, fontSize:'24px', fontWeight:300, letterSpacing:'0.3em', textTransform:'uppercase', color:C.tan, lineHeight:1, marginTop:'4px' }}>Stillness</div>
+        <div style={{ display:'flex', alignItems:'center', gap:'8px', margin:'12px 0 8px' }}>
+          <div style={{ flex:1, height:'0.5px', background:'rgba(200,184,154,0.2)' }} />
+          <div style={{ fontFamily:body, fontSize:'6px', letterSpacing:'0.28em', textTransform:'uppercase', color:C.light, fontStyle:'italic', fontWeight:300 }}>transmission not instruction</div>
+          <div style={{ flex:1, height:'0.5px', background:'rgba(200,184,154,0.2)' }} />
+        </div>
+      </div>
+    </Board>
+  );
+}
+
+// 07-C: Tight stacked, heavy sovereign / thin stillness, tan rule between
+function Logo07C() {
+  return (
+    <Board bg={C.panel}>
+      <div style={{ textAlign:'center' }}>
+        <div style={{ fontFamily:body, fontSize:'6.5px', fontWeight:300, letterSpacing:'0.32em', textTransform:'uppercase', color:C.light, marginBottom:'14px' }}>@sovereignstillness</div>
+        <div style={{ fontFamily:serif, fontSize:'28px', fontWeight:700, letterSpacing:'0.1em', textTransform:'uppercase', color:C.cream, lineHeight:1 }}>Sovereign</div>
+        <div style={{ width:'48px', height:'0.5px', background:C.tan, margin:'7px auto' }} />
+        <div style={{ fontFamily:serif, fontSize:'28px', fontWeight:300, letterSpacing:'0.22em', textTransform:'uppercase', color:C.tan, lineHeight:1 }}>Stillness</div>
+      </div>
+    </Board>
+  );
+}
+
+// 07-D: Horizontal, no tagline — cleaner
+function Logo07D() {
+  return (
+    <Board bg={C.espresso}>
+      <div>
+        <div style={{ display:'flex', alignItems:'baseline', gap:'14px' }}>
+          <span style={{ fontFamily:serif, fontSize:'18px', fontWeight:700, letterSpacing:'0.18em', textTransform:'uppercase', color:C.cream }}>Sovereign</span>
+          <span style={{ fontFamily:serif, fontSize:'18px', fontWeight:300, letterSpacing:'0.34em', textTransform:'uppercase', color:C.tan }}>Stillness</span>
+        </div>
+        <div style={{ height:'0.5px', background:C.tan, marginTop:'9px', opacity:0.4 }} />
+      </div>
+    </Board>
+  );
+}
+
+function App() {
+  return (
+    <DesignCanvas>
+      <DCSection id="02" title="02 · Stacked with rule" subtitle="Your favourite — light + dark variations">
+        <DCArtboard id="02-light"   label="Light bg" width={260} height={140}><Logo02Light/></DCArtboard>
+        <DCArtboard id="02-dark"    label="Dark bg" width={260} height={140}><Logo02Dark/></DCArtboard>
+        <DCArtboard id="02-diamond" label="Dark + diamond rule" width={300} height={140}><Logo02DarkWide/></DCArtboard>
+        <DCArtboard id="02-tag"     label="Light + tagline" width={300} height={140}><Logo02Tagline/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="04" title="04 · SS Monogram" subtitle="Solid / outlined / seal / inverted">
+        <DCArtboard id="04-a" label="Solid — dark" width={220} height={160}><Logo04A/></DCArtboard>
+        <DCArtboard id="04-b" label="Outlined — dark" width={220} height={160}><Logo04B/></DCArtboard>
+        <DCArtboard id="04-c" label="Circle seal" width={220} height={160}><Logo04C/></DCArtboard>
+        <DCArtboard id="04-d" label="Solid — cream bg" width={220} height={160}><Logo04D/></DCArtboard>
+      </DCSection>
+
+      <DCSection id="07" title="07 · Split weight" subtitle="Horizontal / stacked / minimal refinements">
+        <DCArtboard id="07-a" label="Horizontal + tagline" width={340} height={130}><Logo07A/></DCArtboard>
+        <DCArtboard id="07-b" label="Stacked + inline tagline" width={300} height={130}><Logo07B/></DCArtboard>
+        <DCArtboard id="07-c" label="Stacked + handle" width={280} height={160}><Logo07C/></DCArtboard>
+        <DCArtboard id="07-d" label="Horizontal, no tagline" width={300} height={120}><Logo07D/></DCArtboard>
+      </DCSection>
+    </DesignCanvas>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
