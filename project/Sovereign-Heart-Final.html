@@ -392,8 +392,7 @@ body.print-mode .journal-field{display:none;}
 
 /* ======= PRINT @media ======= */
 @media print{
-  @page{size:letter;margin:0.75in 1in;}
-  @page:first{margin:0.75in 1in;}
+  @page{size:letter;margin:0.85in 1in;}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
   html,body{height:auto;overflow:visible;background:var(--cream);}
   .main{height:auto;overflow:visible;padding-top:0;}
@@ -402,24 +401,70 @@ body.print-mode .journal-field{display:none;}
   .action-btn,.topbar-right,.save-toast{display:none!important;}
   .screen-only,textarea{display:none!important;}
   .print-lines{display:block!important;}
-  .print-line{height:28px;border-bottom:1px solid rgba(160,120,72,.3);}
-  .cover-page,.author-page{break-after:page;page-break-after:always;}
-  .light-page,.week-opener{break-after:page;page-break-after:always;}
-  .day-page{break-after:page;page-break-after:always;}
-  .practice-section{break-inside:avoid;}
-  .reflection-section{break-inside:avoid;}
+  .print-line{height:28px;border-bottom:1px solid rgba(160,120,72,.28);}
+
+  /* All section backgrounds → same cream so no color clash at any page break */
+  .practice-section,.reflection-section,.week-opener,.author-page{
+    background:var(--cream)!important;
+  }
+  /* Replace background separation with a visible rule */
+  .practice-section{
+    border-top:1.5px solid var(--brass)!important;
+    break-before:page;page-break-before:always;
+  }
+  .reflection-section{
+    border-top:1.5px solid rgba(160,120,72,.45)!important;
+    break-before:page;page-break-before:always;
+    margin-top:0!important;
+  }
+  /* Prevent orphaned questions */
   .ref-q{break-inside:avoid;page-break-inside:avoid;}
-  .anchor-box{break-inside:avoid;}
+  .anchor-box{break-inside:avoid;page-break-inside:avoid;}
+
+  /* Front matter & week openers get their own page */
+  .cover-page,.author-page,.light-page{break-after:page;page-break-after:always;}
+  .week-opener{break-after:page;page-break-after:always;}
   .cover-page{
-    min-height:calc(11in - 1.5in);
+    min-height:calc(11in - 1.7in);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
   }
   .week-opener{
-    min-height:calc(11in - 1.5in);
+    min-height:calc(11in - 1.7in);
     display:flex;flex-direction:column;align-items:center;justify-content:center;
   }
   .day-inner,.practice-inner,.reflection-inner{padding-left:0;padding-right:0;}
 }
+
+/* ======= PREVIEW MODE (in-browser linear view) ======= */
+body.preview-mode{overflow-y:auto;background:#ccc;}
+body.preview-mode .main{height:auto;overflow:visible;padding-top:52px;}
+body.preview-mode .page{
+  display:block!important;height:auto!important;overflow:visible!important;
+  background:var(--cream);
+  box-shadow:0 2px 12px rgba(0,0,0,.18);
+  margin:32px auto;width:8.5in;min-height:11in;
+  padding:0.85in 1in;box-sizing:border-box;
+  position:relative;
+}
+body.preview-mode .topbar{position:sticky;}
+body.preview-mode .day-page{padding:0;}
+body.preview-mode .practice-section{margin-left:-1in;margin-right:-1in;padding:52px 1in;}
+body.preview-mode .reflection-section{margin-left:-1in;margin-right:-1in;padding:56px 1in 72px;}
+body.preview-mode .screen-only{display:block!important;}
+body.preview-mode textarea{display:none!important;}
+body.preview-mode .print-lines{display:block!important;}
+body.preview-mode .print-line{height:28px;border-bottom:1px solid rgba(160,120,72,.28);}
+body.preview-mode .page-break-ruler{
+  display:block;width:calc(100% + 2in);margin-left:-1in;
+  border-top:2px dashed rgba(200,0,0,.35);
+  height:0;position:relative;
+}
+body.preview-mode .page-break-ruler::after{
+  content:'page break';position:absolute;right:0;top:-10px;
+  font-size:9px;letter-spacing:.08em;color:rgba(200,0,0,.5);
+  font-family:system-ui,sans-serif;text-transform:uppercase;
+}
+body.preview-mode .nav-btn,.preview-mode .page-nav{display:none!important;}
 
 </style>
 </head>
@@ -472,7 +517,7 @@ body.print-mode .journal-field{display:none;}
 <a href="#" onclick="nav('thank-you');return false" data-page="thank-you">Thank You</a>
 </nav>
 <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
-<div class="topbar"><button class="menu-btn" onclick="toggleSidebar()"><span></span><span></span><span></span></button><span class="topbar-title">The Sovereign Heart</span><div class="topbar-right"><div class="mode-toggle"><button class="mode-btn active" data-mode="screen" onclick="setMode('screen')">Screen</button><button class="mode-btn" data-mode="print" onclick="setMode('print')">Layout</button></div><button class="action-btn" onclick="printWorkbook()">Print</button><button class="action-btn" onclick="saveToFile()">Save</button></div></div>
+<div class="topbar"><button class="menu-btn" onclick="toggleSidebar()"><span></span><span></span><span></span></button><span class="topbar-title">The Sovereign Heart</span><div class="topbar-right"><div class="mode-toggle"><button class="mode-btn active" data-mode="screen" onclick="setMode('screen')">Screen</button><button class="mode-btn" data-mode="print" onclick="setMode('print')">Print View</button></div><button class="action-btn" id="preview-btn" onclick="togglePreview()">Preview</button><button class="action-btn" onclick="printWorkbook()">Print</button><button class="action-btn" onclick="saveToFile()">Save</button></div></div>
 <div class="save-toast" id="toast"></div>
 <div class="main" id="main">
 <section class="page active" id="page-cover"><div class="cover-page"><div class="cover-ornament"></div><span class="cover-series">A 30-Day Practice &nbsp;·&nbsp; Sovereign Stillness</span><h1 class="cover-title">The Sovereign<br>Heart</h1><div class="cover-rule"></div><p class="cover-sub">A Stoic Workbook for Reclaiming Your Peace When Someone Has Your Mind</p><button class="cover-begin" onclick="nav('author-note')">Begin &nbsp;→</button></div></section>
@@ -2574,7 +2619,53 @@ document.addEventListener('input', e=>{
   if(e.target.tagName==='TEXTAREA') autoResize(e.target);
 });
 
+function togglePreview(){
+  const on = document.body.classList.toggle('preview-mode');
+  const btn = document.getElementById('preview-btn');
+  btn.textContent = on ? 'Exit Preview' : 'Preview';
+  if(on){
+    setMode('print');
+    // Show all pages
+    document.querySelectorAll('.page').forEach(p=>p.classList.add('active'));
+    // Inject page-break rulers at ~9.25in intervals within each page section
+    setTimeout(injectPageRulers, 100);
+    showToast('Red dashes = approximate page breaks. Scroll down to see the full document.',5000);
+  } else {
+    document.querySelectorAll('.page-break-ruler').forEach(r=>r.remove());
+    document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+    nav(current); // restore active page
+  }
+}
+
+function injectPageRulers(){
+  // Letter page printable height at 96dpi: (11-1.7)*96 = ~893px
+  const pageH = 893;
+  document.querySelectorAll('.page').forEach(page=>{
+    const total = page.scrollHeight;
+    let y = pageH;
+    while(y < total - 40){
+      const ruler = document.createElement('div');
+      ruler.className = 'page-break-ruler';
+      // Insert at approximate y position
+      let inserted = false;
+      const children = Array.from(page.querySelectorAll('*'));
+      for(const el of children){
+        const r = el.getBoundingClientRect();
+        const pr = page.getBoundingClientRect();
+        const relTop = r.top - pr.top + page.scrollTop;
+        if(relTop > y && el.parentElement === page){
+          page.insertBefore(ruler, el);
+          inserted = true; break;
+        }
+      }
+      if(!inserted) page.appendChild(ruler);
+      y += pageH;
+    }
+  });
+}
+
 function printWorkbook(){
+  if(document.body.classList.contains('preview-mode')) togglePreview();
   setMode('print');
   showToast('In the print dialog → uncheck "Headers and footers" for best results');
   setTimeout(()=>window.print(), 800);
