@@ -64,6 +64,7 @@ body{font-family:var(--f);color:var(--ink);}
 .menu-btn{background:none;border:none;cursor:pointer;display:flex;flex-direction:column;gap:5px;padding:6px;}
 .menu-btn span{display:block;width:20px;height:1.5px;background:var(--brass);}
 .topbar-title{font-size:13px;letter-spacing:.15em;text-transform:uppercase;color:var(--brass);font-weight:400;}
+.topbar-right{display:flex;align-items:center;gap:10px;}
 .mode-toggle{
   display:flex;gap:0;border:1px solid var(--cream-dark);border-radius:2px;overflow:hidden;
 }
@@ -73,6 +74,20 @@ body{font-family:var(--f);color:var(--ink);}
   padding:7px 14px;color:var(--warm-gray);transition:all .2s;
 }
 .mode-btn.active{background:var(--brass);color:#fff;}
+.action-btn{
+  background:none;border:1px solid var(--cream-dark);border-radius:2px;
+  cursor:pointer;font-family:var(--f);font-size:11px;letter-spacing:.15em;
+  text-transform:uppercase;padding:7px 14px;color:var(--warm-gray);
+  transition:all .2s;white-space:nowrap;
+}
+.action-btn:hover{border-color:var(--brass);color:var(--brass);}
+.save-toast{
+  position:fixed;bottom:24px;left:50%;transform:translateX(-50%);
+  background:var(--espresso);color:var(--gold);font-family:var(--f);
+  font-size:12px;letter-spacing:.12em;text-transform:uppercase;
+  padding:10px 24px;border-radius:2px;opacity:0;transition:opacity .3s;
+  pointer-events:none;z-index:999;
+}
 
 /* MAIN */
 .main{height:100vh;overflow:hidden;padding-top:52px;}
@@ -289,6 +304,7 @@ body{font-family:var(--f);color:var(--ink);}
   text-align:center;font-size:19px;font-style:italic;
   color:var(--warm-gray);font-weight:300;line-height:1.65;
 }
+.ref-closing+.ref-closing{margin-top:18px;padding-top:0;border-top:none;}
 
 /* PAGE NAV */
 .page-nav{
@@ -445,7 +461,8 @@ body.print-mode .journal-field{display:none;}
 <a href="#" onclick="nav('thank-you');return false" data-page="thank-you">Thank You</a>
 </nav>
 <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
-<div class="topbar"><button class="menu-btn" onclick="toggleSidebar()"><span></span><span></span><span></span></button><span class="topbar-title">The Sovereign Heart</span><div class="mode-toggle"><button class="mode-btn active" data-mode="screen" onclick="setMode('screen')">Screen</button><button class="mode-btn" data-mode="print" onclick="setMode('print')">Print</button></div></div>
+<div class="topbar"><button class="menu-btn" onclick="toggleSidebar()"><span></span><span></span><span></span></button><span class="topbar-title">The Sovereign Heart</span><div class="topbar-right"><div class="mode-toggle"><button class="mode-btn active" data-mode="screen" onclick="setMode('screen')">Screen</button><button class="mode-btn" data-mode="print" onclick="setMode('print')">Layout</button></div><button class="action-btn" onclick="printWorkbook()">Print</button><button class="action-btn" onclick="exportAnswers()">Export</button></div></div>
+<div class="save-toast" id="toast"></div>
 <div class="main" id="main">
 <section class="page active" id="page-cover"><div class="cover-page"><div class="cover-ornament"></div><span class="cover-series">A 30-Day Practice &nbsp;·&nbsp; Sovereign Stillness</span><h1 class="cover-title">The Sovereign<br>Heart</h1><div class="cover-rule"></div><p class="cover-sub">A Stoic Workbook for Reclaiming Your Peace When Someone Has Your Mind</p><button class="cover-begin" onclick="nav('author-note')">Begin &nbsp;→</button></div></section>
 <section class="page" id="page-author-note"><div class="author-page"><div class="author-card"><span class="section-label">A Note from the Author</span><p>This book began as a letter I wrote to myself.</p><p>I didn’t know it would become something I’d share. I only knew that I needed someone to tell me — honestly, without judgment, without telling me to move on — exactly what was happening to me, and how to find my way back to myself.</p><p>I hope it does the same for you.</p><span class="sig">— Amber Harbaugh</span><div class="page-nav"><button class="nav-btn" onclick="nav('cover')">← Back</button><button class="nav-btn" onclick="nav('before-begin')">Continue →</button></div></div></div></section>
@@ -2536,6 +2553,52 @@ window.addEventListener('load', ()=>{
 document.addEventListener('input', e=>{
   if(e.target.tagName==='TEXTAREA') autoResize(e.target);
 });
+
+function printWorkbook(){
+  setMode('print');
+  setTimeout(()=>window.print(), 400);
+}
+
+function exportAnswers(){
+  const DAY_TITLES = {"1": "The Uninvited Guest", "2": "The Story You're Telling", "3": "The Checking", "4": "The Search for Certainty", "5": "The Imaginary Conversation", "6": "The Version of Him in Your Head", "7": "What You See Now", "8": "The Pause", "9": "Feel It Without Feeding It", "10": "Come Back to Your Body", "11": "The Slow Reply", "12": "Delay the Reassurance", "13": "Name It Precisely", "14": "Halfway", "15": "What You're Actually Afraid Of", "16": "You Would Survive It", "17": "Voluntary Discomfort", "18": "What You've Been Putting on Hold", "19": "The Attachment Beneath the Attachment", "20": "What Would Remain", "21": "Sitting With What Is", "22": "Letting It Be Uncertain", "23": "Who You Are Without the Waiting", "24": "Desire Without Desperation", "25": "Becoming the Source", "26": "Grounded Focus", "27": "The Woman You're Becoming", "28": "Loving Well", "29": "Whatever Happens", "30": "The Sovereign Heart"};
+  const lines = [];
+  lines.push('THE SOVEREIGN HEART — My Responses');
+  lines.push('Exported ' + new Date().toLocaleDateString());
+  lines.push('');
+  for(let day=1; day<=30; day++){
+    const title = DAY_TITLES[day] || '';
+    const dayLines = [];
+    for(let q=1; q<=8; q++){
+      const k = 'ssh_d'+day+'_q'+q;
+      const v = (localStorage.getItem(k)||'').trim();
+      if(v) dayLines.push('  Q'+q+': '+v);
+    }
+    // also check other keys for this day
+    for(let key in localStorage){
+      if(key.startsWith('ssh_d'+day+'_') && !key.match(/_q\d+$/)){
+        const v = (localStorage.getItem(key)||'').trim();
+        if(v) dayLines.push('  '+key.replace('ssh_d'+day+'_','')+': '+v);
+      }
+    }
+    if(dayLines.length){
+      lines.push('DAY '+day+' — '+title);
+      lines.push(...dayLines);
+      lines.push('');
+    }
+  }
+  if(lines.length <= 3){ showToast('No responses saved yet.'); return; }
+  const blob = new Blob([lines.join('\n')], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'sovereign-heart-responses.txt';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+}
+
+function showToast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.style.opacity='1';
+  setTimeout(()=>t.style.opacity='0', 2500);
+}
 </script>
 </body>
 </html>
