@@ -6,9 +6,9 @@
 <title>Sovereign Stillness — New Workbook Pages</title>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet"/>
-<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="../vendor/react.development.js"></script>
+<script src="../vendor/react-dom.development.js"></script>
+<script src="../vendor/babel.min.js"></script>
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { background: #1a1a1a; font-family: sans-serif; }
@@ -20,15 +20,18 @@
 
 // ─── DESIGN TOKENS ───────────────────────────────────────────
 const C = {
-  cream:     '#F5F0E8',
-  creamDark: '#EDE0CC',
-  tan:       '#C8B89A',
-  tanDark:   '#A89070',
-  charcoal:  '#1A0F08',
-  mid:       '#4A3020',
-  light:     '#8A7060',
-  dark:      '#2D1E12',
-  white:     '#FFFFFF',
+  cream:        '#F5F0E8',
+  creamDark:    '#EDE0CC',
+  tan:          '#C8B89A',  // Antique Gold — broad fills, primary button
+  brass:        '#A07848',  // Aged Brass — dividers, motifs, detail
+  espresso:     '#3B1F0E',  // deepest dark — body text
+  mid:          '#4A3020',  // secondary text
+  dark:         '#2D1E12',  // dark panels
+  white:        '#FFFFFF',
+  // aliases for backward compat
+  get charcoal() { return this.espresso; },
+  get light()    { return this.brass; },
+  get tanDark()  { return '#A89070'; },
 };
 const F = {
   serif: "'Cormorant Garamond', Georgia, serif",
@@ -52,7 +55,7 @@ const Page = ({ bg = C.cream, children, style = {} }) => (
 const M = 56; // page margin
 
 // Label — small all-caps spaced
-const Label = ({ children, color = C.light, style = {} }) => (
+const Label = ({ children, color = C.mid, style = {} }) => (
   <div style={{ fontFamily: F.body, fontSize: 11, letterSpacing: '0.22em', textTransform: 'uppercase', color, ...style }}>
     {children}
   </div>
@@ -67,9 +70,9 @@ const Lines = ({ count = 18, color = C.creamDark, style = {} }) => (
   </div>
 );
 
-// Thin tan rule
+// Aged Brass hairline rule
 const Rule = ({ style = {} }) => (
-  <div style={{ borderTop: `0.5px solid ${C.tan}`, ...style }} />
+  <div style={{ borderTop: `0.5px solid ${C.brass}`, ...style }} />
 );
 
 

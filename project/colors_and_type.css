@@ -3,112 +3,106 @@
    colors_and_type.css
    ============================================================ */
 
-/* ------------------------------------------------------------
-   Google Fonts import
-   ⚠️  Substitution note: Exact Canva fonts are unconfirmed.
-       Cormorant Garant ≈ editorial high-contrast serif (display)
-       Lora ≈ readable serif (body)
-       Montserrat ≈ spaced label sans
-   ------------------------------------------------------------ */
 @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400;1,9..144,500&display=swap');
 
 /* ------------------------------------------------------------
-   BASE COLOR TOKENS
+   BASE COLOR TOKENS — Final palette (April 2026)
    ------------------------------------------------------------ */
 :root {
   /* Core palette */
-  --color-cream:        #F5F0E8;
-  --color-tan:          #C8B89A;
-  --color-charcoal:     #1A0F08;
-  --color-mid:          #4A3020;
-  --color-light:        #8A7060;
-  --color-dark-panel:   #2D1E12;
-  --color-white:        #FFFFFF;
+  --color-cream:        #F5F0E8;  /* primary background */
+  --color-antique-gold: #C8B89A;  /* broad fills, primary button */
+  --color-aged-brass:   #A07848;  /* dividers, motifs, detail accents — one touch per layout */
+  --color-espresso:     #3B1F0E;  /* deepest dark — body text, dark backgrounds */
+  --color-mid:          #4A3020;  /* secondary text */
+  --color-panel:        #2D1E12;  /* dark panels, overlays */
 
   /* Tints */
-  --color-cream-dark:   #EDE0CC;  /* slightly deeper cream for dividers */
-  --color-tan-light:    #DDD1BC;  /* lighter tan for hover */
-  --color-tan-dark:     #A89070;  /* deeper tan for pressed states */
+  --color-cream-dark:       #EDE0CC;  /* slightly deeper cream for dividers */
+  --color-antique-gold-dk:  #A89070;  /* deeper antique gold for hover states */
+
+  /* No pure black — darkest dark is Panel #2D1E12
+     No cool tones — every dark is warm brown */
 
   /* ------------------------------------------------------------
      SEMANTIC COLOR TOKENS
      ------------------------------------------------------------ */
 
   /* Backgrounds */
-  --bg-page:            var(--color-cream);
-  --bg-dark:            var(--color-charcoal);
-  --bg-panel:           var(--color-dark-panel);
-  --bg-accent:          var(--color-tan);
+  --bg-page:      var(--color-cream);
+  --bg-dark:      var(--color-espresso);
+  --bg-panel:     var(--color-panel);
+  --bg-accent:    var(--color-aged-brass);
+  --bg-accent-lt: var(--color-antique-gold);
 
   /* Foregrounds */
-  --fg-primary:         var(--color-charcoal);
-  --fg-secondary:       var(--color-mid);
-  --fg-tertiary:        var(--color-light);
-  --fg-accent:          var(--color-tan);
-  --fg-on-dark:         var(--color-cream);
-  --fg-on-dark-accent:  var(--color-tan);
+  --fg-primary:        var(--color-espresso);
+  --fg-secondary:      var(--color-mid);
+  --fg-accent:         var(--color-aged-brass);
+  --fg-on-dark:        var(--color-cream);
+  --fg-on-dark-accent: var(--color-antique-gold);
 
   /* Borders & Rules */
-  --border-rule:        var(--color-tan);
-  --border-rule-light:  var(--color-cream-dark);
+  --border-rule:       var(--color-aged-brass);
+  --border-rule-light: var(--color-cream-dark);
 
-  /* CTA / Button */
-  --btn-bg:             var(--color-tan);
-  --btn-fg:             var(--color-white);
-  --btn-bg-hover:       var(--color-tan-dark);
-  --btn-bg-dark:        var(--color-charcoal);
-  --btn-fg-dark:        var(--color-white);
+  /* CTA / Button tokens */
+  --btn-bg:         var(--color-antique-gold);  /* primary: Antique Gold fill */
+  --btn-fg:         var(--color-cream);
+  --btn-bg-hover:   var(--color-antique-gold-dk);
+  --btn-bg-dark:    var(--color-espresso);       /* dark button: Espresso fill */
+  --btn-fg-dark:    var(--color-cream);
 
   /* ------------------------------------------------------------
      TYPOGRAPHY TOKENS
      ------------------------------------------------------------ */
 
   /* Font families */
-  --font-serif:         'Cormorant Garamond', 'Palatino Linotype', Georgia, serif;
-  --font-body:          'Fraunces', Georgia, serif;   /* body, labels, UI — optical serif */
-  --font-sans:          'Fraunces', Georgia, serif;   /* all non-display text uses Fraunces */
+  --font-serif: 'Cormorant Garamond', 'Palatino Linotype', Georgia, serif;
+  --font-body:  'Fraunces', Georgia, serif;
+  --font-sans:  'Fraunces', Georgia, serif;  /* body & UI both use Fraunces */
 
   /* ------------------------------------------------------------
      TYPE SCALE — base 16px
      ------------------------------------------------------------ */
 
-  /* Display / Hero (covers, chapter titles) */
-  --text-display-xl:    clamp(3rem, 8vw, 6rem);      /* ~96px cover title */
-  --text-display-lg:    clamp(2.5rem, 5vw, 4rem);    /* ~64px chapter heading */
-  --text-display-md:    clamp(1.75rem, 3vw, 2.5rem); /* ~40px section heading */
+  /* Display / Hero */
+  --text-display-xl:  clamp(3rem, 8vw, 6rem);       /* ~96px cover title */
+  --text-display-lg:  clamp(2.5rem, 5vw, 4rem);      /* ~64px chapter heading */
+  --text-display-md:  clamp(1.75rem, 3vw, 2.5rem);   /* ~40px section heading */
 
   /* Content headings */
-  --text-h1:            clamp(1.75rem, 2.5vw, 2.25rem); /* ~36px */
-  --text-h2:            clamp(1.25rem, 2vw, 1.75rem);   /* ~28px */
-  --text-h3:            clamp(1rem, 1.5vw, 1.25rem);    /* ~20px */
+  --text-h1: clamp(1.75rem, 2.5vw, 2.25rem);  /* ~36px */
+  --text-h2: clamp(1.25rem, 2vw, 1.75rem);     /* ~28px */
+  --text-h3: clamp(1rem, 1.5vw, 1.25rem);      /* ~20px */
 
   /* Body */
-  --text-body-lg:       1rem;       /* 16px — standard body */
-  --text-body-sm:       0.875rem;   /* 14px — captions, footnotes */
+  --text-body-lg: 1rem;      /* 16px standard body */
+  --text-body-sm: 0.875rem;  /* 14px captions, footnotes */
 
   /* Labels / eyebrows */
-  --text-label:         0.6875rem;  /* 11px — ALL CAPS spaced labels */
-  --text-label-md:      0.75rem;    /* 12px */
+  --text-label:    0.6875rem;  /* 11px ALL CAPS spaced labels */
+  --text-label-md: 0.75rem;    /* 12px */
 
   /* Quote */
-  --text-quote-lg:      clamp(1.5rem, 3vw, 2.5rem);  /* full-page quote */
-  --text-quote-md:      clamp(1.125rem, 2vw, 1.5rem); /* inline pullquote */
+  --text-quote-lg: clamp(1.5rem, 3vw, 2.5rem);   /* full-page quote */
+  --text-quote-md: clamp(1.125rem, 2vw, 1.5rem);  /* inline pullquote */
 
   /* ------------------------------------------------------------
      LETTER SPACING
      ------------------------------------------------------------ */
-  --ls-display:         0.05em;   /* display serifs */
-  --ls-label:           0.2em;    /* ALL CAPS labels */
-  --ls-label-wide:      0.3em;    /* widest labels: "TABLE OF", "GET READY TO" */
-  --ls-body:            0.01em;
+  --ls-display:    0.05em;  /* display serifs */
+  --ls-label:      0.2em;   /* ALL CAPS labels */
+  --ls-label-wide: 0.3em;   /* widest labels */
+  --ls-body:       0.01em;
 
   /* ------------------------------------------------------------
      LINE HEIGHT
      ------------------------------------------------------------ */
-  --lh-display:         1.0;
-  --lh-heading:         1.15;
-  --lh-body:            1.7;
-  --lh-quote:           1.35;
+  --lh-display: 1.0;
+  --lh-heading: 1.15;
+  --lh-body:    1.7;
+  --lh-quote:   1.35;
 
   /* ------------------------------------------------------------
      SPACING SCALE
@@ -125,29 +119,27 @@
   --space-10:  128px;
 
   /* Page margins (8.5×11 document) */
-  --margin-page:         56px;  /* ~0.75in */
-  --margin-page-narrow:  40px;  /* ~0.55in side */
+  --margin-page:        56px;  /* ~0.75in */
+  --margin-page-narrow: 40px;  /* ~0.55in side */
 
   /* ------------------------------------------------------------
      BORDER RADIUS
      ------------------------------------------------------------ */
-  --radius-none:    0;
-  --radius-pill:    999px;   /* oval/pill callouts only */
-  --radius-circle:  50%;     /* chapter number badges */
+  --radius-none:   0;
+  --radius-pill:   999px;  /* oval/pill callouts only */
+  --radius-circle: 50%;    /* chapter number badges */
 
   /* ------------------------------------------------------------
      ELEVATION / SHADOW
      ------------------------------------------------------------ */
-  /* Workbook: no shadows. Digital UI only: */
-  --shadow-page:   0 4px 32px rgba(26,15,8,0.08);
-  --shadow-subtle: 0 2px 8px  rgba(26,15,8,0.06);
+  --shadow-page:   0 4px 32px rgba(59, 31, 14, 0.08);
+  --shadow-subtle: 0 2px 8px  rgba(59, 31, 14, 0.06);
 }
 
 /* ------------------------------------------------------------
    SEMANTIC TYPE CLASSES
    ------------------------------------------------------------ */
 
-/* Display headline — covers and hero sections */
 .ss-display {
   font-family: var(--font-serif);
   font-size: var(--text-display-lg);
@@ -158,10 +150,9 @@
   color: var(--fg-primary);
 }
 
-.ss-display--tan   { color: var(--color-tan); }
+.ss-display--gold  { color: var(--color-antique-gold); }
 .ss-display--cream { color: var(--color-cream); }
 
-/* Section / chapter heading */
 .ss-heading {
   font-family: var(--font-serif);
   font-size: var(--text-h1);
@@ -172,10 +163,9 @@
 }
 
 .ss-heading--italic { font-style: italic; }
-.ss-heading--tan    { color: var(--color-tan); }
+.ss-heading--gold   { color: var(--color-antique-gold); }
 .ss-heading--cream  { color: var(--color-cream); }
 
-/* Subheading */
 .ss-subheading {
   font-family: var(--font-serif);
   font-size: var(--text-h2);
@@ -185,7 +175,6 @@
   color: var(--fg-secondary);
 }
 
-/* Label / eyebrow */
 .ss-label {
   font-family: var(--font-sans);
   font-size: var(--text-label);
@@ -196,11 +185,11 @@
   line-height: 1.4;
 }
 
-.ss-label--tan   { color: var(--color-tan); }
+.ss-label--brass { color: var(--color-aged-brass); }
+.ss-label--gold  { color: var(--color-antique-gold); }
 .ss-label--cream { color: var(--color-cream); }
 .ss-label--wide  { letter-spacing: var(--ls-label-wide); }
 
-/* Body text */
 .ss-body {
   font-family: var(--font-body);
   font-size: var(--text-body-lg);
@@ -215,29 +204,28 @@
 .ss-body--italic    { font-style: italic; }
 .ss-body--sm        { font-size: var(--text-body-sm); }
 
-/* Caption */
 .ss-caption {
   font-family: var(--font-sans);
   font-size: var(--text-body-sm);
   font-weight: 300;
-  color: var(--fg-tertiary);
+  color: var(--fg-secondary);
   letter-spacing: 0.02em;
 }
 
-/* Quote — large centered pullquote */
+/* Quote — Cormorant Garamond 500 italic (confirmed) */
 .ss-quote {
   font-family: var(--font-serif);
   font-size: var(--text-quote-lg);
   font-weight: 500;
+  font-style: italic;
   line-height: var(--lh-quote);
-  color: var(--fg-primary);
+  color: var(--color-antique-gold);
   text-align: center;
 }
 
-.ss-quote--tan   { color: var(--color-tan); }
-.ss-quote--cream { color: var(--color-cream); }
+.ss-quote--espresso { color: var(--color-espresso); }
+.ss-quote--cream    { color: var(--color-cream); }
 
-/* Quote attribution */
 .ss-attribution {
   font-family: var(--font-sans);
   font-size: var(--text-label);
@@ -247,7 +235,7 @@
   color: var(--fg-secondary);
 }
 
-.ss-attribution--tan { color: var(--color-tan); }
+.ss-attribution--brass { color: var(--color-aged-brass); }
 
 /* ------------------------------------------------------------
    STRUCTURAL UTILITIES
@@ -255,7 +243,7 @@
 
 .ss-divider {
   border: none;
-  border-top: 0.5px solid var(--color-tan);
+  border-top: 0.5px solid var(--color-aged-brass);
   margin: var(--space-5) 0;
 }
 
@@ -263,7 +251,7 @@
   border-top-color: var(--color-cream-dark);
 }
 
-/* CTA Button */
+/* CTA Button — primary (Antique Gold fill) */
 .ss-btn {
   display: inline-block;
   font-family: var(--font-sans);
@@ -279,23 +267,34 @@
   transition: background 0.2s ease;
 }
 
-.ss-btn:hover  { background: var(--btn-bg-hover); }
+.ss-btn:hover { background: var(--btn-bg-hover); }
 
+/* Dark button — Espresso fill */
 .ss-btn--dark {
   background: var(--btn-bg-dark);
   color: var(--btn-fg-dark);
 }
 
+.ss-btn--dark:hover { background: var(--color-panel); }
+
+/* Outlined button — Espresso border, transparent fill */
 .ss-btn--outline {
   background: transparent;
-  color: var(--fg-primary);
-  border: 1px solid var(--fg-primary);
+  color: var(--color-espresso);
+  border: 1px solid var(--color-espresso);
+}
+
+/* Ghost button — Mid border */
+.ss-btn--ghost {
+  background: transparent;
+  color: var(--color-mid);
+  border: 0.5px solid var(--color-mid);
 }
 
 /* Tip callout pill */
 .ss-tip-pill {
   display: inline-block;
-  border: 1px solid var(--color-charcoal);
+  border: 1px solid var(--color-espresso);
   border-radius: var(--radius-pill);
   padding: var(--space-1) var(--space-5);
   font-family: var(--font-serif);
@@ -311,15 +310,16 @@
   width: 48px;
   height: 48px;
   border-radius: var(--radius-circle);
-  background: var(--color-tan);
+  background: var(--color-aged-brass);
   font-family: var(--font-serif);
   font-size: var(--text-h2);
   font-weight: 400;
-  color: var(--color-white);
+  color: var(--color-cream);
 }
 
 /* Page backgrounds */
-.ss-bg-cream  { background-color: var(--bg-page); }
-.ss-bg-dark   { background-color: var(--bg-dark); }
-.ss-bg-panel  { background-color: var(--bg-panel); }
-.ss-bg-accent { background-color: var(--bg-accent); }
+.ss-bg-cream   { background-color: var(--bg-page); }
+.ss-bg-dark    { background-color: var(--bg-dark); }
+.ss-bg-panel   { background-color: var(--bg-panel); }
+.ss-bg-accent  { background-color: var(--bg-accent); }
+.ss-bg-accent-lt { background-color: var(--bg-accent-lt); }

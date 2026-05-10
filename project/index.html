@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sovereign Stillness — Design System</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:        #F5F0E8;
+  --cream-dark:   #EDE0CC;
+  --antique-gold: #C8B89A;
+  --aged-brass:   #A07848;
+  --espresso:     #3B1F0E;
+  --mid:          #4A3020;
+  --panel:        #2D1E12;
+  --serif: 'Cormorant Garamond', Georgia, serif;
+  --body:  'Fraunces', Georgia, serif;
+}
+
+html { font-size: 16px; scroll-behavior: smooth; }
+
+body {
+  background: var(--cream);
+  color: var(--espresso);
+  font-family: var(--body);
+  line-height: 1.7;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── NAV ── */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--espresso);
+  padding: 0 48px;
+  display: flex; align-items: center; justify-content: space-between;
+  height: 56px;
+  border-bottom: 0.5px solid var(--panel);
+}
+.nav-brand {
+  font-family: var(--serif);
+  font-size: 14px;
+  font-weight: 400;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--antique-gold);
+  text-decoration: none;
+}
+.nav-links {
+  display: flex; gap: 32px; list-style: none;
+}
+.nav-links a {
+  font-family: var(--body);
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--antique-gold);
+  text-decoration: none;
+  opacity: 0.7;
+  transition: opacity 0.15s;
+}
+.nav-links a:hover { opacity: 1; }
+
+/* ── HERO ── */
+.hero {
+  background: var(--espresso);
+  padding: 96px 80px 88px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: end;
+}
+.hero-left {}
+.hero-eyebrow {
+  font-family: var(--body);
+  font-size: 10px;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--aged-brass);
+  margin-bottom: 24px;
+}
+.hero-title {
+  font-family: var(--serif);
+  font-size: clamp(48px, 6vw, 80px);
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 1.0;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  margin-bottom: 32px;
+}
+.hero-rule {
+  width: 64px;
+  height: 0.5px;
+  background: var(--aged-brass);
+  margin-bottom: 32px;
+}
+.hero-desc {
+  font-family: var(--body);
+  font-size: 15px;
+  line-height: 1.8;
+  color: var(--antique-gold);
+  max-width: 420px;
+  font-weight: 300;
+}
+.hero-right {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding-bottom: 4px;
+}
+.hero-stat {
+  display: flex;
+  gap: 20px;
+  align-items: baseline;
+  padding: 20px 0;
+  border-bottom: 0.5px solid rgba(200,184,154,0.2);
+}
+.hero-stat:first-child { border-top: 0.5px solid rgba(200,184,154,0.2); }
+.hero-stat-num {
+  font-family: var(--serif);
+  font-size: 36px;
+  font-weight: 300;
+  color: var(--antique-gold);
+  min-width: 64px;
+}
+.hero-stat-label {
+  font-family: var(--body);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(200,184,154,0.6);
+}
+
+/* ── SECTION ── */
+.section {
+  padding: 80px 80px 0;
+}
+.section:last-of-type { padding-bottom: 80px; }
+
+.section-eyebrow {
+  font-family: var(--body);
+  font-size: 10px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: var(--aged-brass);
+  margin-bottom: 8px;
+}
+.section-title {
+  font-family: var(--serif);
+  font-size: clamp(28px, 3.5vw, 44px);
+  font-weight: 300;
+  color: var(--espresso);
+  line-height: 1.1;
+  margin-bottom: 12px;
+}
+.section-desc {
+  font-family: var(--body);
+  font-size: 14px;
+  color: var(--mid);
+  line-height: 1.75;
+  max-width: 560px;
+  margin-bottom: 48px;
+}
+.section-rule {
+  border: none;
+  border-top: 0.5px solid var(--aged-brass);
+  width: 56px;
+  margin: 20px 0 48px;
+}
+
+/* ── CARD GRID ── */
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+  margin-bottom: 64px;
+}
+.card-grid--2 { grid-template-columns: repeat(2, 1fr); }
+.card-grid--3 { grid-template-columns: repeat(3, 1fr); }
+
+.preview-card {
+  display: flex;
+  flex-direction: column;
+  border: 0.5px solid var(--cream-dark);
+  background: var(--cream);
+  overflow: hidden;
+}
+.preview-card-label {
+  font-family: var(--body);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mid);
+  padding: 10px 14px;
+  background: var(--cream);
+  border-bottom: 0.5px solid var(--cream-dark);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.preview-card-label a {
+  font-size: 8px;
+  color: var(--aged-brass);
+  text-decoration: none;
+  letter-spacing: 0.14em;
+}
+.preview-card-label a:hover { text-decoration: underline; }
+.preview-card iframe {
+  width: 100%;
+  border: none;
+  display: block;
+}
+
+/* ── LAUNCH CARDS ── */
+.launch-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+  margin-bottom: 64px;
+}
+.launch-card {
+  display: block;
+  text-decoration: none;
+  padding: 44px 40px;
+  background: var(--espresso);
+  color: var(--cream);
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s ease;
+}
+.launch-card:hover { transform: translateY(-3px); }
+.launch-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--antique-gold);
+}
+.launch-card-eyebrow {
+  font-family: var(--body);
+  font-size: 9px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--aged-brass);
+  margin-bottom: 14px;
+}
+.launch-card-title {
+  font-family: var(--serif);
+  font-size: 28px;
+  font-weight: 300;
+  color: var(--cream);
+  line-height: 1.15;
+  margin-bottom: 12px;
+}
+.launch-card-desc {
+  font-family: var(--body);
+  font-size: 13px;
+  color: var(--antique-gold);
+  line-height: 1.7;
+  opacity: 0.8;
+  margin-bottom: 28px;
+}
+.launch-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font-family: var(--body);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--antique-gold);
+}
+.launch-card-cta::after {
+  content: '→';
+  font-size: 12px;
+  transition: transform 0.15s;
+}
+.launch-card:hover .launch-card-cta::after { transform: translateX(4px); }
+
+.launch-card--accent {
+  background: var(--panel);
+}
+.launch-card--cream {
+  background: var(--antique-gold);
+}
+.launch-card--cream .launch-card-title { color: var(--espresso); }
+.launch-card--cream .launch-card-desc  { color: var(--espresso); }
+.launch-card--cream .launch-card-cta   { color: var(--espresso); }
+.launch-card--cream .launch-card-eyebrow { color: var(--espresso); opacity: 0.6; }
+.launch-card--cream::before { background: var(--espresso); }
+
+/* ── PAGE TYPE PREVIEW ── */
+.page-preview-container {
+  width: 100%;
+  border: 0.5px solid var(--cream-dark);
+  overflow: hidden;
+  margin-bottom: 64px;
+}
+
+/* ── TOKEN TABLE ── */
+.token-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-family: var(--body);
+  font-size: 13px;
+  margin-bottom: 64px;
+}
+.token-table th {
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--mid);
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 0.5px solid var(--cream-dark);
+  background: var(--cream);
+}
+.token-table td {
+  padding: 12px 16px;
+  border-bottom: 0.5px solid var(--cream-dark);
+  color: var(--mid);
+  vertical-align: middle;
+}
+.token-table tr:last-child td { border-bottom: none; }
+.token-swatch {
+  display: inline-block;
+  width: 20px; height: 20px;
+  border-radius: 2px;
+  vertical-align: middle;
+  margin-right: 10px;
+  border: 0.5px solid rgba(0,0,0,0.08);
+}
+code {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  background: var(--cream-dark);
+  padding: 2px 6px;
+  border-radius: 2px;
+  color: var(--espresso);
+}
+
+/* ── FOOTER ── */
+.footer {
+  background: var(--panel);
+  padding: 56px 80px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.footer-brand {
+  font-family: var(--serif);
+  font-size: 18px;
+  color: var(--antique-gold);
+  letter-spacing: 0.1em;
+}
+.footer-meta {
+  font-family: var(--body);
+  font-size: 10px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: rgba(200,184,154,0.5);
+}
+
+/* ── DIVIDER ── */
+.section-divider {
+  border: none;
+  border-top: 0.5px solid var(--cream-dark);
+  margin: 64px 80px 0;
+}
+</style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav class="nav">
+  <a href="#" class="nav-brand">Sovereign Stillness</a>
+  <ul class="nav-links">
+    <li><a href="#colors">Colors</a></li>
+    <li><a href="#type">Type</a></li>
+    <li><a href="#components">Components</a></li>
+    <li><a href="#pages">Page Types</a></li>
+    <li><a href="#prototypes">Prototypes</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<header class="hero">
+  <div class="hero-left">
+    <div class="hero-eyebrow">Design System</div>
+    <h1 class="hero-title">Sovereign<br>Stillness</h1>
+    <div class="hero-rule"></div>
+    <p class="hero-desc">A complete design system for the 30-day feminine energy workbook. Colors, typography, components, page types, and interactive prototypes — all grounded in warm espresso browns, Cormorant Garamond, and Fraunces.</p>
+  </div>
+  <div class="hero-right">
+    <div class="hero-stat">
+      <div class="hero-stat-num">6</div>
+      <div class="hero-stat-label">Color tokens — cream to espresso</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">2</div>
+      <div class="hero-stat-label">Typefaces — Cormorant Garamond + Fraunces</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">24</div>
+      <div class="hero-stat-label">Page type layouts</div>
+    </div>
+    <div class="hero-stat">
+      <div class="hero-stat-num">3</div>
+      <div class="hero-stat-label">Interactive prototypes</div>
+    </div>
+  </div>
+</header>
+
+<!-- ── COLORS ── -->
+<section class="section" id="colors">
+  <div class="section-eyebrow">Foundation</div>
+  <h2 class="section-title">Color System</h2>
+  <p class="section-desc">All warm brown — no pure black, no cool grey anywhere. Espresso is the deepest dark. Antique Gold and Aged Brass are the two accent weights.</p>
+  <hr class="section-rule">
+
+  <div class="card-grid card-grid--2">
+    <div class="preview-card">
+      <div class="preview-card-label">
+        Primary Palette
+        <a href="preview/colors-primary.html" target="_blank">Open ↗</a>
+      </div>
+      <iframe src="preview/colors-primary.html" height="130" scrolling="no"></iframe>
+    </div>
+    <div class="preview-card">
+      <div class="preview-card-label">
+        Semantic Colors
+        <a href="preview/colors-semantic.html" target="_blank">Open ↗</a>
+      </div>
+      <iframe src="preview/colors-semantic.html" height="130" scrolling="no"></iframe>
+    </div>
+  </div>
+
+  <!-- Token table -->
+  <table class="token-table">
+    <thead>
+      <tr>
+        <th>Swatch</th>
+        <th>Name</th>
+        <th>Hex</th>
+        <th>CSS Token</th>
+        <th>Usage</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="token-swatch" style="background:#F5F0E8;border-color:#DDD1BC;"></span></td>
+        <td>Cream</td>
+        <td><code>#F5F0E8</code></td>
+        <td><code>--color-cream</code></td>
+        <td style="color:var(--mid)">Primary page background</td>
+      </tr>
+      <tr>
+        <td><span class="token-swatch" style="background:#C8B89A;"></span></td>
+        <td>Antique Gold</td>
+        <td><code>#C8B89A</code></td>
+        <td><code>--color-antique-gold</code></td>
+        <td style="color:var(--mid)">Primary button, broad fills, quote text</td>
+      </tr>
+      <tr>
+        <td><span class="token-swatch" style="background:#A07848;"></span></td>
+        <td>Aged Brass</td>
+        <td><code>#A07848</code></td>
+        <td><code>--color-aged-brass</code></td>
+        <td style="color:var(--mid)">Dividers, motifs, detail — one touch per layout</td>
+      </tr>
+      <tr>
+        <td><span class="token-swatch" style="background:#3B1F0E;"></span></td>
+        <td>Espresso</td>
+        <td><code>#3B1F0E</code></td>
+        <td><code>--color-espresso</code></td>
+        <td style="color:var(--mid)">Body text, dark backgrounds</td>
+      </tr>
+      <tr>
+        <td><span class="token-swatch" style="background:#4A3020;"></span></td>
+        <td>Mid</td>
+        <td><code>#4A3020</code></td>
+        <td><code>--color-mid</code></td>
+        <td style="color:var(--mid)">Secondary text, captions</td>
+      </tr>
+      <tr>
+        <td><span class="token-swatch" style="background:#2D1E12;"></span></td>
+        <td>Panel</td>
+        <td><code>#2D1E12</code></td>
+        <td><code>--color-panel</code></td>
+        <td style="color:var(--mid)">Dark panels, overlays — no darker than this</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── TYPOGRAPHY ── -->
+<section class="section" id="type">
+  <div class="section-eyebrow">Foundation</div>
+  <h2 class="section-title">Typography</h2>
+  <p class="section-desc">Two typefaces only. Cormorant Garamond for display, headings, and quotes (500 weight italic for pull quotes). Fraunces for all body text, labels, and UI.</p>
+  <hr class="section-rule">
+
+  <div class="card-grid card-grid--3">
+    <div class="preview-card">
+      <div class="preview-card-label">
+        Display Type
+        <a href="preview/type-display.html" target="_blank">Open ↗</a>
+      </div>
+      <iframe src="preview/type-display.html" height="200" scrolling="no"></iframe>
+    </div>
+    <div class="preview-card">
+      <div class="preview-card-label">
+        Body &amp; Label Type
+        <a href="preview/type-body.html" target="_blank">Open ↗</a>
+      </div>
+      <iframe src="preview/type-body.html" height="200" scrolling="no"></iframe>
+    </div>
+    <div class="preview-card">
+      <div class="preview-card-label">
+        Quote Type
+        <a href="preview/type-quote.html" target="_blank">Open ↗</a>
+      </div>
+      <iframe src="preview/type-quote.html" height="200" scrolling="no"></iframe>
+    </div>
+  </div>
+
+  <!-- Spacing -->
+  <div class="preview-card" style="margin-bottom:64px;">
+    <div class="preview-card-label">
+      Spacing Tokens
+      <a href="preview/spacing-tokens.html" target="_blank">Open ↗</a>
+    </div>
+    <iframe src="preview/spacing-tokens.html" height="120" scrolling="no"></iframe>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── COMPONENTS ── -->
+<section class="section" id="components">
+  <div class="section-eyebrow">Components</div>
+  <h2 class="section-title">UI Components</h2>
+  <p class="section-desc">Flat, architectural, no border-radius on content blocks. Buttons are all-caps spaced Fraunces. Arch and circle motifs are the only curves.</p>
+  <hr class="section-rule">
+
+  <div class="card-grid card-grid--2">
+    <div class="preview-card">
+      <div class="preview-card-label">
+        Buttons &amp; Badges
+        <a href="preview/components-buttons.html" target="_blank">Open ↗</a>
+      </div>
+      <iframe src="preview/components-buttons.html" height="160" scrolling="no"></iframe>
+    </div>
+    <div class="preview-card">
+      <div class="preview-card-label">
+        Callouts &amp; Motifs
+        <a href="preview/components-callouts.html" target="_blank">Open ↗</a>
+      </div>
+      <iframe src="preview/components-callouts.html" height="160" scrolling="no"></iframe>
+    </div>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── PAGE TYPES ── -->
+<section class="section" id="pages">
+  <div class="section-eyebrow">Workbook</div>
+  <h2 class="section-title">Page Types</h2>
+  <p class="section-desc">24 page layouts covering dark and light pages, arch motifs, photo layouts, pull quotes, dense text, curriculum grids, and CTA pages — all in the warm espresso palette.</p>
+  <hr class="section-rule">
+
+  <div class="preview-card page-preview-container">
+    <div class="preview-card-label">
+      All 24 Page Types
+      <a href="preview/components-page-types.html" target="_blank">Open full view ↗</a>
+    </div>
+    <iframe src="preview/components-page-types.html" height="480" scrolling="auto" style="overflow-x:auto;"></iframe>
+  </div>
+</section>
+
+<hr class="section-divider">
+
+<!-- ── PROTOTYPES ── -->
+<section class="section" id="prototypes">
+  <div class="section-eyebrow">Interactive</div>
+  <h2 class="section-title">Prototypes</h2>
+  <p class="section-desc">Four fully interactive prototypes — each opens in its own view. Arrow-key navigation throughout. Responses persist to localStorage.</p>
+  <hr class="section-rule">
+
+  <!-- Featured: Sovereign Heart workbook -->
+  <a href="The Sovereign Heart - Week One.html" class="launch-card" target="_blank" style="display:block;margin-bottom:24px;padding:52px 56px;background:var(--espresso);text-decoration:none;position:relative;overflow:hidden;transition:transform .2s ease;">
+    <div style="position:absolute;top:0;left:0;right:0;height:2px;background:var(--antique-gold);"></div>
+    <div style="display:grid;grid-template-columns:1fr auto;gap:48px;align-items:center;">
+      <div>
+        <div class="launch-card-eyebrow" style="color:var(--aged-brass);margin-bottom:16px;">Featured · 34-Page Interactive Workbook</div>
+        <div style="font-family:var(--serif);font-size:clamp(32px,4vw,52px);font-weight:300;color:var(--cream);line-height:1.05;letter-spacing:.02em;margin-bottom:16px;">The <em style="font-style:italic;color:var(--antique-gold);">Sovereign</em> Heart<br>Week One · The Mirror</div>
+        <div style="font-family:var(--body);font-size:13px;color:var(--antique-gold);opacity:.8;line-height:1.75;max-width:520px;font-weight:300;margin-bottom:28px;">A Stoic workbook for reclaiming your peace when someone has your mind. Seven days of readings, daily practices, and evening reflections — write directly in the browser or switch to Print Mode.</div>
+        <div class="launch-card-cta" style="color:var(--antique-gold);">Open Workbook</div>
+      </div>
+      <div style="text-align:right;font-family:var(--serif);color:rgba(200,184,154,.15);font-size:120px;font-weight:300;line-height:1;flex-shrink:0;">I</div>
+    </div>
+  </a>
+
+  <div class="launch-grid">
+    <a href="ui_kits/workbook/index.html" class="launch-card" target="_blank">
+      <div class="launch-card-eyebrow">Interactive Prototype</div>
+      <div class="launch-card-title">Workbook<br>Viewer</div>
+      <div class="launch-card-desc">11-page interactive workbook with arrow-key navigation. Cover, TOC, chapter openers, body pages, quotes, two-column, CTA.</div>
+      <div class="launch-card-cta">Launch Viewer</div>
+    </a>
+
+    <a href="ui_kits/quiz/index.html" class="launch-card launch-card--accent" target="_blank">
+      <div class="launch-card-eyebrow">Interactive Prototype</div>
+      <div class="launch-card-title">Feminine<br>Energy Quiz</div>
+      <div class="launch-card-desc">10 questions, 3 results. Auto-advances on selection, persists to localStorage, routes to The Warrior, The Remembering, or The Architect.</div>
+      <div class="launch-card-cta">Take the Quiz</div>
+    </a>
+
+    <a href="assets/workbook-pages/New Pages.html" class="launch-card launch-card--cream" target="_blank">
+      <div class="launch-card-eyebrow">Design Canvas</div>
+      <div class="launch-card-title">New Workbook<br>Pages</div>
+      <div class="launch-card-desc">14 new pages in the design canvas: copyright, letter from author, about, how-to, 3 journal variants, quiz intro, question, 3 results, exercise, resources.</div>
+      <div class="launch-card-cta">Open Canvas</div>
+    </a>
+  </div>
+
+  <!-- Logo exploration -->
+  <div class="preview-card" style="margin-bottom:0;">
+    <div class="preview-card-label">
+      Logo Exploration — 12 directions
+      <a href="assets/Logo Exploration.html" target="_blank">Open ↗</a>
+    </div>
+    <iframe src="assets/Logo Exploration.html" height="240" scrolling="no" style="pointer-events:none;"></iframe>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer class="footer">
+  <div class="footer-brand">Sovereign Stillness</div>
+  <div class="footer-meta">Design System · April 2026 · Cormorant Garamond + Fraunces</div>
+  <div class="footer-meta">Cream · Antique Gold · Aged Brass · Espresso · Mid · Panel</div>
+</footer>
+
+</body>
+</html>
