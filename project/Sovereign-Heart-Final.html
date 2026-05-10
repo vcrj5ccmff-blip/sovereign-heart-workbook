@@ -383,6 +383,13 @@ body.print-mode .journal-field{display:none;}
 .page::-webkit-scrollbar{width:4px;}
 .page::-webkit-scrollbar-thumb{background:rgba(160,120,72,.25);}
 
+/* Fix: understanding-text and ch-label may land outside day-inner */
+.understanding-text{max-width:640px;margin:0 auto;padding:0 40px 0;}
+.day-page>.ch-label{display:block;max-width:640px;margin:44px auto 18px;padding:0 40px;}
+.day-page>.gold-rule{max-width:640px;margin:44px auto;}
+.day-page>.anchor-box{max-width:640px;margin:8px auto 20px;padding:22px 68px;}
+.day-page>.anchor-note{max-width:640px;margin:0 auto;padding:0 40px;}
+
 </style>
 </head>
 <body>
