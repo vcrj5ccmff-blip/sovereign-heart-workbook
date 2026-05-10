@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>The Sovereign Heart — Week One</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400;1,500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;1,9..144,300;1,9..144,400&display=swap" rel="stylesheet">
+<style>
+/* ── Sovereign Stillness — final palette ── */
+:root{
+  --cream:#F5F0E8; --cream-deep:#EDE0CC;
+  --tan:#C8B89A; --tan-dk:#A07848; --tan-lt:#DDD1BC;
+  --espresso:#3B1F0E; --mid:#4A3020; --light:#4A3020;
+  --panel:#2D1E12;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{height:100%;background:var(--cream-deep);}
+body{font-family:'Fraunces',Georgia,serif;color:var(--espresso);font-feature-settings:"liga","kern";}
+::selection{background:rgba(200,184,154,.28);}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:transparent;}
+::-webkit-scrollbar-thumb{background:var(--tan);border-radius:2px;}
+
+.toolbar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:14px 28px;
+  background:var(--cream);
+  border-bottom:.5px solid rgba(200,184,154,.45);
+  font-family:'Fraunces',serif;font-size:10px;letter-spacing:.28em;color:var(--mid);
+}
+.toolbar-title{font-size:10px;letter-spacing:.28em;text-transform:uppercase;color:var(--tan-dk);}
+.toolbar-right{display:flex;align-items:center;gap:20px;}
+.mode-toggle{
+  display:flex;align-items:center;gap:8px;cursor:pointer;
+  font-family:'Fraunces',serif;font-size:10px;letter-spacing:.24em;font-weight:400;
+  text-transform:uppercase;color:var(--mid);background:none;
+  padding:7px 16px;border:.5px solid rgba(200,184,154,.55);border-radius:0;
+  transition:all .2s ease;
+}
+.mode-toggle:hover{color:#fff;background:var(--tan);border-color:var(--tan);}
+.page-counter{font-size:10px;letter-spacing:.28em;color:var(--tan-dk);text-transform:uppercase;}
+
+.stage{
+  display:flex;align-items:center;justify-content:center;
+  min-height:100vh;padding:64px 20px 88px;
+}
+
+.page{
+  width:816px;max-width:100%;
+  min-height:1056px;
+  background:var(--cream);
+  padding:104px 96px;
+  position:relative;
+  box-shadow:0 4px 40px rgba(59,31,14,.10),0 1px 6px rgba(59,31,14,.06);
+}
+
+.nav-arrows{
+  position:fixed;bottom:0;left:0;right:0;z-index:100;
+  display:flex;align-items:center;justify-content:center;gap:40px;
+  padding:20px;background:linear-gradient(transparent,var(--cream-deep) 55%);
+}
+.nav-btn{
+  background:transparent;border:.5px solid rgba(200,184,154,.55);color:var(--mid);
+  padding:12px 32px;font-family:'Fraunces',serif;font-size:10px;font-weight:400;
+  letter-spacing:.24em;text-transform:uppercase;cursor:pointer;
+  border-radius:0;transition:all .2s ease;
+}
+.nav-btn:hover{background:var(--tan);border-color:var(--tan);color:#fff;}
+.nav-btn:disabled{opacity:.25;cursor:default;}
+.nav-btn:disabled:hover{background:transparent;color:var(--mid);border-color:rgba(200,184,154,.55);}
+.nav-hint{font-family:'Fraunces',serif;font-size:9px;letter-spacing:.28em;color:var(--tan-dk);text-transform:uppercase;font-weight:300;}
+
+/* ── TYPOGRAPHY ── */
+.eyebrow{
+  font-family:'Fraunces',serif;font-size:10px;font-weight:400;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--tan-dk);
+  margin-bottom:28px;
+}
+.cover-eyebrow{
+  font-family:'Fraunces',serif;font-size:10px;font-weight:400;
+  letter-spacing:.32em;text-transform:uppercase;color:var(--tan-dk);
+  margin-bottom:36px;
+}
+.cover-title{
+  font-family:'Cormorant Garamond',serif;font-size:72px;font-weight:300;
+  letter-spacing:.02em;line-height:1.0;color:var(--espresso);margin-bottom:24px;
+}
+.cover-title em{font-style:italic;font-weight:300;color:var(--mid);}
+.cover-subtitle{
+  font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;font-style:italic;
+  color:var(--mid);margin-bottom:0;line-height:1.5;letter-spacing:.01em;
+}
+.cover-rule{width:36px;height:.5px;background:var(--tan);margin:44px 0;}
+.cover-tagline{
+  font-family:'Fraunces',serif;font-size:10px;font-weight:400;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--tan-dk);line-height:1.9;
+}
+.page-title{
+  font-family:'Cormorant Garamond',serif;font-size:52px;font-weight:300;
+  letter-spacing:.02em;line-height:1.05;color:var(--espresso);margin-bottom:8px;
+}
+.page-title em{font-style:italic;font-weight:300;color:var(--mid);}
+
+/* Centered hairline-rule eyebrow used inside readings */
+.section-label{
+  font-family:'Fraunces',serif;font-size:10px;font-weight:400;
+  letter-spacing:.28em;text-transform:uppercase;color:var(--tan-dk);
+  margin:48px 0 22px;display:flex;flex-direction:column;align-items:center;gap:14px;
+  text-align:center;
+}
+.section-label::after{content:'';width:36px;height:.5px;background:var(--tan);}
+
+p.body{
+  font-family:'Fraunces',serif;font-size:15px;font-weight:300;line-height:1.85;
+  color:var(--mid);margin-bottom:18px;letter-spacing:.005em;text-wrap:pretty;
+}
+p.body:last-child{margin-bottom:0;}
+
+/* Anchor pull-quote — centered, italic Cormorant */
+.quote-block{
+  margin:36px 0;padding:0;border:none;text-align:center;
+  display:flex;flex-direction:column;align-items:center;gap:18px;
+}
+.quote-text{
+  font-family:'Cormorant Garamond',serif;font-size:24px;font-style:italic;font-weight:300;
+  line-height:1.45;color:var(--espresso);margin:0;letter-spacing:.01em;
+  max-width:560px;
+}
+.quote-text::before{content:'\201C';margin-right:.05em;}
+.quote-text::after{content:'\201D';margin-left:.05em;}
+.quote-attr{
+  font-family:'Fraunces',serif;font-size:10px;font-weight:400;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--tan-dk);
+}
+.quote-divider{width:24px;height:.5px;background:var(--tan);}
+
+.practice-item{display:flex;gap:18px;margin-bottom:24px;}
+.practice-num{
+  font-family:'Cormorant Garamond',serif;font-size:20px;font-weight:300;font-style:italic;
+  color:var(--tan);padding-top:0;min-width:24px;line-height:1.6;
+}
+.fill-in-label{
+  font-family:'Cormorant Garamond',serif;font-size:18px;font-style:italic;font-weight:400;
+  color:var(--mid);margin:24px 0 10px;letter-spacing:.005em;
+}
+
+/* ── RESPONSE FIELDS ── */
+.response-area{width:100%;margin-top:6px;}
+.response-area textarea{
+  width:100%;min-height:84px;resize:vertical;
+  background:transparent;border:none;border-bottom:.5px solid rgba(160,120,72,.4);
+  font-family:'Fraunces',serif;font-size:14px;font-weight:300;
+  line-height:1.85;color:var(--espresso);padding:10px 0;outline:none;
+  transition:border-color .2s ease;letter-spacing:.005em;
+}
+.response-area textarea:focus{border-bottom-color:var(--tan);}
+.response-area textarea::placeholder{color:rgba(160,120,72,.5);font-style:italic;}
+.print-lines{display:none;}
+.print-line{border-bottom:.5px solid rgba(160,120,72,.4);height:34px;width:100%;}
+
+/* ── CONTENTS ── */
+.toc-week{
+  font-family:'Fraunces',serif;font-size:10px;font-weight:400;letter-spacing:.28em;
+  text-transform:uppercase;color:var(--tan-dk);margin-bottom:20px;margin-top:40px;
+}
+.toc-row{
+  display:flex;align-items:baseline;padding:14px 0;
+  border-bottom:.5px solid rgba(160,120,72,.3);
+}
+.toc-day-num{font-family:'Fraunces',serif;font-size:10px;font-weight:400;letter-spacing:.24em;text-transform:uppercase;color:var(--tan-dk);margin-right:24px;min-width:64px;}
+.toc-day-title{font-family:'Cormorant Garamond',serif;font-size:22px;font-weight:300;color:var(--espresso);flex:1;letter-spacing:.01em;}
+.toc-day-title em{font-style:italic;color:var(--mid);}
+
+.day-close{
+  margin-top:48px;padding-top:32px;
+  border-top:.5px solid rgba(160,120,72,.3);
+  font-family:'Cormorant Garamond',serif;font-size:20px;font-style:italic;font-weight:300;
+  color:var(--mid);line-height:1.55;letter-spacing:.005em;text-align:center;
+  max-width:560px;margin-left:auto;margin-right:auto;
+}
+
+/* ── ANNOTATIONS (highlight + margin notes) ── */
+.hl{
+  background:linear-gradient(transparent 8%, rgba(200,184,154,.55) 8%, rgba(200,184,154,.55) 92%, transparent 92%);
+  padding:0 1px;border-radius:1px;cursor:pointer;
+  transition:background .15s ease;
+}
+.hl:hover{background:linear-gradient(transparent 8%, rgba(160,120,72,.45) 8%, rgba(160,120,72,.45) 92%, transparent 92%);}
+.hl.has-note{background:linear-gradient(transparent 8%, rgba(200,184,154,.55) 8%, rgba(200,184,154,.55) 92%, transparent 92%);}
+.note-marker{
+  font-family:'Fraunces',serif;font-size:9px;font-weight:500;
+  letter-spacing:.04em;color:var(--tan-dk);
+  vertical-align:super;margin-left:2px;cursor:pointer;
+  padding:0 4px;border:.5px solid var(--tan);border-radius:8px;
+  background:var(--cream);
+  transition:all .15s ease;
+}
+.note-marker:hover{background:var(--tan);color:#fff;border-color:var(--tan);}
+.annot-toolbar{
+  position:absolute;z-index:200;display:flex;gap:0;
+  background:var(--espresso);border-radius:2px;padding:0;
+  box-shadow:0 4px 18px rgba(59,31,14,.28);
+  font-family:'Fraunces',serif;font-size:9px;letter-spacing:.22em;text-transform:uppercase;
+  transform:translate(-50%,calc(-100% - 10px));
+  opacity:0;pointer-events:none;transition:opacity .12s ease;
+}
+.annot-toolbar.show{opacity:1;pointer-events:auto;}
+.annot-toolbar::after{
+  content:'';position:absolute;left:50%;bottom:-5px;transform:translateX(-50%) rotate(45deg);
+  width:8px;height:8px;background:var(--espresso);
+}
+.annot-toolbar button{
+  background:transparent;border:none;color:var(--cream);
+  padding:10px 14px;cursor:pointer;font:inherit;letter-spacing:inherit;
+  border-right:.5px solid rgba(245,240,232,.15);
+  transition:background .15s ease;
+}
+.annot-toolbar button:last-child{border-right:none;}
+.annot-toolbar button:hover{background:var(--mid);}
+.annot-toolbar button.danger:hover{background:#7a2a1a;}
+
+.note-popover{
+  position:absolute;z-index:201;width:280px;
+  background:var(--cream);border:.5px solid var(--tan);
+  box-shadow:0 6px 24px rgba(59,31,14,.18);
+  padding:18px 20px;
+  transform:translate(-50%,12px);
+}
+.note-popover::before{
+  content:'';position:absolute;left:50%;top:-6px;transform:translateX(-50%) rotate(45deg);
+  width:10px;height:10px;background:var(--cream);
+  border-left:.5px solid var(--tan);border-top:.5px solid var(--tan);
+}
+.note-popover textarea{
+  width:100%;min-height:84px;resize:vertical;
+  background:transparent;border:none;outline:none;
+  font-family:'Fraunces',serif;font-size:13px;font-weight:300;
+  line-height:1.7;color:var(--espresso);letter-spacing:.005em;
+}
+.note-popover textarea::placeholder{color:rgba(160,120,72,.55);font-style:italic;}
+.note-popover-actions{
+  display:flex;justify-content:space-between;align-items:center;
+  margin-top:10px;padding-top:10px;border-top:.5px solid rgba(200,184,154,.4);
+}
+.note-popover-actions button{
+  background:transparent;border:none;cursor:pointer;
+  font-family:'Fraunces',serif;font-size:9px;letter-spacing:.24em;
+  text-transform:uppercase;color:var(--tan-dk);padding:4px 8px;
+}
+.note-popover-actions button:hover{color:var(--espresso);}
+.note-popover-actions button.danger:hover{color:#7a2a1a;}
+
+/* annotations status pill in toolbar */
+.annot-help{
+  font-family:'Fraunces',serif;font-size:9px;letter-spacing:.24em;
+  color:var(--tan-dk);text-transform:uppercase;font-weight:300;
+  display:flex;align-items:center;gap:8px;
+}
+.annot-clear{
+  background:none;border:none;color:var(--tan-dk);
+  font-family:'Fraunces',serif;font-size:9px;letter-spacing:.24em;
+  text-transform:uppercase;cursor:pointer;padding:4px 8px;
+}
+.annot-clear:hover{color:var(--espresso);}
+
+/* ── PRINT MODE ── */
+body.print-mode .response-area textarea{display:none;}
+body.print-mode .print-lines{display:block;}
+body.print-mode .annot-toolbar,body.print-mode .note-popover{display:none!important;}
+
+@media print{
+  body{background:white;}
+  .toolbar,.nav-arrows{display:none!important;}
+  .stage{padding:0;min-height:auto;display:block;}
+  .page{
+    width:8.5in;min-height:11in;height:11in;
+    padding:.9in 1in;
+    box-shadow:none;
+    page-break-after:always;
+    break-after:page;
+  }
+  .response-area textarea{display:none!important;}
+  .print-lines{display:block!important;}
+  body:not(.print-mode) .print-lines{display:none!important;}
+  .annot-toolbar,.note-popover{display:none!important;}
+  .hl{background:rgba(200,184,154,.45)!important;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+  .note-marker{background:transparent;border-color:#A07848;color:#A07848;}
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script src="vendor/react.development.js"></script>
+<script src="vendor/react-dom.development.js"></script>
+<script src="vendor/babel.min.js"></script>
+<script type="text/babel">
+const {useState, useEffect, useCallback} = React;
+
+function save(k,v){try{localStorage.setItem('ssh_'+k,v);}catch(e){}}
+function load(k){try{return localStorage.getItem('ssh_'+k)||'';}catch(e){return '';}}
+
+function Response({id, placeholder='Write here...', lines=5}){
+  const [val,setVal]=useState(()=>load(id));
+  const onChange=e=>{setVal(e.target.value);save(id,e.target.value);};
+  return(
+    <div className="response-area">
+      <textarea value={val} onChange={onChange} placeholder={placeholder} rows={lines}/>
+      <div className="print-lines">{Array.from({length:lines}).map((_,i)=><div key={i} className="print-line"/>)}</div>
+    </div>
+  );
+}
+
+function B({blocks}){
+  return blocks.map((b,i)=>{
+    if(b.t==='ey') return <p key={i} className="eyebrow">{b.text}</p>;
+    if(b.t==='ti') return <h1 key={i} className="page-title" dangerouslySetInnerHTML={{__html:b.text}}/>;
+    if(b.t==='sc') return <div key={i} className="section-label">{b.text}</div>;
+    if(b.t==='p')  return <p key={i} className="body">{b.text}</p>;
+    if(b.t==='qt') return <div key={i} className="quote-block"><p className="quote-text">{b.text}</p><div className="quote-divider"/><p className="quote-attr">{b.attr}</p></div>;
+    if(b.t==='q')  return(
+      <div key={i} className="practice-item">
+        <span className="practice-num">{b.n}.</span>
+        <div style={{flex:1}}>
+          <p className="body" style={{marginBottom:8}}>{b.text}</p>
+          <Response id={b.id} lines={b.lines||5}/>
+        </div>
+      </div>
+    );
+    if(b.t==='fi') return(
+      <div key={i}>
+        <p className="fill-in-label">{b.label}</p>
+        <Response id={b.id} lines={b.lines||3}/>
+      </div>
+    );
+    if(b.t==='cl') return <p key={i} className="day-close">{b.text}</p>;
+    if(b.t==='hr') return <div key={i} style={{height:1,background:'rgba(160,120,72,.25)',margin:'32px 0'}}/>;
+    if(b.t==='sp') return <div key={i} style={{height:b.h||24}}/>;
+    return null;
+  });
+}
+
+const PAGES=[
+
+/* 0 COVER */
+{id:'cover',render:()=>(
+  <div style={{height:'100%',minHeight:864,display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',textAlign:'center'}}>
+    <p className="cover-eyebrow">Sovereign Stillness</p>
+    <h1 className="cover-title">The<br/><em>Sovereign</em><br/>Heart</h1>
+    <div className="cover-rule"/>
+    <p className="cover-subtitle">A Stoic Workbook for Reclaiming Your Peace<br/>When Someone Has Your Mind</p>
+    <div style={{flex:1,minHeight:64}}/>
+    <p className="cover-tagline">A Thirty-Day Practice</p>
+    <p className="cover-tagline" style={{marginTop:6,color:'var(--tan)'}}>Week One · The Mirror</p>
+  </div>
+)},
+
+/* 1 AUTHOR LETTER */
+{id:'letter',blocks:[
+  {t:'ey',text:'A Note Before You Begin'},
+  {t:'sp',h:8},
+  {t:'p',text:'This book began as a letter I wrote to myself.'},
+  {t:'p',text:"I didn't know it would become something I'd share. I only knew that I needed someone to tell me — honestly, without judgment, without telling me to move on — exactly what was happening to me, and how to find my way back to myself."},
+  {t:'p',text:'I hope it does the same for you.'},
+  {t:'hr'},
+  {t:'p',text:"The thirty days ahead are built on Stoic philosophy — one of the most quietly radical frameworks for reclaiming your inner world. But I have not written it as philosophy. I have written it as what it actually is: a practical, honest, day-by-day practice for coming back to yourself."},
+  {t:'p',text:"You do not have to be at your worst to use this. You do not have to be in crisis. You only have to be someone who has noticed — even faintly — that something has shifted. That a part of your peace has quietly been handed over. That it might be time to begin the work of taking it back."},
+  {t:'hr'},
+  {t:'p',text:'Week One is called The Mirror. It asks you to see — clearly, honestly, without judgment — what is actually happening inside you. That seeing is where everything begins.'},
+]},
+
+/* 2 CONTENTS */
+{id:'toc',render:()=>(
+  <div>
+    <p className="eyebrow" style={{textAlign:'center'}}>Contents</p>
+    <h1 className="page-title" style={{fontSize:48,marginBottom:8,textAlign:'center'}}>The <em>Sovereign</em> Heart</h1>
+    <div style={{width:36,height:'.5px',background:'var(--tan)',margin:'32px auto 0'}}/>
+    <p className="toc-week" style={{textAlign:'center'}}>Week One · The Mirror</p>
+    {[['Day 1','The Uninvited Guest'],['Day 2',"The Story You're Telling"],['Day 3','The Checking'],['Day 4','The Search for Certainty'],['Day 5','The Imaginary Conversation'],['Day 6','The Version of Him in Your Head'],['Day 7','What You See Now']].map(([d,t],i)=>(
+      <div key={i} className="toc-row"><span className="toc-day-num">{d}</span><span className="toc-day-title"><em>{t}</em></span></div>
+    ))}
+    <p className="day-close" style={{marginTop:64}}>Each day contains a reading, a practice, and an evening reflection. You may read and write in digital mode, or switch to Print Mode to print the pages and write by hand.</p>
+  </div>
+)},
+
+/* 3 WEEK ONE HEADER */
+{id:'w1head',render:()=>(
+  <div style={{height:'100%',minHeight:864,display:'flex',flexDirection:'column',justifyContent:'center',alignItems:'center',textAlign:'center'}}>
+    <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:200,fontWeight:300,lineHeight:1,color:'var(--tan-lt)',marginBottom:-12,letterSpacing:'.04em'}}>I</p>
+    <p style={{fontFamily:"'Fraunces',serif",fontSize:10,fontWeight:400,letterSpacing:'.32em',textTransform:'uppercase',color:'var(--tan-dk)',marginBottom:24}}>Week One</p>
+    <h2 style={{fontFamily:"'Cormorant Garamond',serif",fontSize:64,fontWeight:300,fontStyle:'italic',lineHeight:1.1,color:'var(--espresso)',marginBottom:32,letterSpacing:'.02em'}}>The Mirror</h2>
+    <div style={{width:36,height:'.5px',background:'var(--tan)',marginBottom:32}}/>
+    <p style={{fontFamily:"'Cormorant Garamond',serif",fontSize:20,fontWeight:300,fontStyle:'italic',color:'var(--mid)',maxWidth:440,lineHeight:1.55,letterSpacing:'.01em'}}>
+      The first work is seeing. Honestly, without judgment, exactly as it is.
+    </p>
+    <p style={{fontFamily:"'Fraunces',serif",fontSize:10,fontWeight:400,letterSpacing:'.28em',textTransform:'uppercase',color:'var(--tan-dk)',marginTop:48}}>Days One — Seven</p>
+  </div>
+)},
+
+/* 4 DAY 1 reading pt 1 */
+{id:'d1a',blocks:[
+  {t:'ey',text:'Day One · The Mirror'},
+  {t:'ti',text:'The Uninvited<br/><em>Guest</em>'},
+  {t:'sp',h:28},
+  {t:'p',text:'You know the feeling.'},
+  {t:'p',text:"It lives somewhere between your chest and your stomach and it doesn't have a name. It isn't anxiety exactly. It isn't excitement exactly. It's both at once, wound together into something that hums quietly underneath everything you do."},
+  {t:'p',text:"It showed up one day and it hasn't left."},
+  {t:'p',text:'Some days it\'s almost sweet. A warmth that spreads through your chest when something reminds you of him — a song, a street, a time of day that became quietly his. On those days you almost want to hold it carefully.'},
+  {t:'p',text:"Other days your own body feels like too much to be inside. A pressure with nowhere to go, an energy so restless it makes you want to walk out of your own skin — to just be somewhere quieter, somewhere that isn't waiting. The not knowing does that. The silence does that. The way your entire nervous system seems to hinge on something as small as whether three dots appear on a screen."},
+  {t:'p',text:"You carry it to work. You carry it into conversations with people who have no idea it's there. You carry it into rooms where you laugh and seem completely fine, while somewhere underneath all of that, a quieter part of you is still waiting. Still listening. Still wondering what he's doing right now and whether you crossed his mind today the way he crossed yours."},
+  {t:'p',text:"You're not sure when he became the first thing you think about in the morning. You just know that he did."},
+  {t:'p',text:"And you know — even if it's hard to admit — that a single message from him could make all of it settle in an instant. That somewhere along the way, without meaning to, you handed the key to your own peace to someone who doesn't even know he's holding it."},
+]},
+
+/* 5 DAY 1 reading pt 2 */
+{id:'d1b',blocks:[
+  {t:'ey',text:'Day One · The Mirror'},
+  {t:'p',text:"That's what this book is about."},
+  {t:'p',text:"Not getting over him. Not pretending you don't feel what you feel."},
+  {t:'p',text:"Just getting yourself back."},
+  {t:'sc',text:'The Anchor'},
+  {t:'qt',text:"Men are disturbed not by things, but by the opinions and notions they form concerning things.",attr:'Epictetus, The Enchiridion'},
+  {t:'p',text:"That feeling in your body is not caused by him. It is caused by what your mind has decided he means — and by the story it keeps telling in the silence between his messages."},
+  {t:'sc',text:'The Understanding'},
+  {t:'p',text:"There is a difference between knowing something and feeling it in your bones."},
+  {t:'p',text:"You might already suspect, on some level, that this isn't entirely about him. That the intensity of what you feel says as much about you — your capacity to love, your sensitivity, the way you experience the world — as it does about him specifically. You might already sense that the version of him living in your head is built partly from what he's actually said, and partly from everything he hasn't."},
+  {t:'p',text:"Knowing that doesn't make the feeling stop. So let's go a little deeper."},
+  {t:'p',text:"Your mind cannot leave unresolved things alone. When something feels incomplete, it returns to it — not because that thing is the most important thing in your life, but because incompleteness feels, to the nervous system, like a low-level emergency. Something that must be closed before it is safe to rest."},
+  {t:'p',text:"He has become that unresolved thing."},
+  {t:'p',text:"And so the mind keeps working the problem. Replaying conversations looking for the clue it missed. Analysing a message sent three days ago for a shift in tone. Constructing imaginary versions of how things might unfold. Running the same questions on repeat at 2am not because it expects new answers, but because stopping feels worse than continuing."},
+  {t:'p',text:"This is not a character flaw. This is your nervous system doing exactly what nervous systems do when faced with something unresolved and important. Every person who has ever loved someone uncertain has felt this. You are not unusual for feeling this way. You are deeply, entirely human."},
+]},
+
+/* 6 DAY 1 reading pt 3 */
+{id:'d1c',blocks:[
+  {t:'ey',text:'Day One · The Mirror'},
+  {t:'p',text:"The Stoics understood something about this that took me a long time to truly absorb."},
+  {t:'p',text:"Epictetus said that the source of all human suffering is not what happens to us — it is the confusion between what is ours to control and what isn't. His feelings. His choices. Whether he reaches out and what it means when he doesn't. None of that has ever been yours. But the mind, desperate for certainty, keeps reaching for it anyway. And in doing so it quietly surrenders the one thing that was always, entirely yours."},
+  {t:'p',text:"Your own inner world."},
+  {t:'p',text:"There is one more thing worth naming honestly, because I think part of you already knows it's true — and because nobody else is likely to say it to you."},
+  {t:'p',text:"Part of the thinking feels intentional. Like focus is a form of closeness. Like if you hold this feeling carefully enough, tend to it, keep it alive — it becomes a thread that connects you to him. And maybe, if the thread stays strong enough, it pulls something real toward you."},
+  {t:'p',text:"That instinct is not wrong. Clarity, intention, and belief are powerful things. And you are not wrong to want to hold this carefully. But there is a difference between rooted, grounded focus that comes from a place of wholeness — and anxious, looping thinking that comes from a place of lack. One draws things toward you. The other keeps you stuck in waiting. And from the inside, they can feel identical."},
+  {t:'p',text:"The next thirty days are about learning the difference. In your body, not just your mind."},
+  {t:'p',text:"And it starts with something very simple."},
+]},
+
+/* 7 DAY 1 practice */
+{id:'d1d',blocks:[
+  {t:'ey',text:'Day One · The Mirror'},
+  {t:'sc',text:"Today's Practice"},
+  {t:'p',text:"Today there is no challenge. No rules, nothing to change, nothing to push through."},
+  {t:'p',text:"Today there is only one thing to do, and it takes less than a minute."},
+  {t:'p',text:"At some point today — on a walk, in the shower, making coffee, lying in bed — he will appear in your mind. He always does. When he does, don't push the thought away. Don't follow it either."},
+  {t:'p',text:"Just stop for a moment. Put one hand on your chest, right where that feeling lives. Take one slow breath, all the way in and all the way out. And say quietly to yourself — out loud if you can:"},
+  {t:'qt',text:"I feel this. I'm not going to chase it right now. I'm right here.",attr:'Your practice for today'},
+  {t:'p',text:"Then come back to whatever you were doing."},
+  {t:'p',text:"That's the whole practice. Every time he appears today, do exactly that. Just those three things — hand on chest, one breath, those words."},
+  {t:'p',text:"You are not trying to make the feeling go away. You are not fighting it or suppressing it. You are simply placing one hand on it and reminding yourself that you are here, in your body, in your own life."},
+  {t:'p',text:"It will feel too simple. The mind will want more — more analysis, more resolution, more certainty. That restlessness is not a sign that you are doing it wrong. It is exactly what you are here to observe."},
+  {t:'p',text:"Just notice how many times he appears today. Don't judge the number. Just notice it."},
+  {t:'p',text:"That noticing — quiet, honest, without drama — is where everything begins."},
+]},
+
+/* 8 DAY 1 reflection */
+{id:'d1e',blocks:[
+  {t:'ey',text:'Day One · Evening Reflection'},
+  {t:'p',text:"Find a quiet moment before bed. Pour something warm if that helps. Answer these as the person you actually are right now — not the person you think you should be. There are no right answers here. Only honest ones."},
+  {t:'q',n:1,id:'d1r1',text:'Describe the feeling in your body when he is on your mind. Where does it live? What does it actually feel like? Give it words, even imperfect ones.',lines:5},
+  {t:'q',n:2,id:'d1r2',text:'When he appeared in your mind today — what were you hoping for in that moment? Not the message. The feeling underneath the wanting. What were you reaching for?',lines:5},
+  {t:'q',n:3,id:'d1r3',text:'When you imagine receiving the perfect message from him right now, what shifts in your body? What does that tell you about where you have placed your sense of safety?',lines:5},
+]},
+{id:'d1f',blocks:[
+  {t:'ey',text:'Day One · Evening Reflection (continued)'},
+  {t:'q',n:4,id:'d1r4',text:'What has this been costing you — in presence, in attention, in the hours of your own life? Name it specifically, without judgment.',lines:6},
+  {t:'q',n:5,id:'d1r5',text:'What is the one thing you would do differently tomorrow if you genuinely believed his message — whatever it said — could not determine how you felt about yourself? Not what you would feel. What you would do.',lines:6},
+  {t:'cl',text:'You gave someone the key to your peace without realising it — this is how you quietly take it back.'},
+]},
+
+/* 9 DAY 2 reading pt 1 */
+{id:'d2a',blocks:[
+  {t:'ey',text:'Day Two · The Mirror'},
+  {t:'ti',text:"The Story You're<br/><em>Telling</em>"},
+  {t:'sp',h:28},
+  {t:'p',text:"You feel it before you even realise what you're feeling."},
+  {t:'p',text:"A small drop somewhere in your chest. A shift so subtle you almost miss it — except you never miss it. Your body has become finely tuned to this particular frequency, the way you can sense a change in weather before a single cloud appears."},
+  {t:'p',text:"You glance at your phone. Nothing."},
+  {t:'p',text:"You put it down. Pick it up again. Still nothing."},
+  {t:'p',text:"You tell yourself you're fine. You almost believe it."},
+  {t:'p',text:"And something that was okay a few minutes ago is suddenly, quietly, not okay."},
+  {t:'p',text:"The mind moves in immediately. Not to help — just to make sense of the silence. To fill it with something, anything, because uncertainty is the one thing it cannot leave alone. Maybe he's pulling back. Maybe something you said didn't land the way you meant it. Maybe he was more present last week than he is this week and you just didn't notice the shift. Maybe you've been reading this entirely wrong from the beginning."},
+  {t:'p',text:"Each thought arrives with its own small wave of feeling. And each wave makes the story feel more true. Of course something is wrong. Look at how this feels. Your body wouldn't lie to you."},
+  {t:'p',text:"But here's what actually happened."},
+  {t:'p',text:"He took a little longer to reply than usual."},
+  {t:'p',text:"That's it. That's the whole event. A message sent, a gap, a reply not yet arrived. Nothing was said. Nothing changed. The facts of the situation are, on their own, completely neutral."},
+  {t:'p',text:"Everything else — the drop in your chest, the quiet spiral, the conclusions that arrived fully formed before you even chose to think them — was a story your mind wrote in the seconds between the silence and the spiral."},
+  {t:'p',text:"And this is one of the most important things you will learn inside this workbook."},
+  {t:'p',text:"The feeling is real. The story is not."},
+]},
+
+/* 10 DAY 2 reading pt 2 */
+{id:'d2b',blocks:[
+  {t:'ey',text:'Day Two · The Mirror'},
+  {t:'sc',text:'The Anchor'},
+  {t:'qt',text:"It's not what happens to you, but how you react to it that matters.",attr:'Epictetus'},
+  {t:'p',text:"Between what happens and how you feel about it, there is always a story. You may not notice it forming. But it is always there — and it is always a choice, even when it doesn't feel like one."},
+  {t:'sc',text:'The Understanding'},
+  {t:'p',text:'The Stoics made a distinction that sounds simple and turns out to be one of the most quietly radical ideas you can absorb.'},
+  {t:'p',text:'They separated events from interpretations. What actually happened — the plain, observable fact of it — from the meaning the mind immediately layered on top. They called the raw event the "impression" and they were absolutely insistent that impressions, on their own, are neutral. A delayed reply is a delayed reply. It is not rejection. It is not losing interest. It is not evidence of anything except that a reply has not yet arrived.'},
+  {t:'p',text:"The suffering — the tightening, the spiral, the sudden certainty that something is wrong — doesn't come from the event. It comes from the story."},
+  {t:'p',text:"And the mind builds these stories fast. Faster than you can catch them. It pulls from every previous experience of being let down, every moment of feeling like too much or not enough, every time someone's silence turned out to mean something. It is not trying to hurt you. It is trying to protect you — scanning for danger, flagging patterns, preparing you for a blow that may never come."},
+  {t:'p',text:"But protection that costs you your peace every single day is not protection. It is a prison with a very convincing justification."},
+  {t:'p',text:"Here is what makes this particularly difficult with someone you care about deeply."},
+  {t:'p',text:"When the feelings are strong, the stories feel like intuition. Like you're not catastrophising — you're reading the situation clearly. You're perceptive. You notice things. And sometimes that's true. But there is a difference between genuine intuition, which is quiet and certain and arrives without drama, and anxiety dressed up as intuition, which is loud and urgent and needs you to act on it immediately."},
+  {t:'p',text:"Anxiety asks you to treat the story as fact."},
+  {t:'p',text:"Today's practice asks you to do something different — to catch the story in the act of forming, hold it up to the light, and ask one simple question before you let it run."},
+  {t:'p',text:"Is this what happened, or is this what I made of what happened?"},
+]},
+
+/* 11 DAY 2 practice */
+{id:'d2c',blocks:[
+  {t:'ey',text:'Day Two · The Mirror'},
+  {t:'sc',text:"Today's Practice"},
+  {t:'p',text:"Today you are going to catch yourself writing a story."},
+  {t:'p',text:"At some point today — and it will happen, it always does — something will occur that your mind immediately interprets. A message, a silence, a tone, a look, something he said or didn't say. The moment you feel the familiar shift in your chest, that's your signal."},
+  {t:'p',text:"Stop. Take a breath. And write down two things, either here in this workbook or somewhere private:"},
+  {t:'fi',label:'What actually happened.',id:'d2p1',lines:3},
+  {t:'fi',label:'What my mind made of it.',id:'d2p2',lines:3},
+  {t:'p',text:'Keep the first column ruthlessly factual. Not "he seemed distant" — that\'s already an interpretation. Just the plain, observable thing. The message that came. The silence that followed. The plans that changed. Nothing added on top.'},
+  {t:'p',text:"Then look at what you wrote in the second column. That is the story. Notice how much further it goes than the fact. Notice how certain it feels. Notice how quickly it arrived."},
+  {t:'p',text:"You don't have to dismantle the story today. You don't have to replace it with a positive one. You only have to see it for what it is."},
+  {t:'p',text:"A story. Not a truth."},
+  {t:'p',text:"The mind will resist this. It will insist that this particular story is different — that this one is actually true, that you're not catastrophising, that your read on the situation is accurate. Maybe it is. But you cannot know that yet. And acting from a story before you know whether it's true is how you create the very distance you're afraid of."},
+  {t:'p',text:"Catch the story. Write it down. That's enough for today."},
+]},
+
+/* 12 DAY 2 reflection */
+{id:'d2d',blocks:[
+  {t:'ey',text:'Day Two · Evening Reflection'},
+  {t:'p',text:"Take your time with these tonight. The second question especially — sit with it longer than feels comfortable."},
+  {t:'q',n:1,id:'d2r1',text:'What story did your mind tell today? Write out the event in one sentence, then write everything the mind added on top of it.',lines:5},
+  {t:'q',n:2,id:'d2r2',text:'How did the story feel in your body? And when you strip it back to just the plain fact — does the feeling change at all?',lines:4},
+  {t:'q',n:3,id:'d2r3',text:"Where do you think this story came from? Is it new, or does it have roots somewhere older than him?",lines:4},
+  {t:'q',n:4,id:'d2r4',text:'Is there another interpretation of the same event that is equally possible? Not more positive — just equally possible. Write it out.',lines:4},
+  {t:'q',n:5,id:'d2r5',text:'What did the story protect you from having to feel today? If there had been no story — just the plain fact, nothing added — what would have been left?',lines:5},
+  {t:'cl',text:"He took a little longer to reply than usual. That's it. That's the whole event. Everything else — the drop in your chest, the spiral, the certainty that something was wrong — that was a story your mind wrote in the gap. The feeling was real. The story was not. And the story, unlike him, is something you can actually do something about."},
+]},
+
+/* 13 DAY 3 reading pt 1 */
+{id:'d3a',blocks:[
+  {t:'ey',text:'Day Three · The Mirror'},
+  {t:'ti',text:'The<br/><em>Checking</em>'},
+  {t:'sp',h:28},
+  {t:'p',text:'You put your phone down.'},
+  {t:'p',text:'You pick it back up.'},
+  {t:'p',text:'Not because a notification came. Not because you were expecting anything. Just — to check. Just in case. Just to close the small gap between not knowing and knowing, even for a second.'},
+  {t:'p',text:'Nothing there.'},
+  {t:'p',text:"You put it down again. You go back to whatever you were doing. A few minutes pass — maybe ten, maybe three — and then, without quite deciding to, you pick it up again."},
+  {t:'p',text:"You already know what this is. You've probably known for a while. There's a part of you that watches yourself do it and quietly winces, because it doesn't feel like a choice. It feels more like a reflex. Like the hand moves before the mind has agreed to anything."},
+  {t:'p',text:"And the thing is — it's never really about the phone."},
+  {t:'p',text:"It's about the three seconds of relief you feel when a message is there. The way the body settles, just slightly, just briefly, before the mind starts doing something else with it entirely. You're not checking for information."},
+  {t:'p',text:"You're checking for proof that you're okay."},
+  {t:'sc',text:'The Anchor'},
+  {t:'qt',text:"Never esteem anything as of advantage to you that will make you break your word or lose your self-respect.",attr:'Marcus Aurelius, Meditations'},
+  {t:'p',text:"Every time you check without cause, you make a small agreement with the belief that your peace lives somewhere outside of you. Today is about breaking that agreement, quietly and without drama, one hour at a time."},
+]},
+
+/* 14 DAY 3 reading pt 2 */
+{id:'d3b',blocks:[
+  {t:'ey',text:'Day Three · The Mirror'},
+  {t:'sc',text:'The Understanding'},
+  {t:'p',text:"There is a reason the checking feels compulsive. It isn't weakness and it isn't desperation — it is your brain doing something it was designed to do, in a context it was never designed for."},
+  {t:'p',text:"Dopamine — the chemical that drives motivation and craving — is not triggered by reward. It is triggered by the anticipation of reward. The possibility of a message. The chance that this time, when you look, something will be there. That uncertainty — the not knowing whether the reward will come — is precisely what makes the urge so strong and so difficult to resist."},
+  {t:'p',text:"This is the same mechanism behind every compulsive behaviour. The slot machine doesn't pay out every time. Neither does the phone. And the unpredictability doesn't make it easier to stop — it makes it harder. Your brain has learned that checking sometimes brings relief. So it keeps asking you to check."},
+  {t:'p',text:"But here is what the checking actually costs you, beyond the obvious."},
+  {t:'p',text:"Every time you reach for the phone without cause, you send your nervous system a message. You tell it that the uncertainty is intolerable. That you cannot simply sit with not knowing. That relief must be sought, and sought now. And your nervous system, obedient and well-meaning, believes you. It learns that this feeling requires immediate action. It becomes less and less able to simply rest inside the unknown."},
+  {t:'p',text:"You are, without meaning to, training yourself to need the checking."},
+  {t:'p',text:'The Stoics practised something they called "askesis" — deliberate restraint, not as punishment, but as a way of proving to themselves that they were not enslaved to their impulses. Not because the impulse was shameful, but because freedom felt better than compulsion. Because a mind that can choose not to act is a mind that belongs to itself.'},
+  {t:'p',text:"Today you begin taking yours back."},
+]},
+
+/* 15 DAY 3 practice */
+{id:'d3c',blocks:[
+  {t:'ey',text:'Day Three · The Mirror'},
+  {t:'sc',text:"Today's Practice"},
+  {t:'p',text:"Today you are going to put your phone in another room for three hours."},
+  {t:'p',text:"Not silent beside you on the desk. Not face-down on the sofa. Another room. Out of reach, out of sight, out of the corner of your eye."},
+  {t:'p',text:"Three hours will feel like a lot right now. That's exactly why it's three hours and not one."},
+  {t:'p',text:"There is one exception, and it matters: if a notification arrives — if he actually messages you — go to the phone, read it, reply as naturally as you normally would, then put the phone back in the other room and continue your window. You are not disappearing. You are not playing games. You are simply practising the difference between him reaching you and you reaching for him."},
+  {t:'p',text:"Before you begin, choose your window and write it down. The window that feels slightly uncomfortable to commit to is probably the right one. If three hours feels impossible today, start with two. If it feels easy, go longer. The discomfort is the signal — not the number."},
+  {t:'fi',label:'My three hours today: _______ to _______',id:'d3window',lines:1},
+  {t:'p',text:"Use this time for something that belongs entirely to you. Something that existed in your life before he did. Not as a distraction — as a reminder of who you are when you are not waiting."},
+  {t:'p',text:'When the urge arrives — and it will, probably within the first twenty minutes — don\'t fight it. Put one hand on your chest, the way you practised on Day One, and say quietly:'},
+  {t:'qt',text:"The not-knowing is there. I am here. And right now, I am choosing myself over the checking.",attr:'Your practice for today'},
+  {t:'p',text:"Then return to what you were doing. Not because the urge has gone. Simply because you are choosing, this once, not to follow it."},
+  {t:'p',text:"If you slip — you go get the phone and there's nothing there — that's okay. Put it back, take a breath, and start the window again. The practice is not perfection. The practice is returning."},
+  {t:'p',text:"The first hour is the hardest. The urge will come in waves — strong, then quieter, then strong again. This is your nervous system adjusting to not getting what it asked for. Let it adjust. It knows how."},
+  {t:'p',text:"By the third hour, something may shift. A quietness. A small, unfamiliar sense of being present in your own life rather than waiting at the edge of someone else's."},
+  {t:'p',text:"That quietness is what you are building toward."},
+]},
+
+/* 16 DAY 3 reflection */
+{id:'d3d',blocks:[
+  {t:'ey',text:'Day Three · Evening Reflection'},
+  {t:'q',n:1,id:'d3r1',text:"How many times did the urge to check arise during your window? What did it feel like in your body when you didn't follow it?",lines:5},
+  {t:'q',n:2,id:'d3r2',text:"What were you actually looking for each time the urge appeared? Try to be specific — reassurance, closeness, certainty, something else?",lines:5},
+  {t:'q',n:3,id:'d3r3',text:"Was there a moment during the window where you felt genuinely present in something other than waiting? Describe it.",lines:4},
+  {t:'q',n:4,id:'d3r4',text:"If the checking actually worked — if it reliably delivered the certainty you were looking for — would you want to stop? Sit with that before you answer.",lines:4},
+  {t:'q',n:5,id:'d3r5',text:"What part of your life has been quietly waiting for you while you have been checking? Name it specifically. How long has it been waiting?",lines:5},
+  {t:'cl',text:"Every time you pick up the phone without cause, you make a small agreement with the belief that your peace lives in someone else's hands. You are not waiting for a message. You are waiting for permission to feel okay. That permission was never his to give."},
+]},
+
+/* 17 DAY 4 reading pt 1 */
+{id:'d4a',blocks:[
+  {t:'ey',text:'Day Four · The Mirror'},
+  {t:'ti',text:'The Search for<br/><em>Certainty</em>'},
+  {t:'sp',h:28},
+  {t:'p',text:"Sometimes it feels like love. Sometimes it feels like fear. Most of the time you can't tell the difference."},
+  {t:'p',text:"You go back to the conversation. Not to obsess — just to look again, now that some time has passed and maybe you can see it more clearly. You read his words slowly. You notice something you didn't notice before — the way he phrased that particular thing, the effort underneath it, what it might mean that he said it like that and not any other way. You screenshot it. Not for any strange reason. Just to have it."},
+  {t:'p',text:"Sometimes this feels warm. Tender, almost. Like spending time with him without any of the risk of actually being with him. You find something in his words that feels like proof — proof that he cares, that the connection is real, that you haven't been imagining it — and for a few minutes the feeling in your chest loosens just slightly. You feel close to him. You feel like you understand him in a way he maybe doesn't even understand himself."},
+  {t:'p',text:"And sometimes it feels like something else entirely. Desperate. Frightened. You're not looking for warmth — you're looking for safety. You're scanning his words the way you'd scan a room for the nearest exit, trying to find the thing that will tell you whether you're okay. Whether this is okay. Whether the ground beneath you is solid or whether it's been quietly shifting and you just haven't noticed yet."},
+  {t:'p',text:"Sometimes you bring it to someone else. A friend who has heard every detail of this story. Or an AI at midnight when you don't want to wake anyone up. You're not looking for drama. You're looking for the one interpretation that will finally make the feeling settle."},
+  {t:'p',text:"What you are looking for, underneath all of it, is the same thing every time."},
+  {t:'p',text:"Certainty."},
+  {t:'p',text:"And here is what you already know, somewhere beneath the searching:"},
+  {t:'p',text:"It has never come. Every analysis leads to another question. Every moment of clarity dissolves the next time something happens that doesn't fit. You have spent more hours here than you would ever say out loud — and you are not more certain than when you began. You are just more tired."},
+  {t:'p',text:"Because certainty about another person was never findable this way."},
+  {t:'p',text:"It never was. And some part of you has always known that — which is why the searching has never quite made the feeling stop."},
+]},
+
+/* 18 DAY 4 reading pt 2 */
+{id:'d4b',blocks:[
+  {t:'ey',text:'Day Four · The Mirror'},
+  {t:'sc',text:'The Anchor'},
+  {t:'qt',text:"Seek not that the things which happen should happen as you wish; but wish the things which happen to be as they are, and you will have a tranquil flow of life.",attr:'Epictetus, The Enchiridion'},
+  {t:'p',text:"Every hour spent searching for certainty in someone else's words is an hour spent trying to control the one thing that has never been in your hands. His feelings are his. They always were."},
+  {t:'sc',text:'The Understanding'},
+  {t:'p',text:"Let's be honest about what the analysis actually is, because it deserves more honesty than it usually gets."},
+  {t:'p',text:"It is not a flaw. It is not weakness. It is one of the most intelligent, most caring, most quietly exhausting things a person can do — and it comes from a place that is genuinely good. You want to understand him. You want to know if the connection is real, if he is safe to open to, if what you sense between you is something he feels too or something you have been building alone in the space between his messages."},
+  {t:'p',text:"These are not unreasonable things to want to know."},
+  {t:'p',text:"The problem is not the wanting. The problem is the method."},
+  {t:'p',text:"Because what you are really trying to do, underneath the analysis, is prevent hurt. If you can decode him accurately enough — if you can read the signs clearly enough, understand his patterns deeply enough, anticipate his feelings precisely enough — you can see the heartbreak coming before it arrives. You can protect yourself. You can stay one step ahead of the pain."},
+  {t:'p',text:"But you cannot. Not this way."},
+  {t:'p',text:"No amount of reading between the lines has ever made another person's interior life fully knowable. He doesn't fully know it himself. The inner monologue you've constructed for him — the fears you've identified, the feelings you've mapped, the reasons you've assigned to his silences — that is not him. That is your best, most loving, most carefully researched guess. And it is still a guess."},
+]},
+
+/* 19 DAY 4 reading pt 3 */
+{id:'d4c',blocks:[
+  {t:'ey',text:'Day Four · The Mirror'},
+  {t:'p',text:"The Stoics called this reaching for what is not ours. Epictetus was direct about it to the point of being almost uncomfortable: another person's thoughts, feelings, and choices are not in our control. They were never in our control. And the attempt to make them knowable — however intelligent, however well-intentioned — is still an attempt to control the uncontrollable. It costs us our peace without ever delivering the certainty we were looking for."},
+  {t:'p',text:"Here is what the analysis has actually been costing you."},
+  {t:'p',text:"Every hour spent inside his words is an hour not spent inside your own life. Every moment of trying to understand what he is feeling is a moment not spent understanding what you are feeling. The question you have been asking — what does he really mean, what does he really feel, is this really real — has been so loud that a quieter, more important question has barely had room to breathe."},
+  {t:'p',text:"What do you need?"},
+  {t:'p',text:"Not from him. From yourself. From this. From the next chapter of your own life."},
+  {t:'p',text:"That question is where your energy belongs."},
+  {t:'sc',text:"Today's Practice"},
+  {t:'p',text:"Today's practice is built around a single moment of pause."},
+  {t:'p',text:"At some point today the pull will arrive — to reread, to analyse, to screenshot, to bring the conversation somewhere it can be examined more closely. When it does, before you follow it, stop for just a moment and ask yourself two questions. Write the answers here or somewhere private:"},
+  {t:'fi',label:'What am I hoping to find?',id:'d4p1',lines:3},
+  {t:'fi',label:"What will I do if I don't find it?",id:'d4p2',lines:3},
+  {t:'p',text:"You don't have to stop the analysis today. You don't have to put the conversation down if you genuinely don't feel ready to. The practice is simply the pause. The two questions. The moment of honesty before you decide."},
+  {t:'p',text:"Because sometimes the most powerful thing is not stopping the behaviour — it's seeing it clearly enough that it starts to lose its grip on its own."},
+  {t:'p',text:"If the answer to the second question is \"I don't know\" — that's okay. Sit with that for a moment. That not knowing is not a crisis. It is actually the beginning of something."},
+  {t:'p',text:"The pull will feel reasonable. It will feel like the sensible thing to do. It will tell you that you're not obsessing, you're just being thorough, just being careful, just making sure you're not missing something important."},
+  {t:'p',text:"Ask the two questions anyway. The answers will tell you everything the analysis never could."},
+]},
+
+/* 20 DAY 4 reflection */
+{id:'d4d',blocks:[
+  {t:'ey',text:'Day Four · Evening Reflection'},
+  {t:'p',text:"Be honest in these — especially the second one. It's the one that matters most tonight."},
+  {t:'q',n:1,id:'d4r1',text:"When the pull to analyse arrived today, what were you specifically hoping to find? Not \"certainty\" in general — what specific thing were you looking for? Proof that he cares? Proof that you're safe? Something else?",lines:5},
+  {t:'q',n:2,id:'d4r2',text:'How much time — honestly, across your life, not just today — have you spent searching for certainty this way? What has it cost you? Name it specifically.',lines:5},
+  {t:'q',n:3,id:'d4r3',text:"What is the inner monologue you've built for him? What do you believe he is feeling, fearing, wanting? Write it out — and then notice that this is your construction, not his confession.",lines:5},
+  {t:'q',n:4,id:'d4r4',text:'There is a version of not-knowing that is terror and a version that is freedom. Which one have you actually been living in? And what is the difference between them in your body?',lines:5},
+  {t:'q',n:5,id:'d4r5',text:"What question about yourself have you not been asking because you've been so focused on decoding him?",lines:5},
+  {t:'cl',text:"The certainty you've been searching for in his words lives nowhere in his words. It only ever lived in you."},
+]},
+
+/* 21 DAY 5 reading pt 1 */
+{id:'d5a',blocks:[
+  {t:'ey',text:'Day Five · The Mirror'},
+  {t:'ti',text:'The Imaginary<br/><em>Conversation</em>'},
+  {t:'sp',h:28},
+  {t:'p',text:"You've had this conversation a hundred times."},
+  {t:'p',text:"Not with him. With the version of him that lives in your head — the one who says what you need to hear, who finally understands, who gives you the answer that the real conversation never quite arrived at."},
+  {t:'p',text:"You know how it starts. Maybe it begins with something you wish you'd said. Something that came to you an hour after the moment passed, perfectly formed, exactly right — the thing that would have made everything clear. So you go back there in your mind and you say it. And this time, in this version, he gets it. He responds the way you needed him to respond. The air between you settles."},
+  {t:'p',text:"Or maybe it begins with something that hasn't happened yet. A conversation you're preparing for, rehearsing, getting ready. You try different words, different tones, different versions of yourself saying the same essential thing. You anticipate what he might say back. You prepare your response to that. You play it forward, and forward again, until you've lived through a dozen different versions of something that exists only in your mind."},
+  {t:'p',text:"It feels like preparation. It feels productive. Like you're working toward something, building toward something, getting yourself ready for the real thing when it comes."},
+  {t:'p',text:"But here is what is actually happening."},
+  {t:'p',text:"You are in a relationship with a version of him that he has never agreed to and will never know about. You are investing emotionally — your time, your energy, your hope — in conversations he isn't having. You are getting closer to a man who is not there."},
+  {t:'p',text:"And the real one, the actual one, the one who exists outside your mind — you are further from him with every hour you spend in the imaginary version."},
+]},
+
+/* 22 DAY 5 reading pt 2 */
+{id:'d5b',blocks:[
+  {t:'ey',text:'Day Five · The Mirror'},
+  {t:'sc',text:'The Anchor'},
+  {t:'qt',text:"Never let the future disturb you. You will meet it, if you have to, with the same weapons of reason which today arm you against the present.",attr:'Marcus Aurelius, Meditations'},
+  {t:'p',text:"The conversation you have been rehearsing cannot prepare you for the one that actually happens. The real conversation will go its own way — and no amount of rehearsal has ever changed that."},
+  {t:'sc',text:'The Understanding'},
+  {t:'p',text:"The imaginary conversation is the most creative thing on this list. And in another context, that creativity would be something to celebrate."},
+  {t:'p',text:"You are not doing this because you are lost or confused or particularly fragile. You are doing this because you are someone who feels deeply, who cares about getting things right, who wants to be understood and to understand. The imaginary conversation is your mind's attempt to close the gap between where things are and where you wish they were."},
+  {t:'p',text:"But there are two things worth understanding clearly about what it costs you."},
+  {t:'p',text:"The first is this: every imaginary conversation is directed by you. Which means he always says what you need him to say. He always responds in a way that gives you resolution. He is, in your mind, more available, more articulate, more emotionally present than any real person is capable of being — because he is you, wearing his face. And the more time you spend with that version of him, the harder it becomes to be present with the real one, who is complicated and uncertain and entirely his own."},
+  {t:'p',text:"The second is subtler and more important."},
+  {t:'p',text:"The imaginary conversation keeps you feeling like you are doing something about the situation. Like you are moving toward something. But you are not moving. You are standing completely still, inside your own head, burning through hours that belong to your actual life."},
+  {t:'p',text:'The Stoics called this "living in advance" — rehearsing futures that may never arrive, suffering through outcomes that haven\'t happened, solving problems that don\'t yet exist. Marcus Aurelius returned to this idea again and again in his private journals: that the present moment is the only place where life actually happens. That the mind which lives in the future is not preparing for life. It is avoiding it.'},
+  {t:'p',text:"The conversation you need to have — the real one, the one that matters — cannot happen in your head."},
+  {t:'p',text:"It can only happen out loud, in real time, with the uncertainty of not knowing how it ends."},
+  {t:'p',text:"That uncertainty is not a problem to be solved before you begin. It is simply what real intimacy feels like."},
+]},
+
+/* 23 DAY 5 practice */
+{id:'d5c',blocks:[
+  {t:'ey',text:'Day Five · The Mirror'},
+  {t:'sc',text:"Today's Practice"},
+  {t:'p',text:"Today's practice is about catching yourself mid-conversation — the imaginary one — and doing something very deliberate with what you find there."},
+  {t:'p',text:"When you notice you've slipped into a rehearsal or a replay — when you catch yourself saying something to him in your mind, or imagining his response, or playing a scene forward — stop. Don't judge it. Just stop."},
+  {t:'p',text:"Then write down, as quickly and honestly as you can, the one thing you most want him to understand. Not the speech. Not the full conversation. Just the single thing underneath all of it — the real need, the real fear, the real question you've been trying to find the words for."},
+  {t:'fi',label:'The one thing I most want him to understand is:',id:'d5p1',lines:4},
+  {t:'p',text:"Now look at what you wrote."},
+  {t:'p',text:"That — right there — is what the hundred imaginary conversations have been circling. Not a script. Not a perfect phrasing. Just that."},
+  {t:'p',text:"Hold it for a moment. You don't have to do anything with it today. You don't have to send it or say it or act on it. You only have to see it clearly, maybe for the first time."},
+  {t:'p',text:"The mind won't want to stop at one sentence. It will feel unfinished — like you've opened a door and only been allowed to stand in the doorway. That restlessness is normal. It means you found the real thing underneath all the noise."},
+  {t:'p',text:"That is enough for today."},
+]},
+
+/* 24 DAY 5 reflection */
+{id:'d5d',blocks:[
+  {t:'ey',text:'Day Five · Evening Reflection'},
+  {t:'p',text:"Take your time with these. The fourth one especially — it might surprise you."},
+  {t:'q',n:1,id:'d5r1',text:"What version of the conversation do you return to most often? The one where you finally say the right thing, or the one where he finally does? What does that tell you about what you're actually looking for?",lines:5},
+  {t:'q',n:2,id:'d5r2',text:"In your imaginary conversations, how does he respond? What does the version of him in your head give you that the real situation hasn't? Be specific.",lines:5},
+  {t:'q',n:3,id:'d5r3',text:"What is the thing you most want him to understand — the one you wrote today? Where does that need come from? Is it new, or have you carried it for longer than this relationship?",lines:5},
+  {t:'q',n:4,id:'d5r4',text:"If you could never have the imaginary conversation again — if that door simply closed — what would you do with the silence it left behind? What might you finally have room to hear?",lines:5},
+  {t:'q',n:5,id:'d5r5',text:"What would it feel like to have the real conversation — imperfect, unscripted, with no guaranteed ending? Is there something you've been waiting to say that the rehearsals have actually been keeping you from saying?",lines:5},
+  {t:'cl',text:"He has never been in that conversation. He doesn't know it exists. The only person who has ever been there is you. And you deserve a real one — imperfect, unscripted, with no guaranteed ending. That is what intimacy actually feels like."},
+]},
+
+/* 25 DAY 6 reading pt 1 */
+{id:'d6a',blocks:[
+  {t:'ey',text:'Day Six · The Mirror'},
+  {t:'ti',text:'The Version of Him<br/>in <em>Your Head</em>'},
+  {t:'sp',h:28},
+  {t:'p',text:"There are two of him."},
+  {t:'p',text:"There is the one who exists in the world — who says what he says and does what he does and shows up in the ways he shows up, imperfectly and inconsistently and entirely on his own terms."},
+  {t:'p',text:"And there is the one who lives in your head."},
+  {t:'p',text:"The one in your head is built from everything real — the things he's actually said, the moments that were genuinely good, the times you felt something between you that seemed undeniable. But he is also built from everything else. From the gaps you filled with hope. From the silences you gave meaning. From the version of him you saw in his best moments and held up as the truest version, the one that's always just beneath the surface, the one that would emerge if only the timing were better, if only he felt safe enough, if only you said the right thing."},
+  {t:'p',text:"You have built him carefully. Lovingly, even. With all the intelligence and sensitivity you bring to everything that matters to you."},
+  {t:'p',text:"And he is not entirely real."},
+  {t:'p',text:"Not because the connection isn't real. Not because what you feel isn't real. But because the version of him you have been loving most deeply — the one you analyse and replay and imagine conversations with — is partly him and partly you. Partly what he's shown you and partly what you've needed him to be."},
+  {t:'p',text:"That gap — between the version in your head and the person actually standing in front of you — is where so much of the pain lives."},
+  {t:'sc',text:'The Anchor'},
+  {t:'qt',text:"If it is not right, do not do it. If it is not true, do not say it.",attr:'Marcus Aurelius, Meditations'},
+  {t:'p',text:"The two-list practice today is both of these things. You cannot love rightly what you cannot see clearly. And you cannot say something true about him — to yourself or to anyone else — until you have first looked at what is actually there. That is what today asks of you. Not harshness. Just honesty."},
+]},
+
+/* 26 DAY 6 reading pt 2 */
+{id:'d6b',blocks:[
+  {t:'ey',text:'Day Six · The Mirror'},
+  {t:'sc',text:'The Understanding'},
+  {t:'p',text:"I want to be careful here, because this is the part that is easiest to misread."},
+  {t:'p',text:"Seeing the version of him in your head clearly is not the same as deciding he isn't worth loving. It is not a verdict on him, or on the connection, or on you for feeling what you feel. It is simply — and this matters — an act of honesty. And honesty is where real things can actually begin."},
+  {t:'p',text:"Here is what tends to happen when we feel something strongly for someone."},
+  {t:'p',text:"The mind, flooded with feeling, begins to build. It takes the real moments — the ones that were genuinely good, genuinely warm, genuinely meaningful — and it holds them up. It studies them. It uses them as evidence for a larger story: that this person is capable of this, that they feel this, that the best version of what has happened between you is the truest version of who they are."},
+  {t:'p',text:"Meanwhile, the moments that don't fit the story — the silences, the inconsistencies, the times they pulled back or went quiet or showed up differently than you needed — get explained away. Given reasons. Placed inside a context that makes them understandable, temporary, not representative of the whole."},
+  {t:'p',text:"This is not stupidity. This is hope. And hope is not wrong."},
+  {t:'p',text:"But hope that edits out the parts that don't fit is not the same as seeing someone clearly. And loving a carefully edited version of someone — however sincerely, however deeply — is not the same as loving the actual person."},
+  {t:'p',text:"The Stoics were insistent about this. They called it seeing things as they are — not as we fear them to be, and not as we wish them to be, but as they actually are. This is not cynicism. It is the only foundation on which something real can be built."},
+  {t:'p',text:"Because here is what becomes possible when you set the constructed version down and look at the actual person clearly."},
+  {t:'p',text:"You get to make a real choice. Not a choice based on who he might become, or who he was in his best moment, or who you believe is hiding just beneath the surface waiting to emerge. A choice based on who he actually is, right now, as evidenced by what he actually does."},
+  {t:'p',text:"That choice — made clearly, from a place of seeing rather than hoping — is one of the most sovereign things you can do."},
+]},
+
+/* 27 DAY 6 practice */
+{id:'d6c',blocks:[
+  {t:'ey',text:'Day Six · The Mirror'},
+  {t:'sc',text:"Today's Practice"},
+  {t:'p',text:"Today you are going to do something that requires honesty and a steady hand. Not harshness — just clarity."},
+  {t:'p',text:"You are going to draw a line down the middle of a page and make two lists."},
+  {t:'p',text:"On the left: What he has actually shown you. Not what you think he means, not what you believe he feels underneath it, not what he said that one time in that one moment. What he has consistently, repeatedly, actually done."},
+  {t:'fi',label:'What he has actually shown you:',id:'d6left',lines:7},
+  {t:'p',text:"On the right: What you have added. The interpretations. The hopes. The reasons you've given for the parts that didn't fit. The potential you can see in him that he hasn't yet shown you himself."},
+  {t:'fi',label:'What you have added:',id:'d6right',lines:7},
+  {t:'p',text:"You are not doing this to diminish him. You are doing this to finally see him — and to see yourself clearly in the process."},
+  {t:'p',text:"Look at both lists without judgment. Notice which one is longer. Notice which one you've been living inside."},
+  {t:'p',text:"You don't have to do anything with what you find today. Seeing it is enough."},
+  {t:'p',text:"This practice will feel uncomfortable. The right-hand list may be longer than you expected. You may feel the urge to defend him as you write — to explain, to contextualise, to soften what you find."},
+  {t:'p',text:"Let the lists be what they are. They are not a verdict. They are just the truth, laid out where you can finally see it."},
+  {t:'p',text:"If the left-hand list is long and solid — if he has genuinely shown up, consistently and clearly — that is its own kind of important. It means the pattern lives in you, not in him. That is harder to see and more important to know."},
+]},
+
+/* 28 DAY 6 reflection */
+{id:'d6d',blocks:[
+  {t:'ey',text:'Day Six · Evening Reflection'},
+  {t:'p',text:"Be gentle with yourself tonight. This was the hardest day of Week One. It deserves time."},
+  {t:'q',n:1,id:'d6r1',text:"Looking at your two lists — what surprised you? Was there something on either side that you hadn't quite let yourself see before today?",lines:5},
+  {t:'q',n:2,id:'d6r2',text:"Which version of him have you been more in love with — the one on the left, or the one on the right? Be honest.",lines:4},
+  {t:'q',n:3,id:'d6r3',text:"Where did the right-hand list come from? What did you need him to be, and why? Is that need about him specifically, or does it go somewhere deeper?",lines:5},
+  {t:'q',n:4,id:'d6r4',text:"If the left-hand list — just what he has actually shown you — were all you ever got, would it be enough? Answer it. Don't save it for another time.",lines:4},
+  {t:'q',n:5,id:'d6r5',text:"What would you have to grieve in order to let the constructed version go? Not him — the version. Name what you would actually be losing.",lines:5},
+  {t:'cl',text:"You have been loving the best version of him and calling it him. That is not a failure. That is what hope looks like from the inside. But the person worth loving is the real one — who shows up exactly as he is, not as you need him to be. And the person worth loving is also you. Clearly. Without the editing."},
+]},
+
+/* 29 DAY 7 reading pt 1 */
+{id:'d7a',blocks:[
+  {t:'ey',text:'Day Seven · The Mirror'},
+  {t:'ti',text:'What You<br/><em>See Now</em>'},
+  {t:'sp',h:28},
+  {t:'p',text:"You made it through the first week."},
+  {t:'p',text:"I don't want to gloss over that. This was not a gentle week. You were asked to look at things most people spend years carefully not looking at — the feeling in your body, the stories you build from silence, the compulsive reaching, the analysis dressed up as insight, the imaginary conversations, the version of him you've been constructing in the gaps between what he actually shows you."},
+  {t:'p',text:"That takes courage. Not the dramatic kind — the quiet, private kind that nobody else sees. The kind that happens at night, alone, with a workbook and a pen and the decision to be honest with yourself even when honesty is uncomfortable."},
+  {t:'p',text:"Today is not a day for new revelations. Today is a day to stop and see what you've already found."},
+  {t:'p',text:"Because here is something worth knowing about how change actually works: awareness that isn't witnessed tends to disappear. The insights of one day get buried under the noise of the next. The things you saw clearly on Tuesday become hazy by Friday. Taking time today to name what you've discovered — slowly, in your own words, on this page — is how you make it yours. How you carry it forward rather than losing it in the days ahead."},
+  {t:'p',text:"So today is simple. Today is just you and what you know now that you didn't know seven days ago."},
+  {t:'sc',text:'The Anchor'},
+  {t:'qt',text:"Know thyself.",attr:'Inscription at the Temple of Apollo, Delphi — foundational to Stoic philosophy'},
+  {t:'p',text:"Every Stoic practice begins here. Not with discipline, not with restraint, not with detachment — but with seeing yourself honestly. You have spent seven days doing exactly that."},
+]},
+
+/* 30 DAY 7 reading pt 2 */
+{id:'d7b',blocks:[
+  {t:'ey',text:'Day Seven · The Mirror'},
+  {t:'sc',text:'The Understanding'},
+  {t:'p',text:"There is a reason this week was called The Mirror."},
+  {t:'p',text:"Not because the point was to find fault. Not because the goal was to make you feel bad about the checking, the analysing, the imaginary conversations, the version of him you've been carrying around. The point was simply to see. Clearly. Without the softening that happens when we tell ourselves the story of why each thing is fine, justified, understandable."},
+  {t:'p',text:"And here is what you have actually done this week, underneath all of it."},
+  {t:'p',text:"You have begun to separate yourself from your patterns. That is not a small thing. Most people live inside their patterns so completely that they cannot see them at all — they simply experience them as reality, as the way things are, as who they are. The moment you can name a pattern — see it arriving, watch it move through you, recognise it for what it is — you have already created a small but real distance between you and it."},
+  {t:'p',text:"That distance is everything. That distance is where choice lives."},
+  {t:'p',text:"You may not feel dramatically different than you did seven days ago. That's okay — that's actually right. Real change doesn't usually feel dramatic from the inside. It feels like noticing things you didn't notice before. Like a moment of pause where there used to be only reflex. Like asking a question before following an urge."},
+  {t:'p',text:"Those small things are not nothing. They are the beginning of everything."},
+  {t:'p',text:"Week Two begins tomorrow. If Week One was about seeing, Week Two is about training. The same patterns you've been observing — you are going to start responding to them differently. Not suppressing them. Not fighting them. Simply choosing, with increasing steadiness, what you do next."},
+  {t:'p',text:"But that's tomorrow. Today belongs entirely to you."},
+]},
+
+/* 31 DAY 7 practice */
+{id:'d7c',blocks:[
+  {t:'ey',text:'Day Seven · The Mirror'},
+  {t:'sc',text:"Today's Practice"},
+  {t:'p',text:"There is no challenge today. No rule, no window, no practice to complete."},
+  {t:'p',text:"Today you only have one thing to do, and it is entirely yours."},
+  {t:'p',text:"Find a quiet hour. Somewhere comfortable. Make something warm to drink if that helps. And spend that hour with the reflection prompts below — not rushing through them, not writing what sounds good, but taking the time to let each one land before you answer it."},
+  {t:'p',text:"Write more than you think you need to. The first thing you write is rarely the truest thing. Let yourself get past the surface."},
+  {t:'p',text:"This is the most important practice of the week. Not because it is the hardest — but because it is the one that makes everything else stick."},
+  {t:'sc',text:'Week One Reflection'},
+  {t:'p',text:"Take as much space as you need. There are extra pages at the back of this workbook if these lines aren't enough."},
+  {t:'q',n:1,id:'d7r1',text:"Before this week, how would you have described what was happening to you? And how would you describe it now? What words do you have today that you didn't have seven days ago?",lines:6},
+  {t:'q',n:2,id:'d7r2',text:"Which day hit hardest? Which reading made you stop and put the book down for a moment? What was it that landed?",lines:5},
+]},
+
+/* 32 DAY 7 reflection cont */
+{id:'d7d',blocks:[
+  {t:'ey',text:'Day Seven · Week One Reflection (continued)'},
+  {t:'q',n:3,id:'d7r3',text:"What is the pattern you've seen most clearly this week — the one that was always there but that you can now actually name? Write it out in your own words, as specifically as you can.",lines:6},
+  {t:'q',n:4,id:'d7r4',text:"What has this pattern been costing you — across your life, not just in this situation? Name it honestly and fully. Sleep, presence, time, self-trust, other relationships. All of it.",lines:6},
+  {t:'q',n:5,id:'d7r5',text:"Is there something you understand about yourself now that explains why this particular person, in this particular way, has such a hold on you? Write about it without judgment.",lines:6},
+  {t:'q',n:6,id:'d7r6',text:"And the most important question of the week: What do you want to be different by the end of the thirty days? Not what you want from him — what do you want for yourself? Describe it as specifically as you can. What does it feel like, in your body, to imagine actually being there?",lines:7},
+]},
+
+/* 33 CLOSING NOTE */
+{id:'close',blocks:[
+  {t:'ey',text:'A Note Before Week Two'},
+  {t:'sp',h:24},
+  {t:'p',text:"Everything you've seen this week lives in the space between the trigger and your response. Something happens — a silence, a message, a shift in tone — and almost immediately, before you've had a chance to think, the pattern is already running."},
+  {t:'p',text:"Week Two is about that space. About widening it. About finding, in the gap between what happens and what you do next, just enough room to choose."},
+  {t:'p',text:"You already know more than you think you do. The next seven days will show you what to do with it."},
+  {t:'hr'},
+  {t:'p',text:"You have spent seven days looking honestly at yourself. That is not where most people are willing to go."},
+  {t:'sp',h:48},
+  {t:'p',text:"Week Two · The Training begins tomorrow."},
+]},
+
+];
+
+/* ── ANNOTATIONS ── */
+function loadAnnots(page){
+  try{return JSON.parse(localStorage.getItem('ssh_annot_'+page)||'[]');}catch(e){return [];}
+}
+function saveAnnots(page,arr){
+  try{localStorage.setItem('ssh_annot_'+page,JSON.stringify(arr));}catch(e){}
+}
+
+// Walk text nodes inside `root`, returning array of {node, start, end} where start/end are global character offsets.
+function getTextNodeMap(root){
+  const map=[]; let pos=0;
+  const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,{
+    acceptNode(n){
+      // Skip text inside form controls and existing markers
+      const p=n.parentElement;
+      if(!p)return NodeFilter.FILTER_REJECT;
+      if(p.closest('textarea,input,.note-marker,.annot-toolbar,.note-popover'))return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+  let n;
+  while((n=w.nextNode())){
+    const len=n.nodeValue.length;
+    map.push({node:n,start:pos,end:pos+len});
+    pos+=len;
+  }
+  return {map,total:pos};
+}
+
+// Find Nth occurrence of `text` in `.page` content, return Range or null
+function findTextRange(root,text,occurrence){
+  if(!text)return null;
+  const {map}=getTextNodeMap(root);
+  const full=map.map(m=>m.node.nodeValue).join('');
+  let idx=-1, count=0;
+  while(true){
+    idx=full.indexOf(text,idx+1);
+    if(idx<0)return null;
+    if(count===occurrence)break;
+    count++;
+  }
+  const endIdx=idx+text.length;
+  // Locate start node/offset
+  const startEntry=map.find(m=>idx>=m.start && idx<m.end);
+  const endEntry=map.find(m=>endIdx>m.start && endIdx<=m.end);
+  if(!startEntry||!endEntry)return null;
+  const r=document.createRange();
+  r.setStart(startEntry.node, idx-startEntry.start);
+  r.setEnd(endEntry.node, endIdx-endEntry.start);
+  return r;
+}
+
+// Compute the occurrence index of currently selected text within root
+function getSelectionOccurrence(root,sel){
+  const text=sel.toString();
+  if(!text)return null;
+  const {map}=getTextNodeMap(root);
+  const full=map.map(m=>m.node.nodeValue).join('');
+  // Find global offset of selection start
+  const r=sel.getRangeAt(0);
+  const startEntry=map.find(m=>m.node===r.startContainer);
+  if(!startEntry)return null;
+  const globalStart=startEntry.start+r.startOffset;
+  // Count occurrences of text before globalStart
+  let count=0,idx=-1;
+  while((idx=full.indexOf(text,idx+1))>=0 && idx<globalStart){count++;}
+  return {text,occurrence:count};
+}
+
+// Wrap a Range in a span (works across multiple text nodes)
+function wrapRange(range,className,attrs){
+  const nodes=[];
+  const root=range.commonAncestorContainer;
+  if(root.nodeType===Node.TEXT_NODE){
+    nodes.push(root);
+  } else {
+    const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT,null);
+    let n;
+    while((n=w.nextNode())){
+      if(range.intersectsNode(n))nodes.push(n);
+    }
+  }
+  const wraps=[];
+  nodes.forEach(node=>{
+    const isStart=node===range.startContainer;
+    const isEnd=node===range.endContainer;
+    const startOff=isStart?range.startOffset:0;
+    const endOff=isEnd?range.endOffset:node.nodeValue.length;
+    if(startOff>=endOff)return;
+    const before=node.nodeValue.slice(0,startOff);
+    const middle=node.nodeValue.slice(startOff,endOff);
+    const after=node.nodeValue.slice(endOff);
+    const span=document.createElement('span');
+    span.className=className;
+    if(attrs)Object.entries(attrs).forEach(([k,v])=>span.setAttribute(k,v));
+    span.textContent=middle;
+    const parent=node.parentNode;
+    const frag=document.createDocumentFragment();
+    if(before)frag.appendChild(document.createTextNode(before));
+    frag.appendChild(span);
+    if(after)frag.appendChild(document.createTextNode(after));
+    parent.replaceChild(frag,node);
+    wraps.push(span);
+  });
+  return wraps;
+}
+
+function applyAnnotations(root,annots,onMarkerClick){
+  if(!root||!annots.length)return;
+  // Process in order; later annotations may need to find text after earlier ones are wrapped.
+  annots.forEach((a,i)=>{
+    const range=findTextRange(root,a.text,a.occurrence);
+    if(!range)return;
+    const wraps=wrapRange(range,'hl'+(a.note?' has-note':''),{'data-id':a.id});
+    // Append numbered marker after the last wrap if there's a note
+    if(a.note && wraps.length){
+      const last=wraps[wraps.length-1];
+      const marker=document.createElement('sup');
+      marker.className='note-marker';
+      marker.textContent=String(i+1);
+      marker.dataset.id=a.id;
+      marker.addEventListener('click',e=>{
+        e.stopPropagation();
+        onMarkerClick(a.id,marker);
+      });
+      last.parentNode.insertBefore(marker,last.nextSibling);
+    }
+    // Click highlight to open popover too
+    wraps.forEach(span=>{
+      span.addEventListener('click',e=>{
+        e.stopPropagation();
+        onMarkerClick(a.id,span);
+      });
+    });
+  });
+}
+
+function App(){
+  const [page,setPage]=useState(()=>{try{return parseInt(localStorage.getItem('ssh_page')||'0');}catch(e){return 0;}});
+  const [printMode,setPrintMode]=useState(false);
+  const [annots,setAnnots]=useState(()=>loadAnnots(0));
+  const [toolbar,setToolbar]=useState(null); // {x,y,text,occurrence}
+  const [popover,setPopover]=useState(null); // {id,x,y}
+  const total=PAGES.length;
+  const pageRef=React.useRef(null);
+
+  const go=useCallback(n=>{
+    const next=Math.max(0,Math.min(total-1,n));
+    setPage(next);
+    try{localStorage.setItem('ssh_page',next);}catch(e){}
+    setToolbar(null);setPopover(null);
+    window.scrollTo(0,0);
+  },[total]);
+
+  useEffect(()=>{
+    const h=e=>{
+      if(e.target.tagName==='TEXTAREA'||e.target.tagName==='INPUT')return;
+      if(e.key==='ArrowRight')go(page+1);
+      if(e.key==='ArrowLeft')go(page-1);
+      if(e.key==='Escape'){setToolbar(null);setPopover(null);}
+    };
+    window.addEventListener('keydown',h);
+    return()=>window.removeEventListener('keydown',h);
+  },[page,go]);
+
+  useEffect(()=>{document.body.classList.toggle('print-mode',printMode);},[printMode]);
+
+  // Reload annotations when page changes
+  useEffect(()=>{ setAnnots(loadAnnots(page)); },[page]);
+
+  // Re-apply annotations whenever annots or page content changes
+  useEffect(()=>{
+    if(!pageRef.current)return;
+    // The block renderer rebuilds DOM each render, so we just decorate after paint.
+    const id=requestAnimationFrame(()=>{
+      if(!pageRef.current)return;
+      applyAnnotations(pageRef.current,annots,(annotId,el)=>{
+        const rect=el.getBoundingClientRect();
+        setPopover({
+          id:annotId,
+          x:rect.left+rect.width/2+window.scrollX,
+          y:rect.bottom+window.scrollY
+        });
+        setToolbar(null);
+      });
+    });
+    return()=>cancelAnimationFrame(id);
+  },[annots,page,printMode]);
+
+  // Selection handler — show toolbar above selection
+  useEffect(()=>{
+    const onUp=()=>{
+      const sel=window.getSelection();
+      if(!sel||sel.isCollapsed||!pageRef.current){setToolbar(null);return;}
+      const text=sel.toString().trim();
+      if(text.length<2){setToolbar(null);return;}
+      // Selection must be inside .page
+      const r=sel.getRangeAt(0);
+      if(!pageRef.current.contains(r.commonAncestorContainer)){setToolbar(null);return;}
+      // Don't trigger inside textareas
+      const anc=r.commonAncestorContainer;
+      const ancEl=anc.nodeType===1?anc:anc.parentElement;
+      if(ancEl.closest('textarea,input,.note-popover'))return;
+      const occ=getSelectionOccurrence(pageRef.current,sel);
+      if(!occ)return;
+      const rect=r.getBoundingClientRect();
+      setToolbar({
+        x:rect.left+rect.width/2+window.scrollX,
+        y:rect.top+window.scrollY,
+        text:occ.text,
+        occurrence:occ.occurrence
+      });
+      setPopover(null);
+    };
+    document.addEventListener('mouseup',onUp);
+    document.addEventListener('touchend',onUp);
+    return()=>{
+      document.removeEventListener('mouseup',onUp);
+      document.removeEventListener('touchend',onUp);
+    };
+  },[page]);
+
+  // Dismiss popover on outside click
+  useEffect(()=>{
+    if(!popover&&!toolbar)return;
+    const onClick=e=>{
+      if(e.target.closest('.annot-toolbar,.note-popover,.hl,.note-marker'))return;
+      setPopover(null);setToolbar(null);
+    };
+    document.addEventListener('mousedown',onClick);
+    return()=>document.removeEventListener('mousedown',onClick);
+  },[popover,toolbar]);
+
+  const addAnnot=(withNote)=>{
+    if(!toolbar)return;
+    const id='a'+Date.now()+Math.floor(Math.random()*1000);
+    const next=[...annots,{id,text:toolbar.text,occurrence:toolbar.occurrence,note:withNote?'':null}];
+    setAnnots(next);
+    saveAnnots(page,next);
+    setToolbar(null);
+    window.getSelection()?.removeAllRanges();
+    if(withNote){
+      // Open the popover for editing right away
+      setTimeout(()=>{
+        const el=pageRef.current?.querySelector(`.hl[data-id="${id}"]`);
+        if(el){
+          const rect=el.getBoundingClientRect();
+          setPopover({id,x:rect.left+rect.width/2+window.scrollX,y:rect.bottom+window.scrollY});
+        }
+      },80);
+    }
+  };
+
+  const updateNote=(id,note)=>{
+    const next=annots.map(a=>a.id===id?{...a,note}:a);
+    setAnnots(next);saveAnnots(page,next);
+  };
+  const removeAnnot=id=>{
+    const next=annots.filter(a=>a.id!==id);
+    setAnnots(next);saveAnnots(page,next);
+    setPopover(null);
+  };
+  const clearAll=()=>{
+    if(!confirm('Remove all highlights and notes on this page?'))return;
+    setAnnots([]);saveAnnots(page,[]);
+    setPopover(null);setToolbar(null);
+  };
+
+  const cur=PAGES[page];
+  const curAnnot=popover?annots.find(a=>a.id===popover.id):null;
+
+  return(
+    <>
+      <div className="toolbar">
+        <span className="toolbar-title">The Sovereign Heart &nbsp;·&nbsp; Week One: The Mirror</span>
+        <div className="toolbar-right">
+          {annots.length>0 && (
+            <button className="annot-clear" onClick={clearAll} title="Clear all highlights and notes on this page">
+              Clear ({annots.length})
+            </button>
+          )}
+          <span className="page-counter">{page+1} / {total}</span>
+          <button className="mode-toggle" onClick={()=>setPrintMode(m=>!m)}>
+            {printMode?'◈ Screen Mode':'⊞ Print Mode'}
+          </button>
+        </div>
+      </div>
+      <div className="stage">
+        <div className="page" ref={pageRef}>
+          {cur.render?cur.render():<B blocks={cur.blocks}/>}
+        </div>
+      </div>
+      {toolbar && (
+        <div className="annot-toolbar show" style={{left:toolbar.x,top:toolbar.y}}>
+          <button onClick={()=>addAnnot(false)}>✦ Highlight</button>
+          <button onClick={()=>addAnnot(true)}>✎ Add Note</button>
+        </div>
+      )}
+      {popover && curAnnot && (
+        <div className="note-popover" style={{left:popover.x,top:popover.y}}>
+          <textarea
+            autoFocus
+            placeholder="Write your note…"
+            value={curAnnot.note||''}
+            onChange={e=>updateNote(popover.id,e.target.value)}
+          />
+          <div className="note-popover-actions">
+            <button className="danger" onClick={()=>removeAnnot(popover.id)}>Remove</button>
+            <button onClick={()=>setPopover(null)}>Done</button>
+          </div>
+        </div>
+      )}
+      <div className="nav-arrows">
+        <button className="nav-btn" onClick={()=>go(page-1)} disabled={page===0}>← Previous</button>
+        <span className="nav-hint">← → keyboard or click</span>
+        <button className="nav-btn" onClick={()=>go(page+1)} disabled={page===total-1}>Next →</button>
+      </div>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App/>);
+</script>
+</body>
+</html>
