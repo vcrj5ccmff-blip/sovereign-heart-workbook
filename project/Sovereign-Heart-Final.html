@@ -392,22 +392,33 @@ body.print-mode .journal-field{display:none;}
 
 /* ======= PRINT @media ======= */
 @media print{
+  @page{size:letter;margin:0.75in 1in;}
+  @page:first{margin:0.75in 1in;}
   *{-webkit-print-color-adjust:exact!important;print-color-adjust:exact!important;}
   html,body{height:auto;overflow:visible;background:var(--cream);}
   .main{height:auto;overflow:visible;padding-top:0;}
   .page{display:block!important;height:auto!important;overflow:visible;}
-  .topbar,.sidebar,.sidebar-overlay,.menu-btn,.mode-toggle,.nav-btn,.page-nav{display:none!important;}
+  .topbar,.sidebar,.sidebar-overlay,.menu-btn,.mode-toggle,.nav-btn,.page-nav,
+  .action-btn,.topbar-right,.save-toast{display:none!important;}
   .screen-only,textarea{display:none!important;}
   .print-lines{display:block!important;}
   .print-line{height:28px;border-bottom:1px solid rgba(160,120,72,.3);}
-  .cover-page,.author-page,.light-page,.week-opener{break-after:page;page-break-after:always;}
+  .cover-page,.author-page{break-after:page;page-break-after:always;}
+  .light-page,.week-opener{break-after:page;page-break-after:always;}
   .day-page{break-after:page;page-break-after:always;}
   .practice-section{break-inside:avoid;}
   .reflection-section{break-inside:avoid;}
-  .ref-q{break-inside:avoid;}
+  .ref-q{break-inside:avoid;page-break-inside:avoid;}
   .anchor-box{break-inside:avoid;}
-  .cover-page{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-  .week-opener{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .cover-page{
+    min-height:calc(11in - 1.5in);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .week-opener{
+    min-height:calc(11in - 1.5in);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+  }
+  .day-inner,.practice-inner,.reflection-inner{padding-left:0;padding-right:0;}
 }
 
 </style>
@@ -461,7 +472,7 @@ body.print-mode .journal-field{display:none;}
 <a href="#" onclick="nav('thank-you');return false" data-page="thank-you">Thank You</a>
 </nav>
 <div class="sidebar-overlay" id="overlay" onclick="closeSidebar()"></div>
-<div class="topbar"><button class="menu-btn" onclick="toggleSidebar()"><span></span><span></span><span></span></button><span class="topbar-title">The Sovereign Heart</span><div class="topbar-right"><div class="mode-toggle"><button class="mode-btn active" data-mode="screen" onclick="setMode('screen')">Screen</button><button class="mode-btn" data-mode="print" onclick="setMode('print')">Layout</button></div><button class="action-btn" onclick="printWorkbook()">Print</button><button class="action-btn" onclick="exportAnswers()">Export</button></div></div>
+<div class="topbar"><button class="menu-btn" onclick="toggleSidebar()"><span></span><span></span><span></span></button><span class="topbar-title">The Sovereign Heart</span><div class="topbar-right"><div class="mode-toggle"><button class="mode-btn active" data-mode="screen" onclick="setMode('screen')">Screen</button><button class="mode-btn" data-mode="print" onclick="setMode('print')">Layout</button></div><button class="action-btn" onclick="printWorkbook()">Print</button><button class="action-btn" onclick="saveToFile()">Save</button></div></div>
 <div class="save-toast" id="toast"></div>
 <div class="main" id="main">
 <section class="page active" id="page-cover"><div class="cover-page"><div class="cover-ornament"></div><span class="cover-series">A 30-Day Practice &nbsp;·&nbsp; Sovereign Stillness</span><h1 class="cover-title">The Sovereign<br>Heart</h1><div class="cover-rule"></div><p class="cover-sub">A Stoic Workbook for Reclaiming Your Peace When Someone Has Your Mind</p><button class="cover-begin" onclick="nav('author-note')">Begin &nbsp;→</button></div></section>
@@ -2530,23 +2541,32 @@ document.addEventListener('keydown', e=>{
 });
 
 window.addEventListener('load', ()=>{
-  // restore page
+  // 1. Restore answers embedded in the file itself (saved via saveToFile)
+  if(typeof SAVED_DATA !== 'undefined'){
+    Object.entries(SAVED_DATA).forEach(([id,val])=>{
+      const el = document.getElementById(id);
+      if(el && val){
+        el.value = val;
+        if(el.tagName==='TEXTAREA'){el.style.height='auto';el.style.height=el.scrollHeight+'px';}
+      }
+    });
+  }
+  // 2. Also check localStorage for anything not already covered
+  document.querySelectorAll('textarea[id], input[id]').forEach(el=>{
+    if(typeof SAVED_DATA !== 'undefined' && SAVED_DATA[el.id]) return;
+    const v = load(el.id);
+    if(v){ el.value=v; if(el.tagName==='TEXTAREA'){el.style.height='auto';el.style.height=el.scrollHeight+'px';} }
+  });
+  // 3. Restore last page
   try{
-    const p=localStorage.getItem('ssh_page');
+    const p = (typeof SAVED_DATA!=='undefined' && SAVED_DATA['_page']) || localStorage.getItem('ssh_page');
     if(p && document.getElementById('page-'+p)) nav(p);
   }catch(e){}
-  // restore mode
+  // 4. Restore mode
   try{
-    const m=localStorage.getItem('ssh_mode')||'screen';
+    const m = (typeof SAVED_DATA!=='undefined' && SAVED_DATA['_mode']) || localStorage.getItem('ssh_mode') || 'screen';
     setMode(m);
   }catch(e){ setMode('screen'); }
-  // restore journal entries
-  document.querySelectorAll('[id]').forEach(el=>{
-    if(el.tagName==='TEXTAREA'||el.tagName==='INPUT'){
-      const v=load(el.id);
-      if(v){ el.value=v; if(el.tagName==='TEXTAREA'){el.style.height='auto';el.style.height=el.scrollHeight+'px';} }
-    }
-  });
   updateSidebar();
 });
 
@@ -2556,48 +2576,45 @@ document.addEventListener('input', e=>{
 
 function printWorkbook(){
   setMode('print');
-  setTimeout(()=>window.print(), 400);
+  showToast('In the print dialog → uncheck "Headers and footers" for best results');
+  setTimeout(()=>window.print(), 800);
 }
 
-function exportAnswers(){
-  const DAY_TITLES = {"1": "The Uninvited Guest", "2": "The Story You're Telling", "3": "The Checking", "4": "The Search for Certainty", "5": "The Imaginary Conversation", "6": "The Version of Him in Your Head", "7": "What You See Now", "8": "The Pause", "9": "Feel It Without Feeding It", "10": "Come Back to Your Body", "11": "The Slow Reply", "12": "Delay the Reassurance", "13": "Name It Precisely", "14": "Halfway", "15": "What You're Actually Afraid Of", "16": "You Would Survive It", "17": "Voluntary Discomfort", "18": "What You've Been Putting on Hold", "19": "The Attachment Beneath the Attachment", "20": "What Would Remain", "21": "Sitting With What Is", "22": "Letting It Be Uncertain", "23": "Who You Are Without the Waiting", "24": "Desire Without Desperation", "25": "Becoming the Source", "26": "Grounded Focus", "27": "The Woman You're Becoming", "28": "Loving Well", "29": "Whatever Happens", "30": "The Sovereign Heart"};
-  const lines = [];
-  lines.push('THE SOVEREIGN HEART — My Responses');
-  lines.push('Exported ' + new Date().toLocaleDateString());
-  lines.push('');
-  for(let day=1; day<=30; day++){
-    const title = DAY_TITLES[day] || '';
-    const dayLines = [];
-    for(let q=1; q<=8; q++){
-      const k = 'ssh_d'+day+'_q'+q;
-      const v = (localStorage.getItem(k)||'').trim();
-      if(v) dayLines.push('  Q'+q+': '+v);
-    }
-    // also check other keys for this day
-    for(let key in localStorage){
-      if(key.startsWith('ssh_d'+day+'_') && !key.match(/_q\d+$/)){
-        const v = (localStorage.getItem(key)||'').trim();
-        if(v) dayLines.push('  '+key.replace('ssh_d'+day+'_','')+': '+v);
-      }
-    }
-    if(dayLines.length){
-      lines.push('DAY '+day+' — '+title);
-      lines.push(...dayLines);
-      lines.push('');
-    }
-  }
-  if(lines.length <= 3){ showToast('No responses saved yet.'); return; }
-  const blob = new Blob([lines.join('\n')], {type:'text/plain;charset=utf-8'});
+function saveToFile(){
+  // Collect all field values
+  const data = {};
+  document.querySelectorAll('textarea[id], input[id]').forEach(el=>{
+    if(el.value && el.value.trim()) data[el.id] = el.value;
+  });
+  // Also save current page + mode
+  data['_page'] = current;
+  data['_mode'] = document.body.classList.contains('print-mode') ? 'print' : 'screen';
+
+  // Get the full current HTML
+  let html = '<!DOCTYPE html>\n' + document.documentElement.outerHTML;
+
+  // Remove any previous saved-data block
+  html = html.replace(/<script id="saved-data">[\s\S]*?<\/script>\s*/g, '');
+
+  // Safely encode data — escape </ so it can't break the script tag
+  const safeJson = JSON.stringify(data).replace(/<\//g, '<\\/');
+
+  // Inject data block just before </body>
+  html = html.replace('</body>', '<script id="saved-data">var SAVED_DATA='+safeJson+';<\/script>\n</body>');
+
+  const blob = new Blob([html], {type:'text/html;charset=utf-8'});
+  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = URL.createObjectURL(blob);
-  a.download = 'sovereign-heart-responses.txt';
-  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  a.href = url; a.download = 'Sovereign-Heart-Workbook.html';
+  document.body.appendChild(a); a.click();
+  setTimeout(()=>{ document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
+  showToast('Saved! Re-open the downloaded file to continue with your answers.');
 }
 
-function showToast(msg){
+function showToast(msg, dur){
   const t = document.getElementById('toast');
   t.textContent = msg; t.style.opacity='1';
-  setTimeout(()=>t.style.opacity='0', 2500);
+  setTimeout(()=>t.style.opacity='0', dur||3500);
 }
 </script>
 </body>
